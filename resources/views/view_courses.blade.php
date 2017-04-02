@@ -55,33 +55,29 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">LIST OF STUDENTS</h3>
+                            <h3 class="box-title">LIST OF COURSES</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <a href="{{ url('/add/student') }}"  class="btn btn-default pull-right add-records"><i class="fa fa-plus-circle"></i> ADD STUDENT</a>
+                            <a href="{{ url('/add/course') }}" class="btn btn-default pull-right add-records"><i
+                                        class="fa fa-plus-circle"></i> ADD COURSE</a>
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>COURES CODE</th>
-                                    <th>COURSE NAME </th>
+                                    <th>COURSE</th>
                                     <th>INSTRUCTOR</th>
-                                    <th>COLLEGE</th>
-                                    <th>SEMESTER</th>
                                     <th>ACTION</th>
                                 </tr>
                                 </thead>
-                                @foreach($data as $value)
+                                @foreach($courses as $course)
                                     <tbody>
                                     <tr>
-                                        <td>{{ $value->coures_code }}</td>
-                                        <td>{{ $value->course_name }}</td>
-                                        <td>{{ $value->firstname }} {{ $value->middlename }} {{ $value->lastname }}</td>
-                                        <td>{{ $value->college_short_name }}</td>
-                                        <td>{{ $value->semester }}</td>
+                                        <td>{{ $course->course_code }}</td>
+                                        <td>{{ $course->instructor1->firstname }}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-flat">EDIT</button>
-                                            <a href="/list/students/delete/{{ $value->course_id }}" class="btn btn-danger btn-flat">DELETE</a>
+                                            <a href="/list/students/delete/{{ $course->course_id }}"
+                                               class="btn btn-danger btn-flat">DELETE</a>
                                         </td>
                                     </tr>
                                     </tbody>

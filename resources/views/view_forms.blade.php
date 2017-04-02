@@ -59,7 +59,7 @@
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <a href="{{ url('/add/form') }}" class="btn btn-default pull-right add-records"><i class="fa fa-plus-circle"></i> ADD COLLEGE</a>
+                            <a href="{{ url('/add/form') }}" class="btn btn-default pull-right add-records"><i class="fa fa-plus-circle"></i> ADD FORM</a>
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
