@@ -43,6 +43,11 @@ Route::get('logout', function()
     Auth::logout();
     return View::make('logout');
 });
+Route::get('/list/courses', function()
+{
+    $courses = App\Course::all();
+    return View::make('view_courses')->with('courses', $courses);
+});
 
 Route::post('loginProcess', 'MainController@login');
 
