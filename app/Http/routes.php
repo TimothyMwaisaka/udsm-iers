@@ -48,6 +48,11 @@ Route::get('/list/courses', function()
     $courses = App\Course::all();
     return View::make('view_courses')->with('courses', $courses);
 });
+Route::get('form/{course_id}', function($id)
+{
+    $course = App\Course::where('course_id', $id);
+    return View::make('view_assessment_form')->with('course', $course);
+});
 
 Route::post('loginProcess', 'MainController@login');
 
