@@ -3,20 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Admins</title>
+    <title>IERS - Edit Instructors</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/bootstrap/css/bootstrap.min.css") }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.min.css") }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet"
-          href="{{ asset ("/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css") }}">
-    <!-- custom style -->
-    <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/custom.css") }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css") }}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -46,66 +43,96 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">admins</li>
+                <li class="active">edit instructor</li>
             </ol>
         </section>
+
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title">LIST OF ADMINISTRATORS</h3>
+                <!-- right column -->
+                <div class="col-md-9">
+                    <!-- Horizontal Form -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">EDIT INSTRUCTOR</h3>
                         </div>
                         <!-- /.box-header -->
-                        <div class="box-body">
-                            <a href="{{ url('/add/admin') }}"  class="btn btn-default pull-right add-records"><i class="fa fa-plus-circle"></i> ADD ADMIN</a>
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>STAFF ID</th>
-                                    <th>FIRST NAME</th>
-                                    <th>MIDDLE NAME</th>
-                                    <th>LAST NAME</th>
-                                    <th>ACTION</th>
-                                </tr>
-                                </thead>
-                                @foreach($data as $value)
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ $value->admin_id }}</td>
-                                        <td>{{ $value->firstname }}</td>
-                                        <td>{{ $value->middlename }}</td>
-                                        <td>{{ $value->lastname }}</td>
-                                        <td>
-                                            <a href="/edit/admins/{{ $value->id }}" class="btn btn-primary btn-flat">EDIT</a>
-                                            <a href="/list/admins/delete/{{ $value->id }}" class="btn btn-danger btn-flat">DELETE</a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                @endforeach
-                            </table>
-                        </div>
-                        <!-- /.box-body -->
+                        <!-- form start -->
+                        <form class="form-horizontal" action="" method="post">
+                            <div class="box-body">
+                                {{ csrf_field() }}
+                                <div class="form-group">
+                                    <label for="instructorID" class="col-sm-2 control-label">STAFF ID</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="instructorID" name="instructorID"
+                                               placeholder="Enter Staff ID">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="instructorFirstName" class="col-sm-2 control-label">FIRST NAME</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="instructorFirstName"
+                                               name="instructorFirstName"
+                                               placeholder="Enter First Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="instructorMiddleName" class="col-sm-2 control-label">MIDDLE NAME</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="instructorMiddleName"
+                                               name="instructorMiddleName"
+                                               placeholder="Enter Middle Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="instructorLastName" class="col-sm-2 control-label">LAST NAME</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="instructorLastName"
+                                               name="instructorLastName"
+                                               placeholder="Enter Last Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">COLLEGE</label>
+                                    <div class="col-sm-10">
+
+                                        <select class="form-control select2" style="width: 100%;">
+                                            <option selected disabled>Select College..</option>
+                                            @foreach($data as $value)
+                                                <option>{{ $value->college_short_name }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="reset" class="btn btn-default">Clear</button>
+                                <button type="submit" name="submit" class="btn btn-info pull-right">Save</button>
+                            </div>
+                            <!-- /.box-footer -->
+                        </form>
                     </div>
                     <!-- /.box -->
+                    <!-- general form elements disabled -->
+
+                    <!-- /.box -->
                 </div>
-                <!-- /.col -->
+                <!--/.col (right) -->
             </div>
             <!-- /.row -->
         </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>Version</b> 2.3.8
-        </div>
-        <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-        reserved.
-    </footer>
-
-    <!-- Control Sidebar -->
+@include('footer')
+<!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
@@ -305,30 +332,14 @@
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="{{ asset ("/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
-<!-- DataTables -->
-<script src="{{ asset ("/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js") }}"></script>
-<script src="{{ asset ("/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js") }}"></script>
-<!-- SlimScroll -->
-<script src="{{ asset ("/bower_components/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- FastClick -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/fastclick/fastclick.js") }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/demo.js") }}"></script>
-<!-- page script -->
-<script>
-    $(function () {
-        $("#example1").DataTable();
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false
-        });
-    });
-</script>
+<!-- Select2 -->
+<script src="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
+
 </body>
 </html>

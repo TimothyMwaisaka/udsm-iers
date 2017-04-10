@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Admins</title>
+    <title>IERS - Forms</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -15,10 +15,10 @@
     <!-- DataTables -->
     <link rel="stylesheet"
           href="{{ asset ("/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css") }}">
-    <!-- custom style -->
-    <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/custom.css") }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css") }}">
+    <!-- custom style -->
+    <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/custom.css") }}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css") }}">
@@ -46,7 +46,7 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">admins</li>
+                <li class="active">assessment form</li>
             </ol>
         </section>
         <!-- Main content -->
@@ -55,36 +55,13 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">LIST OF ADMINISTRATORS</h3>
+                            <h3 class="box-title">ASSESSMENT FORM</h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <a href="{{ url('/add/admin') }}"  class="btn btn-default pull-right add-records"><i class="fa fa-plus-circle"></i> ADD ADMIN</a>
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>STAFF ID</th>
-                                    <th>FIRST NAME</th>
-                                    <th>MIDDLE NAME</th>
-                                    <th>LAST NAME</th>
-                                    <th>ACTION</th>
-                                </tr>
-                                </thead>
-                                @foreach($data as $value)
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ $value->admin_id }}</td>
-                                        <td>{{ $value->firstname }}</td>
-                                        <td>{{ $value->middlename }}</td>
-                                        <td>{{ $value->lastname }}</td>
-                                        <td>
-                                            <a href="/edit/admins/{{ $value->id }}" class="btn btn-primary btn-flat">EDIT</a>
-                                            <a href="/list/admins/delete/{{ $value->id }}" class="btn btn-danger btn-flat">DELETE</a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                @endforeach
-                            </table>
+                            <a href="{{ url('/add/form') }}" class="btn btn-default pull-right add-records"><i
+                                        class="fa fa-plus-circle"></i> ADD FORM</a>
+                            <h1>{{ $course->course_name }}</h1>
                         </div>
                         <!-- /.box-body -->
                     </div>
@@ -97,15 +74,8 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>Version</b> 2.3.8
-        </div>
-        <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-        reserved.
-    </footer>
-
-    <!-- Control Sidebar -->
+@include('footer')
+<!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">

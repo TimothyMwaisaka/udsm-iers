@@ -73,7 +73,7 @@
                                     <tbody>
                                     <tr>
                                         <td>{{ $course->course_code }}</td>
-                                        <td>{{ $course->instructor1->firstname }}</td>
+                                        <td>{{ $course->instructor->firstname }}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-flat">EDIT</button>
                                             <a href="/list/students/delete/{{ $course->course_id }}"

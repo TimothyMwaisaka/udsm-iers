@@ -72,7 +72,7 @@
                                     <tr>
                                         <td>{{ $value->course_code }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-primary btn-flat">EDIT</button>
+                                            <a href="/form/{{ $value->course_id }}" class="btn btn-info btn-flat">VIEW</a>
                                             <a href="/list/forms/delete/{{ $value->course_id }}" class="btn btn-danger btn-flat">DELETE</a>
                                         </td>
                                     </tr>
