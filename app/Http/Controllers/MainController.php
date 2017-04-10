@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
@@ -232,5 +233,12 @@ class MainController extends Controller
     {
         DB::table('students')->where('id', $id)->delete();
         return redirect('list/students');
+    }
+
+
+    public function editAdmins($id)
+    {
+        $admins = Admin::find($id);
+        return view('edit_instructors', ['admins'=>$admins]);
     }
 }

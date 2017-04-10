@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    return view('login');
 });
 Route::get('login', function () {
     return view('login');
@@ -30,13 +30,11 @@ Route::get('add/college', function () {
 Route::get('add/instructor', function () {
     return view('add_instructors');
 });
-Route::post('/login', function()
-{
-    $credentials = Input::only('username', 'password');
-    if (Auth::attempt($credentials)) {
-        return Redirect::intended('/');
-    }
-    return Redirect::to('login');
+Route::get('student', function () {
+    return view('student.home');
+});
+Route::get('instructor', function () {
+    return view('instructor.home');
 });
 Route::get('logout', function()
 {
@@ -54,7 +52,10 @@ Route::get('form/{course_id}', function($id)
     return View::make('view_assessment_form')->with('course', $course);
 });
 
-Route::post('loginProcess', 'MainController@login');
+Route::post('login/system', [
+    'uses' => 'loginController@login',
+    'as' => 'login.system'
+]);
 
 /* Routes :: Get records from the database */
 Route::get('list/admins', 'MainController@getAdmins');
@@ -75,3 +76,20 @@ Route::post('add/college', 'MainController@addCollege');
 Route::post('add/instructor', 'MainController@addInstructor');
 Route::get('add/instructor', 'MainController@getFKColleges');
 Route::post('add-students', 'MainController@addStudents');
+
+/* Routes :: Update records */
+//Route::get('edit/admins/{id}', 'MainController@editAdmins');
+Route::get('edit/admins/{id}', function($id)
+{
+    $admins = App\Admin::find($id);
+    return view::make('edit_instructors')->with('admins', $admins);;
+    //$course = App\Course::where('course_id', $id);
+});
+
+Route::auth();
+Route::get('/admin', function () {
+    return view('admin');
+})->name('admin');
+
+Route::get('/home', 'HomeController@index');
+
