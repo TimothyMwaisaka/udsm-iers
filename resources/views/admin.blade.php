@@ -14,6 +14,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="<?php echo asset("/bower_components/AdminLTE/bootstrap/css/bootstrap.min.css") ?>">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- custom style -->
+    <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/custom.css") }}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
@@ -31,31 +33,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<!--
-BODY TAG OPTIONS:
-=================
-Apply one or more of the following classes to get the
-desired effect
-|---------------------------------------------------------|
-| SKINS         | skin-blue                               |
-|               | skin-black                              |
-|               | skin-purple                             |
-|               | skin-yellow                             |
-|               | skin-red                                |
-|               | skin-green                              |
-|---------------------------------------------------------|
-|LAYOUT OPTIONS | fixed                                   |
-|               | layout-boxed                            |
-|               | layout-top-nav                          |
-|               | sidebar-collapse                        |
-|               | sidebar-mini                            |
-|---------------------------------------------------------|
--->
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
     <!-- Header -->
 @include('header')
-
 <!-- Sidebar -->
 @include('sidebar')
 <!-- Content Wrapper. Contains page content -->
@@ -64,23 +45,80 @@ desired effect
         <section class="content-header">
             @include('heading')
             <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
                 <li class="active">Admin</li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
-
             <!-- Your Page Content Here -->
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <a href="{{ url('/list/forms') }}" style="display: block;">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-aqua"><i class="fa fa-files-o"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Assessment Forms</span>
+                                <span class="info-box-number">{{ App\Form::distinct('course_id')->count('course_id') }}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </a>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <a href="{{ url('/list/colleges') }}" style="display: block;">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-red"><i class="fa fa-graduation-cap"></i></span>
 
+                            <div class="info-box-content">
+                                <span class="info-box-text">Colleges</span>
+                                <span class="info-box-number">{{ App\College::count() }}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </a>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <!-- fix for small devices only -->
+                <div class="clearfix visible-sm-block"></div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <a href="{{ url('/list/courses') }}" style="display: block;">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-green"><i class="fa fa-book"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Courses</span>
+                                <span class="info-box-number">{{ App\Course::count() }}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </a>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <a href="{{ url('/list/students') }}" style="display: block;">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Students</span>
+                                <span class="info-box-number">{{ App\Student::count() }}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </a>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+            </div>
         </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
     <!-- Footer -->
 @include('footer')
-
 <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
@@ -97,17 +135,14 @@ desired effect
                     <li>
                         <a href="javascript:;">
                             <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-
                             <div class="menu-info">
                                 <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
                                 <p>Will be 23 on April 24th</p>
                             </div>
                         </a>
                     </li>
                 </ul>
                 <!-- /.control-sidebar-menu -->
-
                 <h3 class="control-sidebar-heading">Tasks Progress</h3>
                 <ul class="control-sidebar-menu">
                     <li>
@@ -118,7 +153,6 @@ desired effect
                   <span class="label label-danger pull-right">70%</span>
                 </span>
                             </h4>
-
                             <div class="progress progress-xxs">
                                 <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
                             </div>
@@ -126,7 +160,6 @@ desired effect
                     </li>
                 </ul>
                 <!-- /.control-sidebar-menu -->
-
             </div>
             <!-- /.tab-pane -->
             <!-- Stats tab content -->
@@ -136,13 +169,11 @@ desired effect
             <div class="tab-pane" id="control-sidebar-settings-tab">
                 <form method="post">
                     <h3 class="control-sidebar-heading">General Settings</h3>
-
                     <div class="form-group">
                         <label class="control-sidebar-subheading">
                             Report panel usage
                             <input type="checkbox" class="pull-right" checked>
                         </label>
-
                         <p>
                             Some information about this general settings option
                         </p>
