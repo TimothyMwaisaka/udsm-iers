@@ -85,3 +85,9 @@
     border-radius: 50%;
     background: #fff;
 }
+.box-title-underline{
+    text-decoration: underline;
+}
+.box-header-title{
+    margin-top: 10px;
+}
