@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css") }}">
     <!-- iCheck -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css") }}">
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -27,7 +26,8 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>UDSM</b> IERS</a>
+        <p style="font-size: 42.5%"><b>UDSM INSTRUCTORS EVALUATION AND RATING SYSTEM</b></p>
+        <a href="#" style="font-size: 210%"><b>UDSM IERS</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -44,7 +44,6 @@
             </div>
             <div class="row">
                 <div class="col-xs-8">
-
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
@@ -53,7 +52,6 @@
                 <!-- /.col -->
             </div>
         </form>
-
     </div>
     <!-- /.login-box-body -->
 </div>
