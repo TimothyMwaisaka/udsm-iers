@@ -46,12 +46,6 @@ Route::get('/list/courses', function()
     $courses = App\Course::all();
     return View::make('view_courses')->with('courses', $courses);
 });
-Route::get('form/{course_id}', function($id)
-{
-    $course = App\Course::where('course_id', $id);
-    return View::make('view_assessment_form')->with('course', $course);
-});
-
 Route::post('login/system', [
     'uses' => 'loginController@login',
     'as' => 'login.system'
@@ -60,9 +54,11 @@ Route::post('login/system', [
 /* Routes :: Get records from the database */
 Route::get('list/admins', 'MainController@getAdmins');
 Route::get('list/colleges', 'MainController@getColleges');
+//Route::get('list/college', 'MainController@getCollege');
 Route::get('list/instructors', 'MainController@getInstructors');
 Route::get('list/students', 'MainController@getStudents');
 Route::get('list/forms', 'MainController@getFormCourse');
+Route::get('list/forms/{id}', 'MainController@showForms');
 
 /* Routes :: Delete records from the database */
 Route::get('list/admins/delete/{id}', 'MainController@deleteAdmins');
@@ -92,4 +88,9 @@ Route::get('/admin', function () {
 })->name('admin');
 
 Route::get('/home', 'HomeController@index');
+
+
+
+Route::get('add','MainController@create1');
+Route::post('add','MainController@store1');
 

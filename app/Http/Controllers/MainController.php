@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Admin;
+use App\College;
+use App\Course;
+use App\Instructor;
+use App\Student;
+use App\Form;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
@@ -120,9 +123,7 @@ class MainController extends Controller
         $instructorMiddleName = $req->input('adminMiddleName');
         $instructorLastName = $req->input('adminLastName');
         $data = array('instructor_id' => $instructorID, 'firstname' => $instructorFirstName, 'middlename' => $instructorMiddleName, 'lastname' => $instructorLastName);
-
         DB::table('administrators')->insert($data);
-
         return redirect('add/instructor');
     }
 
@@ -134,28 +135,37 @@ class MainController extends Controller
         DB::table('colleges')->insert($data);
         return redirect('add/college');
     }
+
+    public function addCourse(Request $req)
+    {
+
+    }
     /* End - Functions to insert data into database - End */
 
 
     /* Functions to view data from database */
     public function getAdmins()
     {
-        $data['data'] = DB::table('administrators')->get();
-        if (count($data) > 0) {
-            return view('view_admins', $data);
-        } else {
-            return view('add_admins');
-        }
+        $admins = Admin::all();
+        return view('view_admins', compact('admins'));
+    }
+
+    public function getInstructors()
+    {
+        $instructors = Instructor::all();
+        return view('view_instructors', compact('instructors'));
+    }
+
+    public function getStudents()
+    {
+        $students = Student::all();
+        return view('view_students', compact('students'));
     }
 
     public function getColleges()
     {
-        $data['data'] = DB::table('colleges')->get();
-        if (count($data) > 0) {
-            return view('view_colleges', $data);
-        } else {
-            return view('add_colleges');
-        }
+        $colleges = College::all();
+        return view('view_colleges', compact('colleges'));
     }
 
     //Retrieve colleges using foreign key (not yet)
@@ -168,9 +178,10 @@ class MainController extends Controller
             return view('add_instructors');
         }
     }
+
     public function getFormCourse()
     {
-        $data['data'] = DB::table('courses')->distinct()->select('courses.course_id', 'courses.course_code')->join('forms', 'courses.course_id', '=', 'forms.course_id')->get();
+        $data['data'] = DB::table('courses')->distinct()->select('courses.course_id', 'courses.course_code', 'courses.course_name')->join('forms', 'courses.course_id', '=', 'forms.course_id')->get();
         if (count($data) > 0) {
             return view('view_forms', $data);
         } else {
@@ -178,37 +189,19 @@ class MainController extends Controller
         }
     }
 
-    public function getInstructors()
-    {
-        $data['data'] = DB::table('instructors')->get();
-        if (count($data) > 0) {
-            return view('view_instructors', $data);
-        } else {
-            return view('add_instructors');
-        }
-    }
-
-    public function getStudents()
-    {
-        $data['data'] = DB::table('students')->get();
-        if (count($data) > 0) {
-            return view('view_students', $data);
-        } else {
-            return view('add_students');
-        }
-    }
     public function getCourses()
     {
-        $data['data'] = DB::table('courses')->distinct()->select('courses.course_id', 'courses.course_code')->join('forms', 'courses.course_id', '=', 'forms.course_id')->get();
-        if (count($data) > 0) {
-            return view('view_forms', $data);
-        } else {
-            return view('add_form');
-        }
+        $courses = DB::table('courses')->distinct()->select('courses.course_id', 'courses.course_code')->join('forms', 'courses.course_id', '=', 'forms.course_id')->get();
+        return view('view_forms', compact('courses'));
     }
 
-    /* End - Functions to view data from database - End */
-
+    /*  Functions to update records  */
+    public function editCollege($id)
+    {
+        DB::table('colleges')
+            ->where('forms.course_id', $id)
+            ->update(['title' => "Updated Title"]);
+    }
 
     /*  Functions to delete data from database  */
     public function deleteAdmins($id)
@@ -235,10 +228,35 @@ class MainController extends Controller
         return redirect('list/students');
     }
 
-
     public function editAdmins($id)
     {
         $admins = Admin::find($id);
-        return view('edit_instructors', ['admins'=>$admins]);
+        return view('edit_instructors', ['admins' => $admins]);
+    }
+
+    public function showForms($id)
+    {
+        $data['data'] = DB::table('questions')
+            ->join('forms', 'questions.question_id', '=', 'forms.question_id')
+            ->join('courses', 'forms.course_id', '=', 'courses.course_id')
+            ->join('instructors', 'forms.instr_id', '=', 'instructors.id')
+            ->select('questions.question_id', 'questions.content', 'courses.course_id', 'courses.course_code', 'courses.course_name', 'instructors.*')
+            ->where('forms.course_id', $id)
+            ->get();
+        return view('view_assessment_form', $data);
+    }
+
+    public function create1()
+    {
+        return view('add_questions');
+    }
+
+    public function store1(Request $request)
+    {
+        $bio = new Bio;
+        $bio->details = $request->get('name');
+        //dd($request->get('name'));
+        $bio->save();
+        return "Success";
     }
 }

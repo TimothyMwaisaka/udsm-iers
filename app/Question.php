@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    public function getCourse()
-    {
-        return $this->belongsTo('App\Course', 'course_id');
+    protected $table = 'questions';
+    protected $primaryKey = 'question_id';
+    public function form(){
+        return $this->belongsTo(Form::class);
     }
 }

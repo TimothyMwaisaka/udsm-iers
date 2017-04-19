@@ -7,13 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
     protected $table = 'courses';
+    protected $primaryKey = 'course_id';
 
     public function instructor()
     {
-        return $this->belongsTo('App\Instructor', 'instr_id');
+        return $this->belongsTo(Instructor::class, 'instr_id');
     }
-    public function formQuestion()
+
+    public function college()
     {
-        return $this->belongsTo('App\Question', 'question_id');
+        return $this->belongsTo(College::class, 'college_id');
+    }
+    public function form(){
+        return $this->hasMany(Form::class, 'question_id');
+
+    }
+    public function question(){
+        return $this->hasMany(Question::class);
+
     }
 }

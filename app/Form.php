@@ -6,16 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Form extends Model
 {
+    protected $table = 'forms';
+    protected $primaryKey = 'course_id';
+
     public function course()
     {
-        return $this->belongsTo('App\Course', 'course_id');
-    }
-    public function instructor()
-    {
-        return $this->belongsTo('App\Instructor', 'instr_id');
+        return $this->hasMany(Course::class, 'course_id');
     }
     public function question()
     {
-        return $this->hasMany('App\Question', 'question_id');
+        return $this->hasMany(Question::class, 'question_id');
+    }
+    public function instructor()
+    {
+        return $this->belongsTo(Instructor::class, 'instr_id');
     }
 }
