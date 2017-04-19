@@ -27,17 +27,16 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="../../index2.html"><b>UDSM</b> IERS</a>
+        <a href="#"><b>UDSM</b> IERS</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">Sign in to start your session</p>
-
+        <p class="login-box-msg">Registration number and password required</p>
         <form action="{{ route('login.system') }}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" name="username" placeholder="Registration Number">
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
                 <input type="password" class="form-control" name="password" placeholder="Password">

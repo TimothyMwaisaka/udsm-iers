@@ -67,19 +67,21 @@
                                     <th>FIRST NAME</th>
                                     <th>MIDDLE NAME</th>
                                     <th>LAST NAME</th>
+                                    <th>COLLEGE</th>
                                     <th>ACTION</th>
                                 </tr>
                                 </thead>
-                                @foreach($data as $value)
+                                @foreach($instructors as $instructor)
                                     <tbody>
                                     <tr>
-                                        <td>{{ $value->instructor_id }}</td>
-                                        <td>{{ $value->firstname }}</td>
-                                        <td>{{ $value->middlename }}</td>
-                                        <td>{{ $value->lastname }}</td>
+                                        <td>{{ $instructor->instructor_id }}</td>
+                                        <td>{{ $instructor->firstname }}</td>
+                                        <td>{{ $instructor->middlename }}</td>
+                                        <td>{{ $instructor->lastname }}</td>
+                                        <td>{{ $instructor->college->college_short_name }}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-flat">EDIT</button>
-                                            <a href="/list/instructors/delete/{{ $value->id }}" class="btn btn-danger btn-flat">DELETE</a>
+                                            <a href="/list/instructors/delete/{{ $instructor->id }}" class="btn btn-danger btn-flat">DELETE</a>
                                         </td>
                                     </tr>
                                     </tbody>

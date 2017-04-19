@@ -59,21 +59,24 @@
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <a href="{{ url('/add/form') }}" class="btn btn-default pull-right add-records"><i class="fa fa-plus-circle"></i> ADD FORM</a>
+                            <a href="{{ url('/add/form') }}" class="btn btn-default pull-right add-records"><i
+                                        class="fa fa-plus-circle"></i> ADD FORM</a>
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>COURSE</th>
+                                    <th>FORM</th>
                                     <th>ACTION</th>
                                 </tr>
                                 </thead>
                                 @foreach($data as $value)
                                     <tbody>
                                     <tr>
-                                        <td>{{ $value->course_code }}</td>
+                                        <td>{{ $value->course_code }} - {{ $value->course_name }}</td>
                                         <td>
-                                            <a href="/form/{{ $value->course_id }}" class="btn btn-info btn-flat">VIEW</a>
-                                            <a href="/list/forms/delete/{{ $value->course_id }}" class="btn btn-danger btn-flat">DELETE</a>
+                                            <a href="/list/forms/{{ $value->course_id }}"
+                                               class="btn btn-info btn-flat">VIEW</a>
+                                            <a href="/list/forms/delete/{{ $value->course_id }}"
+                                               class="btn btn-danger btn-flat">DELETE</a>
                                         </td>
                                     </tr>
                                     </tbody>

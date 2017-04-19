@@ -32,8 +32,8 @@
                             <li><a href="{{ url('/list/students') }}"><i class="fa fa-arrow-right"></i> Students</a></li>
                         </ul>
                     </li>
-                    <li><a href="{{ url('/list/colleges') }}"><i class="fa fa-arrow-right"></i> MANAGE COLLEGES</a></li>
-                    <li><a href="{{ url('/list/courses') }}"><i class="fa fa-arrow-right"></i> MANAGE COURSES</a></li>
+                    <li><a href="{{ url('/list/colleges') }}"><i class="fa fa-chevron-circle-right"></i> MANAGE COLLEGES</a></li>
+                    <li><a href="{{ url('/list/courses') }}"><i class="fa fa-chevron-circle-right"></i> MANAGE COURSES</a></li>
                 </ul>
             </li>
             <li class="active"><a href="{{ url('/list/forms') }}"><i class="fa fa-link"></i> <span> FORMS</span></a></li>

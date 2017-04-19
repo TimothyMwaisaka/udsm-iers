@@ -46,7 +46,7 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">students</li>
+                <li class="active">courses</li>
             </ol>
         </section>
         <!-- Main content -->
@@ -64,8 +64,9 @@
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
+                                    <th>CODE</th>
                                     <th>COURSE</th>
-                                    <th>INSTRUCTOR</th>
+                                    <th>COLLEGE</th>
                                     <th>ACTION</th>
                                 </tr>
                                 </thead>
@@ -73,10 +74,11 @@
                                     <tbody>
                                     <tr>
                                         <td>{{ $course->course_code }}</td>
-                                        <td>{{ $course->instructor->firstname }}</td>
+                                        <td>{{ $course->course_name }}</td>
+                                        <td>{{ $course->college->college_short_name }}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-flat">EDIT</button>
-                                            <a href="/list/students/delete/{{ $course->course_id }}"
+                                            <a href="/list/colleges/delete/{{ $course->course_id }}"
                                                class="btn btn-danger btn-flat">DELETE</a>
                                         </td>
                                     </tr>

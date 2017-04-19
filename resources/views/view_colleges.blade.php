@@ -45,7 +45,7 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">admins</li>
+                <li class="active">colleges</li>
             </ol>
         </section>
         <!-- Main content -->
@@ -68,14 +68,14 @@
                                     <th>ACTION</th>
                                 </tr>
                                 </thead>
-                                @foreach($data as $value)
+                                @foreach($colleges as $college)
                                     <tbody>
                                     <tr>
-                                        <td>{{ $value->college_short_name }}</td>
-                                        <td>{{ $value->college_name }}</td>
+                                        <td>{{ $college->college_short_name }}</td>
+                                        <td>{{ $college->college_name }}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-flat">EDIT</button>
-                                            <a href="/list/colleges/delete/{{ $value->college_id }}" class="btn btn-danger btn-flat">DELETE</a>
+                                            <a href="/list/colleges/delete/{{ $college->college_id }}" class="btn btn-danger btn-flat">DELETE</a>
                                         </td>
                                     </tr>
                                     </tbody>
