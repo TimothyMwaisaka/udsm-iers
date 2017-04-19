@@ -39,7 +39,7 @@ class Pipeline implements PipelineContract
     /**
      * Create a new class instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container $container
+     * @param  \Illuminate\Contracts\Container\Container  $container
      * @return void
      */
     public function __construct(Container $container)
@@ -50,7 +50,7 @@ class Pipeline implements PipelineContract
     /**
      * Set the object being sent through the pipeline.
      *
-     * @param  mixed $passable
+     * @param  mixed  $passable
      * @return $this
      */
     public function send($passable)
@@ -63,7 +63,7 @@ class Pipeline implements PipelineContract
     /**
      * Set the array of pipes.
      *
-     * @param  array|mixed $pipes
+     * @param  array|mixed  $pipes
      * @return $this
      */
     public function through($pipes)
@@ -76,7 +76,7 @@ class Pipeline implements PipelineContract
     /**
      * Set the method to call on the pipes.
      *
-     * @param  string $method
+     * @param  string  $method
      * @return $this
      */
     public function via($method)
@@ -89,7 +89,7 @@ class Pipeline implements PipelineContract
     /**
      * Run the pipeline with a final destination callback.
      *
-     * @param  \Closure $destination
+     * @param  \Closure  $destination
      * @return mixed
      */
     public function then(Closure $destination)
@@ -112,17 +112,28 @@ class Pipeline implements PipelineContract
     {
         return function ($stack, $pipe) {
             return function ($passable) use ($stack, $pipe) {
-                // If the pipe is an instance of a Closure, we will just call it directly but
-                // otherwise we'll resolve the pipes out of the container and call it with
-                // the appropriate method and arguments, returning the results back out.
                 if ($pipe instanceof Closure) {
+                    // If the pipe is an instance of a Closure, we will just call it directly but
+                    // otherwise we'll resolve the pipes out of the container and call it with
+                    // the appropriate method and arguments, returning the results back out.
                     return call_user_func($pipe, $passable, $stack);
-                } else {
+                } elseif (! is_object($pipe)) {
                     list($name, $parameters) = $this->parsePipeString($pipe);
 
-                    return call_user_func_array([$this->container->make($name), $this->method],
-                        array_merge([$passable, $stack], $parameters));
+                    // If the pipe is a string we will parse the string and resolve the class out
+                    // of the dependency injection container. We can then build a callable and
+                    // execute the pipe function giving in the parameters that are required.
+                    $pipe = $this->container->make($name);
+
+                    $parameters = array_merge([$passable, $stack], $parameters);
+                } else {
+                    // If the pipe is already an object we'll just make a callable and pass it to
+                    // the pipe as-is. There is no need to do any extra parsing and formatting
+                    // since the object we're given was already a fully instantiated object.
+                    $parameters = [$passable, $stack];
                 }
+
+                return call_user_func_array([$pipe, $this->method], $parameters);
             };
         };
     }
@@ -130,7 +141,7 @@ class Pipeline implements PipelineContract
     /**
      * Get the initial slice to begin the stack call.
      *
-     * @param  \Closure $destination
+     * @param  \Closure  $destination
      * @return \Closure
      */
     protected function getInitialSlice(Closure $destination)

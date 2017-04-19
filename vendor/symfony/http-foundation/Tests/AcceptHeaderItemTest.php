@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\AcceptHeaderItem;
 
-class AcceptHeaderItemTest extends TestCase
+class AcceptHeaderItemTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideFromStringData
@@ -54,7 +53,7 @@ class AcceptHeaderItemTest extends TestCase
     public function testToString($value, array $attributes, $string)
     {
         $item = new AcceptHeaderItem($value, $attributes);
-        $this->assertEquals($string, (string)$item);
+        $this->assertEquals($string, (string) $item);
     }
 
     public function provideToStringData()

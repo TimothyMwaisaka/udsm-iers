@@ -25,9 +25,6 @@ use Symfony\Component\HttpFoundation\Response;
  * Client simulates a browser and makes requests to a Kernel object.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- *
- * @method Request|null getRequest() A Request instance
- * @method Response|null getResponse() A Response instance
  */
 class Client extends BaseClient
 {
@@ -36,10 +33,10 @@ class Client extends BaseClient
     /**
      * Constructor.
      *
-     * @param HttpKernelInterface $kernel An HttpKernel instance
-     * @param array $server The server parameters (equivalent of $_SERVER)
-     * @param History $history A History instance to store the browser history
-     * @param CookieJar $cookieJar A CookieJar instance to store the cookies
+     * @param HttpKernelInterface $kernel    An HttpKernel instance
+     * @param array               $server    The server parameters (equivalent of $_SERVER)
+     * @param History             $history   A History instance to store the browser history
+     * @param CookieJar           $cookieJar A CookieJar instance to store the cookies
      */
     public function __construct(HttpKernelInterface $kernel, array $server = array(), History $history = null, CookieJar $cookieJar = null)
     {
@@ -48,6 +45,26 @@ class Client extends BaseClient
         $this->followRedirects = false;
 
         parent::__construct($server, $history, $cookieJar);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Request|null A Request instance
+     */
+    public function getRequest()
+    {
+        return parent::getRequest();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Response|null A Response instance
+     */
+    public function getResponse()
+    {
+        return parent::getResponse();
     }
 
     /**
@@ -100,7 +117,7 @@ require_once '$requirePath';
 \$request = unserialize('$request');
 EOF;
 
-        return $code . $this->getHandleScript();
+        return $code.$this->getHandleScript();
     }
 
     protected function getHandleScript()

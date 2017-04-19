@@ -40,10 +40,10 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
     /**
      * Create a new token repository instance.
      *
-     * @param  \Illuminate\Database\ConnectionInterface $connection
-     * @param  string $table
-     * @param  string $hashKey
-     * @param  int $expires
+     * @param  \Illuminate\Database\ConnectionInterface  $connection
+     * @param  string  $table
+     * @param  string  $hashKey
+     * @param  int  $expires
      * @return void
      */
     public function __construct(ConnectionInterface $connection, $table, $hashKey, $expires = 60)
@@ -57,7 +57,7 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
     /**
      * Create a new token record.
      *
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword $user
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
      * @return string
      */
     public function create(CanResetPasswordContract $user)
@@ -79,7 +79,7 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
     /**
      * Delete all existing reset tokens from the database.
      *
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword $user
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
      * @return int
      */
     protected function deleteExisting(CanResetPasswordContract $user)
@@ -90,8 +90,8 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
     /**
      * Build the record payload for the table.
      *
-     * @param  string $email
-     * @param  string $token
+     * @param  string  $email
+     * @param  string  $token
      * @return array
      */
     protected function getPayload($email, $token)
@@ -102,46 +102,36 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
     /**
      * Determine if a token record exists and is valid.
      *
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword $user
-     * @param  string $token
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+     * @param  string  $token
      * @return bool
      */
     public function exists(CanResetPasswordContract $user, $token)
     {
         $email = $user->getEmailForPasswordReset();
 
-        $token = (array)$this->getTable()->where('email', $email)->where('token', $token)->first();
+        $token = (array) $this->getTable()->where('email', $email)->where('token', $token)->first();
 
-        return $token && !$this->tokenExpired($token);
+        return $token && ! $this->tokenExpired($token);
     }
 
     /**
      * Determine if the token has expired.
      *
-     * @param  array $token
+     * @param  array  $token
      * @return bool
      */
     protected function tokenExpired($token)
     {
-        $expirationTime = strtotime($token['created_at']) + $this->expires;
+        $expiresAt = Carbon::parse($token['created_at'])->addSeconds($this->expires);
 
-        return $expirationTime < $this->getCurrentTime();
-    }
-
-    /**
-     * Get the current UNIX timestamp.
-     *
-     * @return int
-     */
-    protected function getCurrentTime()
-    {
-        return time();
+        return $expiresAt->isPast();
     }
 
     /**
      * Delete a token record by token.
      *
-     * @param  string $token
+     * @param  string  $token
      * @return void
      */
     public function delete($token)

@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ServerBag;
 
 /**
@@ -19,7 +18,7 @@ use Symfony\Component\HttpFoundation\ServerBag;
  *
  * @author Bulat Shakirzyanov <mallluhuct@gmail.com>
  */
-class ServerBagTest extends TestCase
+class ServerBagTest extends \PHPUnit_Framework_TestCase
 {
     public function testShouldExtractHeadersFromServerArray()
     {
@@ -40,7 +39,7 @@ class ServerBagTest extends TestCase
             'CONTENT_TYPE' => 'text/html',
             'CONTENT_LENGTH' => '0',
             'ETAG' => 'asdf',
-            'AUTHORIZATION' => 'Basic ' . base64_encode('foo:bar'),
+            'AUTHORIZATION' => 'Basic '.base64_encode('foo:bar'),
             'PHP_AUTH_USER' => 'foo',
             'PHP_AUTH_PW' => 'bar',
         ), $bag->getHeaders());
@@ -51,7 +50,7 @@ class ServerBagTest extends TestCase
         $bag = new ServerBag(array('PHP_AUTH_USER' => 'foo'));
 
         $this->assertEquals(array(
-            'AUTHORIZATION' => 'Basic ' . base64_encode('foo:'),
+            'AUTHORIZATION' => 'Basic '.base64_encode('foo:'),
             'PHP_AUTH_USER' => 'foo',
             'PHP_AUTH_PW' => '',
         ), $bag->getHeaders());
@@ -59,10 +58,10 @@ class ServerBagTest extends TestCase
 
     public function testHttpBasicAuthWithPhpCgi()
     {
-        $bag = new ServerBag(array('HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('foo:bar')));
+        $bag = new ServerBag(array('HTTP_AUTHORIZATION' => 'Basic '.base64_encode('foo:bar')));
 
         $this->assertEquals(array(
-            'AUTHORIZATION' => 'Basic ' . base64_encode('foo:bar'),
+            'AUTHORIZATION' => 'Basic '.base64_encode('foo:bar'),
             'PHP_AUTH_USER' => 'foo',
             'PHP_AUTH_PW' => 'bar',
         ), $bag->getHeaders());
@@ -70,7 +69,7 @@ class ServerBagTest extends TestCase
 
     public function testHttpBasicAuthWithPhpCgiBogus()
     {
-        $bag = new ServerBag(array('HTTP_AUTHORIZATION' => 'Basic_' . base64_encode('foo:bar')));
+        $bag = new ServerBag(array('HTTP_AUTHORIZATION' => 'Basic_'.base64_encode('foo:bar')));
 
         // Username and passwords should not be set as the header is bogus
         $headers = $bag->getHeaders();
@@ -80,10 +79,10 @@ class ServerBagTest extends TestCase
 
     public function testHttpBasicAuthWithPhpCgiRedirect()
     {
-        $bag = new ServerBag(array('REDIRECT_HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('username:pass:word')));
+        $bag = new ServerBag(array('REDIRECT_HTTP_AUTHORIZATION' => 'Basic '.base64_encode('username:pass:word')));
 
         $this->assertEquals(array(
-            'AUTHORIZATION' => 'Basic ' . base64_encode('username:pass:word'),
+            'AUTHORIZATION' => 'Basic '.base64_encode('username:pass:word'),
             'PHP_AUTH_USER' => 'username',
             'PHP_AUTH_PW' => 'pass:word',
         ), $bag->getHeaders());
@@ -91,10 +90,10 @@ class ServerBagTest extends TestCase
 
     public function testHttpBasicAuthWithPhpCgiEmptyPassword()
     {
-        $bag = new ServerBag(array('HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('foo:')));
+        $bag = new ServerBag(array('HTTP_AUTHORIZATION' => 'Basic '.base64_encode('foo:')));
 
         $this->assertEquals(array(
-            'AUTHORIZATION' => 'Basic ' . base64_encode('foo:'),
+            'AUTHORIZATION' => 'Basic '.base64_encode('foo:'),
             'PHP_AUTH_USER' => 'foo',
             'PHP_AUTH_PW' => '',
         ), $bag->getHeaders());
@@ -102,7 +101,7 @@ class ServerBagTest extends TestCase
 
     public function testHttpDigestAuthWithPhpCgi()
     {
-        $digest = 'Digest username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
+        $digest = 'Digest username="foo", realm="acme", nonce="'.md5('secret').'", uri="/protected, qop="auth"';
         $bag = new ServerBag(array('HTTP_AUTHORIZATION' => $digest));
 
         $this->assertEquals(array(
@@ -113,7 +112,7 @@ class ServerBagTest extends TestCase
 
     public function testHttpDigestAuthWithPhpCgiBogus()
     {
-        $digest = 'Digest_username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
+        $digest = 'Digest_username="foo", realm="acme", nonce="'.md5('secret').'", uri="/protected, qop="auth"';
         $bag = new ServerBag(array('HTTP_AUTHORIZATION' => $digest));
 
         // Username and passwords should not be set as the header is bogus
@@ -124,7 +123,7 @@ class ServerBagTest extends TestCase
 
     public function testHttpDigestAuthWithPhpCgiRedirect()
     {
-        $digest = 'Digest username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
+        $digest = 'Digest username="foo", realm="acme", nonce="'.md5('secret').'", uri="/protected, qop="auth"';
         $bag = new ServerBag(array('REDIRECT_HTTP_AUTHORIZATION' => $digest));
 
         $this->assertEquals(array(

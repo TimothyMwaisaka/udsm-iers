@@ -4,7 +4,7 @@ namespace Illuminate\Queue\Console;
 
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
-use Illuminate\Foundation\Composer;
+use Illuminate\Support\Composer;
 use Illuminate\Filesystem\Filesystem;
 
 class TableCommand extends Command
@@ -31,15 +31,15 @@ class TableCommand extends Command
     protected $files;
 
     /**
-     * @var \Illuminate\Foundation\Composer
+     * @var \Illuminate\Support\Composer
      */
     protected $composer;
 
     /**
      * Create a new queue job table command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem $files
-     * @param  \Illuminate\Foundation\Composer $composer
+     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param  \Illuminate\Support\Composer    $composer
      * @return void
      */
     public function __construct(Filesystem $files, Composer $composer)
@@ -64,7 +64,7 @@ class TableCommand extends Command
         $fullPath = $this->createBaseMigration($table);
 
         $stub = str_replace(
-            ['{{table}}', '{{tableClassName}}'], [$table, $tableClassName], $this->files->get(__DIR__ . '/stubs/jobs.stub')
+            ['{{table}}', '{{tableClassName}}'], [$table, $tableClassName], $this->files->get(__DIR__.'/stubs/jobs.stub')
         );
 
         $this->files->put($fullPath, $stub);
@@ -77,14 +77,14 @@ class TableCommand extends Command
     /**
      * Create a base migration file for the table.
      *
-     * @param  string $table
+     * @param  string  $table
      * @return string
      */
     protected function createBaseMigration($table = 'jobs')
     {
-        $name = 'create_' . $table . '_table';
+        $name = 'create_'.$table.'_table';
 
-        $path = $this->laravel->databasePath() . '/migrations';
+        $path = $this->laravel->databasePath().'/migrations';
 
         return $this->laravel['migration.creator']->create($name, $path);
     }

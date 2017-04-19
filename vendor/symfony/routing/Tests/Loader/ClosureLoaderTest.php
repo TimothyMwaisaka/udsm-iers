@@ -11,19 +11,17 @@
 
 namespace Symfony\Component\Routing\Tests\Loader;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Loader\ClosureLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class ClosureLoaderTest extends TestCase
+class ClosureLoaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testSupports()
     {
         $loader = new ClosureLoader();
 
-        $closure = function () {
-        };
+        $closure = function () {};
 
         $this->assertTrue($loader->supports($closure), '->supports() returns true if the resource is loadable');
         $this->assertFalse($loader->supports('foo.foo'), '->supports() returns true if the resource is loadable');

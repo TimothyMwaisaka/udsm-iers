@@ -44,9 +44,9 @@ class ExecutableFinder
     /**
      * Finds an executable by name.
      *
-     * @param string $name The executable name (without the extension)
-     * @param string $default The default to return if no executable is found
-     * @param array $extraDirs Additional dirs to check into
+     * @param string $name      The executable name (without the extension)
+     * @param string $default   The default to return if no executable is found
+     * @param array  $extraDirs Additional dirs to check into
      *
      * @return string The executable path or default value
      */
@@ -60,7 +60,7 @@ class ExecutableFinder
                 if (@is_dir($path)) {
                     $dirs[] = $path;
                 } else {
-                    if (basename($path) == $name && @is_executable($path)) {
+                    if (basename($path) == $name && is_executable($path)) {
                         return $path;
                     }
                 }
@@ -75,11 +75,11 @@ class ExecutableFinder
         $suffixes = array('');
         if ('\\' === DIRECTORY_SEPARATOR) {
             $pathExt = getenv('PATHEXT');
-            $suffixes = array_merge($suffixes, $pathExt ? explode(PATH_SEPARATOR, $pathExt) : $this->suffixes);
+            $suffixes = $pathExt ? explode(PATH_SEPARATOR, $pathExt) : $this->suffixes;
         }
         foreach ($suffixes as $suffix) {
             foreach ($dirs as $dir) {
-                if (@is_file($file = $dir . DIRECTORY_SEPARATOR . $name . $suffix) && ('\\' === DIRECTORY_SEPARATOR || is_executable($file))) {
+                if (is_file($file = $dir.DIRECTORY_SEPARATOR.$name.$suffix) && ('\\' === DIRECTORY_SEPARATOR || is_executable($file))) {
                     return $file;
                 }
             }

@@ -40,7 +40,7 @@ class WindowsPipes extends AbstractPipes
 
     public function __construct($disableOutput, $input)
     {
-        $this->disableOutput = (bool)$disableOutput;
+        $this->disableOutput = (bool) $disableOutput;
 
         if (!$this->disableOutput) {
             // Fix for PHP bug #51800: reading from STDOUT pipe hangs forever on Windows if the output is too big.
@@ -51,24 +51,17 @@ class WindowsPipes extends AbstractPipes
                 Process::STDOUT => Process::OUT,
                 Process::STDERR => Process::ERR,
             );
-            $tmpCheck = false;
             $tmpDir = sys_get_temp_dir();
-            $lastError = 'unknown reason';
-            set_error_handler(function ($type, $msg) use (&$lastError) {
-                $lastError = $msg;
-            });
-            for ($i = 0; ; ++$i) {
+            $error = 'unknown reason';
+            set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
+            for ($i = 0;; ++$i) {
                 foreach ($pipes as $pipe => $name) {
                     $file = sprintf('%s\\sf_proc_%02X.%s', $tmpDir, $i, $name);
                     if (file_exists($file) && !unlink($file)) {
                         continue 2;
                     }
                     $h = fopen($file, 'xb');
-                    if (!$h) {
-                        $error = $lastError;
-                        if ($tmpCheck || $tmpCheck = unlink(tempnam(false, 'sf_check_'))) {
-                            continue;
-                        }
+                    if (!$h && false === strpos($error, 'File exists')) {
                         restore_error_handler();
                         throw new RuntimeException(sprintf('A temporary file could not be opened to write the process output: %s', $error));
                     }
@@ -185,7 +178,7 @@ class WindowsPipes extends AbstractPipes
      * @param Process $process The process
      * @param $input
      *
-     * @return static
+     * @return WindowsPipes
      */
     public static function create(Process $process, $input)
     {

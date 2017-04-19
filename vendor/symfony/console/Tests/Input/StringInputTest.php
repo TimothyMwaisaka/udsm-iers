@@ -11,12 +11,11 @@
 
 namespace Symfony\Component\Console\Tests\Input;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\StringInput;
 
-class StringInputTest extends TestCase
+class StringInputTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getTokenizeData
@@ -39,19 +38,6 @@ class StringInputTest extends TestCase
         // call to bind
         $input = new StringInput('--foo=bar');
         $input->bind($definition);
-        $this->assertEquals('bar', $input->getOption('foo'));
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testLegacyInputOptionDefinitionInConstructor()
-    {
-        $definition = new InputDefinition(
-            array(new InputOption('foo', null, InputOption::VALUE_REQUIRED))
-        );
-
-        $input = new StringInput('--foo=bar', $definition);
         $this->assertEquals('bar', $input->getOption('foo'));
     }
 
@@ -89,12 +75,12 @@ class StringInputTest extends TestCase
     public function testToString()
     {
         $input = new StringInput('-f foo');
-        $this->assertEquals('-f foo', (string)$input);
+        $this->assertEquals('-f foo', (string) $input);
 
         $input = new StringInput('-f --bar=foo "a b c d"');
-        $this->assertEquals('-f --bar=foo ' . escapeshellarg('a b c d'), (string)$input);
+        $this->assertEquals('-f --bar=foo '.escapeshellarg('a b c d'), (string) $input);
 
-        $input = new StringInput('-f --bar=foo \'a b c d\' ' . "'A\nB\\'C'");
-        $this->assertEquals('-f --bar=foo ' . escapeshellarg('a b c d') . ' ' . escapeshellarg("A\nB'C"), (string)$input);
+        $input = new StringInput('-f --bar=foo \'a b c d\' '."'A\nB\\'C'");
+        $this->assertEquals('-f --bar=foo '.escapeshellarg('a b c d').' '.escapeshellarg("A\nB'C"), (string) $input);
     }
 }

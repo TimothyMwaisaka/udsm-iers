@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\Console\Formatter;
 
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+
 /**
  * Formatter class for console output.
  *
@@ -33,20 +35,6 @@ class OutputFormatter implements OutputFormatterInterface
     {
         $text = preg_replace('/([^\\\\]?)</', '$1\\<', $text);
 
-        return self::escapeTrailingBackslash($text);
-    }
-
-    /**
-     * Escapes trailing "\" in given text.
-     *
-     * @param string $text Text to escape
-     *
-     * @return string Escaped text
-     *
-     * @internal
-     */
-    public static function escapeTrailingBackslash($text)
-    {
         if ('\\' === substr($text, -1)) {
             $len = strlen($text);
             $text = rtrim($text, '\\');
@@ -59,12 +47,12 @@ class OutputFormatter implements OutputFormatterInterface
     /**
      * Initializes console output formatter.
      *
-     * @param bool $decorated Whether this formatter should actually decorate strings
-     * @param OutputFormatterStyleInterface[] $styles Array of "name => FormatterStyle" instances
+     * @param bool                            $decorated Whether this formatter should actually decorate strings
+     * @param OutputFormatterStyleInterface[] $styles    Array of "name => FormatterStyle" instances
      */
     public function __construct($decorated = false, array $styles = array())
     {
-        $this->decorated = (bool)$decorated;
+        $this->decorated = (bool) $decorated;
 
         $this->setStyle('error', new OutputFormatterStyle('white', 'red'));
         $this->setStyle('info', new OutputFormatterStyle('green'));
@@ -85,7 +73,7 @@ class OutputFormatter implements OutputFormatterInterface
      */
     public function setDecorated($decorated)
     {
-        $this->decorated = (bool)$decorated;
+        $this->decorated = (bool) $decorated;
     }
 
     /**
@@ -101,7 +89,7 @@ class OutputFormatter implements OutputFormatterInterface
     /**
      * Sets a new style.
      *
-     * @param string $name The style name
+     * @param string                        $name  The style name
      * @param OutputFormatterStyleInterface $style The style instance
      */
     public function setStyle($name, OutputFormatterStyleInterface $style)
@@ -128,12 +116,12 @@ class OutputFormatter implements OutputFormatterInterface
      *
      * @return OutputFormatterStyleInterface
      *
-     * @throws \InvalidArgumentException When style isn't defined
+     * @throws InvalidArgumentException When style isn't defined
      */
     public function getStyle($name)
     {
         if (!$this->hasStyle($name)) {
-            throw new \InvalidArgumentException(sprintf('Undefined style: %s', $name));
+            throw new InvalidArgumentException(sprintf('Undefined style: %s', $name));
         }
 
         return $this->styles[strtolower($name)];
@@ -148,7 +136,7 @@ class OutputFormatter implements OutputFormatterInterface
      */
     public function format($message)
     {
-        $message = (string)$message;
+        $message = (string) $message;
         $offset = 0;
         $output = '';
         $tagRegex = '[a-z][a-z0-9_=;-]*+';
@@ -206,7 +194,7 @@ class OutputFormatter implements OutputFormatterInterface
      *
      * @param string $string
      *
-     * @return OutputFormatterStyle|false false if string is not format string
+     * @return OutputFormatterStyle|bool false if string is not format string
      */
     private function createStyleFromString($string)
     {

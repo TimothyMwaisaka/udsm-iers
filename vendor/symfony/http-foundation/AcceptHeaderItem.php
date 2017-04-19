@@ -42,7 +42,7 @@ class AcceptHeaderItem
      * Constructor.
      *
      * @param string $value
-     * @param array $attributes
+     * @param array  $attributes
      */
     public function __construct($value, array $attributes = array())
     {
@@ -57,7 +57,7 @@ class AcceptHeaderItem
      *
      * @param string $itemValue
      *
-     * @return self
+     * @return AcceptHeaderItem
      */
     public static function fromString($itemValue)
     {
@@ -88,11 +88,11 @@ class AcceptHeaderItem
      */
     public function __toString()
     {
-        $string = $this->value . ($this->quality < 1 ? ';q=' . $this->quality : '');
+        $string = $this->value.($this->quality < 1 ? ';q='.$this->quality : '');
         if (count($this->attributes) > 0) {
-            $string .= ';' . implode(';', array_map(function ($name, $value) {
-                    return sprintf(preg_match('/[,;=]/', $value) ? '%s="%s"' : '%s=%s', $name, $value);
-                }, array_keys($this->attributes), $this->attributes));
+            $string .= ';'.implode(';', array_map(function ($name, $value) {
+                return sprintf(preg_match('/[,;=]/', $value) ? '%s="%s"' : '%s=%s', $name, $value);
+            }, array_keys($this->attributes), $this->attributes));
         }
 
         return $string;
@@ -103,7 +103,7 @@ class AcceptHeaderItem
      *
      * @param string $value
      *
-     * @return $this
+     * @return AcceptHeaderItem
      */
     public function setValue($value)
     {
@@ -127,7 +127,7 @@ class AcceptHeaderItem
      *
      * @param float $quality
      *
-     * @return $this
+     * @return AcceptHeaderItem
      */
     public function setQuality($quality)
     {
@@ -151,7 +151,7 @@ class AcceptHeaderItem
      *
      * @param int $index
      *
-     * @return $this
+     * @return AcceptHeaderItem
      */
     public function setIndex($index)
     {
@@ -186,7 +186,7 @@ class AcceptHeaderItem
      * Returns an attribute by its name.
      *
      * @param string $name
-     * @param mixed $default
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -211,14 +211,14 @@ class AcceptHeaderItem
      * @param string $name
      * @param string $value
      *
-     * @return $this
+     * @return AcceptHeaderItem
      */
     public function setAttribute($name, $value)
     {
         if ('q' === $name) {
-            $this->quality = (float)$value;
+            $this->quality = (float) $value;
         } else {
-            $this->attributes[$name] = (string)$value;
+            $this->attributes[$name] = (string) $value;
         }
 
         return $this;

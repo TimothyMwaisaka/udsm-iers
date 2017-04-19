@@ -11,7 +11,6 @@ use Illuminate\Contracts\Mail\Mailer;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Foundation\Application;
 
 class Event
 {
@@ -65,18 +64,25 @@ class Event
     public $withoutOverlapping = false;
 
     /**
-     * The filter callback.
+     * Indicates if the command should run in background.
      *
-     * @var \Closure
+     * @var bool
      */
-    protected $filter;
+    public $runInBackground = false;
 
     /**
-     * The reject callback.
+     * The array of filter callbacks.
      *
-     * @var \Closure
+     * @var array
      */
-    protected $reject;
+    protected $filters = [];
+
+    /**
+     * The array of reject callbacks.
+     *
+     * @var array
+     */
+    protected $rejects = [];
 
     /**
      * The location that output should be sent to.
@@ -116,7 +122,7 @@ class Event
     /**
      * Create a new event instance.
      *
-     * @param  string $command
+     * @param  string  $command
      * @return void
      */
     public function __construct($command)
@@ -138,12 +144,12 @@ class Event
     /**
      * Run the given event.
      *
-     * @param  \Illuminate\Contracts\Container\Container $container
+     * @param  \Illuminate\Contracts\Container\Container  $container
      * @return void
      */
     public function run(Container $container)
     {
-        if (count($this->afterCallbacks) > 0 || count($this->beforeCallbacks) > 0) {
+        if (! $this->runInBackground) {
             $this->runCommandInForeground($container);
         } else {
             $this->runCommandInBackground();
@@ -151,21 +157,9 @@ class Event
     }
 
     /**
-     * Run the command in the background using exec.
-     *
-     * @return void
-     */
-    protected function runCommandInBackground()
-    {
-        chdir(base_path());
-
-        exec($this->buildCommand());
-    }
-
-    /**
      * Run the command in the foreground.
      *
-     * @param  \Illuminate\Contracts\Container\Container $container
+     * @param  \Illuminate\Contracts\Container\Container  $container
      * @return void
      */
     protected function runCommandInForeground(Container $container)
@@ -180,9 +174,21 @@ class Event
     }
 
     /**
+     * Run the command in the background.
+     *
+     * @return void
+     */
+    protected function runCommandInBackground()
+    {
+        (new Process(
+            $this->buildCommand(), base_path(), null, null, null
+        ))->run();
+    }
+
+    /**
      * Call all of the "before" callbacks for the event.
      *
-     * @param  \Illuminate\Contracts\Container\Container $container
+     * @param  \Illuminate\Contracts\Container\Container  $container
      * @return void
      */
     protected function callBeforeCallbacks(Container $container)
@@ -195,7 +201,7 @@ class Event
     /**
      * Call all of the "after" callbacks for the event.
      *
-     * @param  \Illuminate\Contracts\Container\Container $container
+     * @param  \Illuminate\Contracts\Container\Container  $container
      * @return void
      */
     protected function callAfterCallbacks(Container $container)
@@ -218,15 +224,15 @@ class Event
 
         if ($this->withoutOverlapping) {
             if (windows_os()) {
-                $command = '(echo \'\' > "' . $this->mutexPath() . '" & ' . $this->command . ' & del "' . $this->mutexPath() . '")' . $redirect . $output . ' 2>&1 &';
+                $command = '(echo \'\' > "'.$this->mutexPath().'" & '.$this->command.' & del "'.$this->mutexPath().'")'.$redirect.$output.' 2>&1 &';
             } else {
-                $command = '(touch ' . $this->mutexPath() . '; ' . $this->command . '; rm ' . $this->mutexPath() . ')' . $redirect . $output . ' 2>&1 &';
+                $command = '(touch '.$this->mutexPath().'; '.$this->command.'; rm '.$this->mutexPath().')'.$redirect.$output.' 2>&1 &';
             }
         } else {
-            $command = $this->command . $redirect . $output . ' 2>&1 &';
+            $command = $this->command.$redirect.$output.' 2>&1 &';
         }
 
-        return $this->user && !windows_os() ? 'sudo -u ' . $this->user . ' -- sh -c \'' . $command . '\'' : $command;
+        return $this->user && ! windows_os() ? 'sudo -u '.$this->user.' -- sh -c \''.$command.'\'' : $command;
     }
 
     /**
@@ -236,24 +242,23 @@ class Event
      */
     protected function mutexPath()
     {
-        return storage_path('framework/schedule-' . md5($this->expression . $this->command));
+        return storage_path('framework'.DIRECTORY_SEPARATOR.'schedule-'.sha1($this->expression.$this->command));
     }
 
     /**
      * Determine if the given event should run based on the Cron expression.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application $app
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return bool
      */
-    public function isDue(Application $app)
+    public function isDue($app)
     {
-        if (!$this->runsInMaintenanceMode() && $app->isDownForMaintenance()) {
+        if (! $this->runsInMaintenanceMode() && $app->isDownForMaintenance()) {
             return false;
         }
 
         return $this->expressionPasses() &&
-        $this->filtersPass($app) &&
-        $this->runsInEnvironment($app->environment());
+               $this->runsInEnvironment($app->environment());
     }
 
     /**
@@ -275,15 +280,21 @@ class Event
     /**
      * Determine if the filters pass for the event.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application $app
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return bool
      */
-    protected function filtersPass(Application $app)
+    public function filtersPass($app)
     {
-        if (($this->filter && !$app->call($this->filter)) ||
-            $this->reject && $app->call($this->reject)
-        ) {
-            return false;
+        foreach ($this->filters as $callback) {
+            if (! $app->call($callback)) {
+                return false;
+            }
+        }
+
+        foreach ($this->rejects as $callback) {
+            if ($app->call($callback)) {
+                return false;
+            }
         }
 
         return true;
@@ -292,7 +303,7 @@ class Event
     /**
      * Determine if the event runs in the given environment.
      *
-     * @param  string $environment
+     * @param  string  $environment
      * @return bool
      */
     public function runsInEnvironment($environment)
@@ -313,7 +324,7 @@ class Event
     /**
      * The Cron expression representing the event's frequency.
      *
-     * @param  string $expression
+     * @param  string  $expression
      * @return $this
      */
     public function cron($expression)
@@ -346,7 +357,7 @@ class Event
     /**
      * Schedule the command at a given time.
      *
-     * @param  string $time
+     * @param  string  $time
      * @return $this
      */
     public function at($time)
@@ -357,30 +368,30 @@ class Event
     /**
      * Schedule the event to run daily at a given time (10:00, 19:30, etc).
      *
-     * @param  string $time
+     * @param  string  $time
      * @return $this
      */
     public function dailyAt($time)
     {
         $segments = explode(':', $time);
 
-        return $this->spliceIntoPosition(2, (int)$segments[0])
-            ->spliceIntoPosition(1, count($segments) == 2 ? (int)$segments[1] : '0');
+        return $this->spliceIntoPosition(2, (int) $segments[0])
+                    ->spliceIntoPosition(1, count($segments) == 2 ? (int) $segments[1] : '0');
     }
 
     /**
      * Schedule the event to run twice daily.
      *
-     * @param  int $first
-     * @param  int $second
+     * @param  int  $first
+     * @param  int  $second
      * @return $this
      */
     public function twiceDaily($first = 1, $second = 13)
     {
-        $hours = $first . ',' . $second;
+        $hours = $first.','.$second;
 
         return $this->spliceIntoPosition(1, 0)
-            ->spliceIntoPosition(2, $hours);
+                    ->spliceIntoPosition(2, $hours);
     }
 
     /**
@@ -476,8 +487,8 @@ class Event
     /**
      * Schedule the event to run weekly on a given day and time.
      *
-     * @param  int $day
-     * @param  string $time
+     * @param  int  $day
+     * @param  string  $time
      * @return $this
      */
     public function weeklyOn($day, $time = '0:0')
@@ -495,6 +506,30 @@ class Event
     public function monthly()
     {
         return $this->cron('0 0 1 * * *');
+    }
+
+    /**
+     * Schedule the event to run monthly on a given day and time.
+     *
+     * @param int  $day
+     * @param string  $time
+     * @return $this
+     */
+    public function monthlyOn($day = 1, $time = '0:0')
+    {
+        $this->dailyAt($time);
+
+        return $this->spliceIntoPosition(3, $day);
+    }
+
+    /**
+     * Schedule the event to run quarterly.
+     *
+     * @return $this
+     */
+    public function quarterly()
+    {
+        return $this->cron('0 0 1 */3 *');
     }
 
     /**
@@ -550,7 +585,7 @@ class Event
     /**
      * Set the days of the week the command should run on.
      *
-     * @param  array|mixed $days
+     * @param  array|mixed  $days
      * @return $this
      */
     public function days($days)
@@ -561,9 +596,21 @@ class Event
     }
 
     /**
+     * State that the command should run in background.
+     *
+     * @return $this
+     */
+    public function runInBackground()
+    {
+        $this->runInBackground = true;
+
+        return $this;
+    }
+
+    /**
      * Set the timezone the date should be evaluated on.
      *
-     * @param  \DateTimeZone|string $timezone
+     * @param  \DateTimeZone|string  $timezone
      * @return $this
      */
     public function timezone($timezone)
@@ -576,7 +623,7 @@ class Event
     /**
      * Set which user the command should run as.
      *
-     * @param  string $user
+     * @param  string  $user
      * @return $this
      */
     public function user($user)
@@ -589,7 +636,7 @@ class Event
     /**
      * Limit the environments the command should run in.
      *
-     * @param  array|mixed $environments
+     * @param  array|mixed  $environments
      * @return $this
      */
     public function environments($environments)
@@ -628,12 +675,12 @@ class Event
     /**
      * Register a callback to further filter the schedule.
      *
-     * @param  \Closure $callback
+     * @param  \Closure  $callback
      * @return $this
      */
     public function when(Closure $callback)
     {
-        $this->filter = $callback;
+        $this->filters[] = $callback;
 
         return $this;
     }
@@ -641,12 +688,12 @@ class Event
     /**
      * Register a callback to further filter the schedule.
      *
-     * @param  \Closure $callback
+     * @param  \Closure  $callback
      * @return $this
      */
     public function skip(Closure $callback)
     {
-        $this->reject = $callback;
+        $this->rejects[] = $callback;
 
         return $this;
     }
@@ -654,8 +701,8 @@ class Event
     /**
      * Send the output of the command to a given location.
      *
-     * @param  string $location
-     * @param  bool $append
+     * @param  string  $location
+     * @param  bool  $append
      * @return $this
      */
     public function sendOutputTo($location, $append = false)
@@ -670,7 +717,7 @@ class Event
     /**
      * Append the output of the command to a given location.
      *
-     * @param  string $location
+     * @param  string  $location
      * @return $this
      */
     public function appendOutputTo($location)
@@ -681,12 +728,13 @@ class Event
     /**
      * E-mail the results of the scheduled operation.
      *
-     * @param  array|mixed $addresses
+     * @param  array|mixed  $addresses
+     * @param  bool  $onlyIfOutputExists
      * @return $this
      *
      * @throws \LogicException
      */
-    public function emailOutputTo($addresses)
+    public function emailOutputTo($addresses, $onlyIfOutputExists = false)
     {
         if (is_null($this->output) || $this->output == $this->getDefaultOutput()) {
             throw new LogicException('Must direct output to a file in order to e-mail results.');
@@ -694,21 +742,41 @@ class Event
 
         $addresses = is_array($addresses) ? $addresses : func_get_args();
 
-        return $this->then(function (Mailer $mailer) use ($addresses) {
-            $this->emailOutput($mailer, $addresses);
+        return $this->then(function (Mailer $mailer) use ($addresses, $onlyIfOutputExists) {
+            $this->emailOutput($mailer, $addresses, $onlyIfOutputExists);
         });
+    }
+
+    /**
+     * E-mail the results of the scheduled operation if it produces output.
+     *
+     * @param  array|mixed  $addresses
+     * @return $this
+     *
+     * @throws \LogicException
+     */
+    public function emailWrittenOutputTo($addresses)
+    {
+        return $this->emailOutputTo($addresses, true);
     }
 
     /**
      * E-mail the output of the event to the recipients.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailer $mailer
-     * @param  array $addresses
+     * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
+     * @param  array  $addresses
+     * @param  bool  $onlyIfOutputExists
      * @return void
      */
-    protected function emailOutput(Mailer $mailer, $addresses)
+    protected function emailOutput(Mailer $mailer, $addresses, $onlyIfOutputExists = false)
     {
-        $mailer->raw(file_get_contents($this->output), function ($m) use ($addresses) {
+        $text = file_get_contents($this->output);
+
+        if ($onlyIfOutputExists && empty($text)) {
+            return;
+        }
+
+        $mailer->raw($text, function ($m) use ($addresses) {
             $m->subject($this->getEmailSubject());
 
             foreach ($addresses as $address) {
@@ -725,7 +793,7 @@ class Event
     protected function getEmailSubject()
     {
         if ($this->description) {
-            return 'Scheduled Job Output (' . $this->description . ')';
+            return 'Scheduled Job Output ('.$this->description.')';
         }
 
         return 'Scheduled Job Output';
@@ -734,7 +802,7 @@ class Event
     /**
      * Register a callback to ping a given URL before the job runs.
      *
-     * @param  string $url
+     * @param  string  $url
      * @return $this
      */
     public function pingBefore($url)
@@ -747,7 +815,7 @@ class Event
     /**
      * Register a callback to be called before the operation.
      *
-     * @param  \Closure $callback
+     * @param  \Closure  $callback
      * @return $this
      */
     public function before(Closure $callback)
@@ -760,7 +828,7 @@ class Event
     /**
      * Register a callback to ping a given URL after the job runs.
      *
-     * @param  string $url
+     * @param  string  $url
      * @return $this
      */
     public function thenPing($url)
@@ -773,7 +841,7 @@ class Event
     /**
      * Register a callback to be called after the operation.
      *
-     * @param  \Closure $callback
+     * @param  \Closure  $callback
      * @return $this
      */
     public function after(Closure $callback)
@@ -784,7 +852,7 @@ class Event
     /**
      * Register a callback to be called after the operation.
      *
-     * @param  \Closure $callback
+     * @param  \Closure  $callback
      * @return $this
      */
     public function then(Closure $callback)
@@ -797,7 +865,7 @@ class Event
     /**
      * Set the human-friendly description of the event.
      *
-     * @param  string $description
+     * @param  string  $description
      * @return $this
      */
     public function name($description)
@@ -808,7 +876,7 @@ class Event
     /**
      * Set the human-friendly description of the event.
      *
-     * @param  string $description
+     * @param  string  $description
      * @return $this
      */
     public function description($description)
@@ -821,8 +889,8 @@ class Event
     /**
      * Splice the given value into the given position of the expression.
      *
-     * @param  int $position
-     * @param  string $value
+     * @param  int  $position
+     * @param  string  $value
      * @return $this
      */
     protected function spliceIntoPosition($position, $value)

@@ -3,13 +3,20 @@
 namespace Illuminate\Foundation\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Str;
+use Illuminate\Foundation\Application;
 use Symfony\Component\HttpFoundation\Cookie;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Session\TokenMismatchException;
 
 class VerifyCsrfToken
 {
+    /**
+     * The application instance.
+     *
+     * @var \Illuminate\Foundation\Application
+     */
+    protected $app;
+
     /**
      * The encrypter implementation.
      *
@@ -27,26 +34,33 @@ class VerifyCsrfToken
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Encryption\Encrypter $encrypter
+     * @param  \Illuminate\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Encryption\Encrypter  $encrypter
      * @return void
      */
-    public function __construct(Encrypter $encrypter)
+    public function __construct(Application $app, Encrypter $encrypter)
     {
+        $this->app = $app;
         $this->encrypter = $encrypter;
     }
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      *
      * @throws \Illuminate\Session\TokenMismatchException
      */
     public function handle($request, Closure $next)
     {
-        if ($this->isReading($request) || $this->shouldPassThrough($request) || $this->tokensMatch($request)) {
+        if (
+            $this->isReading($request) ||
+            $this->runningUnitTests() ||
+            $this->shouldPassThrough($request) ||
+            $this->tokensMatch($request)
+        ) {
             return $this->addCookieToResponse($request, $next($request));
         }
 
@@ -56,7 +70,7 @@ class VerifyCsrfToken
     /**
      * Determine if the request has a URI that should pass through CSRF verification.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
     protected function shouldPassThrough($request)
@@ -75,9 +89,19 @@ class VerifyCsrfToken
     }
 
     /**
+     * Determine if the application is running unit tests.
+     *
+     * @return bool
+     */
+    protected function runningUnitTests()
+    {
+        return $this->app->runningInConsole() && $this->app->runningUnitTests();
+    }
+
+    /**
      * Determine if the session and input CSRF tokens match.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
     protected function tokensMatch($request)
@@ -86,22 +110,22 @@ class VerifyCsrfToken
 
         $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
 
-        if (!$token && $header = $request->header('X-XSRF-TOKEN')) {
+        if (! $token && $header = $request->header('X-XSRF-TOKEN')) {
             $token = $this->encrypter->decrypt($header);
         }
 
-        if (!is_string($sessionToken) || !is_string($token)) {
+        if (! is_string($sessionToken) || ! is_string($token)) {
             return false;
         }
 
-        return Str::equals($sessionToken, $token);
+        return hash_equals($sessionToken, $token);
     }
 
     /**
      * Add the CSRF token to the response cookies.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Illuminate\Http\Response $response
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Response  $response
      * @return \Illuminate\Http\Response
      */
     protected function addCookieToResponse($request, $response)
@@ -110,7 +134,7 @@ class VerifyCsrfToken
 
         $response->headers->setCookie(
             new Cookie(
-                'XSRF-TOKEN', $request->session()->token(), time() + 60 * 120,
+                'XSRF-TOKEN', $request->session()->token(), time() + 60 * $config['lifetime'],
                 $config['path'], $config['domain'], $config['secure'], false
             )
         );
@@ -121,7 +145,7 @@ class VerifyCsrfToken
     /**
      * Determine if the HTTP request uses a ‘read’ verb.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
     protected function isReading($request)

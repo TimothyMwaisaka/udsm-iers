@@ -10,7 +10,7 @@ class SessionManager extends Manager
     /**
      * Call a custom driver creator.
      *
-     * @param  string $driver
+     * @param  string  $driver
      * @return mixed
      */
     protected function callCustomCreator($driver)
@@ -77,7 +77,25 @@ class SessionManager extends Manager
 
         $lifetime = $this->app['config']['session.lifetime'];
 
-        return $this->buildSession(new DatabaseSessionHandler($connection, $table, $lifetime));
+        return $this->buildSession(new DatabaseSessionHandler($connection, $table, $lifetime, $this->app));
+    }
+
+    /**
+     * Create an instance of the legacy database session driver.
+     *
+     * @return \Illuminate\Session\Store
+     *
+     * @deprecated since version 5.2.
+     */
+    protected function createLegacyDatabaseDriver()
+    {
+        $connection = $this->getDatabaseConnection();
+
+        $table = $this->app['config']['session.table'];
+
+        $lifetime = $this->app['config']['session.lifetime'];
+
+        return $this->buildSession(new LegacyDatabaseSessionHandler($connection, $table, $lifetime));
     }
 
     /**
@@ -139,7 +157,7 @@ class SessionManager extends Manager
     /**
      * Create an instance of a cache driven driver.
      *
-     * @param  string $driver
+     * @param  string  $driver
      * @return \Illuminate\Session\Store
      */
     protected function createCacheBased($driver)
@@ -150,7 +168,7 @@ class SessionManager extends Manager
     /**
      * Create the cache based session handler instance.
      *
-     * @param  string $driver
+     * @param  string  $driver
      * @return \Illuminate\Session\CacheBasedSessionHandler
      */
     protected function createCacheHandler($driver)
@@ -163,7 +181,7 @@ class SessionManager extends Manager
     /**
      * Build the session instance.
      *
-     * @param  \SessionHandlerInterface $handler
+     * @param  \SessionHandlerInterface  $handler
      * @return \Illuminate\Session\Store
      */
     protected function buildSession($handler)
@@ -200,7 +218,7 @@ class SessionManager extends Manager
     /**
      * Set the default session driver name.
      *
-     * @param  string $name
+     * @param  string  $name
      * @return void
      */
     public function setDefaultDriver($name)

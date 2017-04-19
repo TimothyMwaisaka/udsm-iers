@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\Process\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\ProcessBuilder;
 
-class ProcessBuilderTest extends TestCase
+class ProcessBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testInheritEnvironmentVars()
     {
@@ -43,7 +42,8 @@ class ProcessBuilderTest extends TestCase
             ->setEnv('foo', 'bar2')
             ->addEnvironmentVariables($env)
             ->inheritEnvironmentVariables(false)
-            ->getProcess();
+            ->getProcess()
+        ;
 
         $this->assertSame($env, $proc->getEnv());
     }

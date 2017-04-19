@@ -70,10 +70,10 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      *                            This setting is overridden by the stale-if-error HTTP Cache-Control extension
      *                            (see RFC 5861).
      *
-     * @param HttpKernelInterface $kernel An HttpKernelInterface instance
-     * @param StoreInterface $store A Store instance
-     * @param SurrogateInterface $surrogate A SurrogateInterface instance
-     * @param array $options An array of options
+     * @param HttpKernelInterface $kernel    An HttpKernelInterface instance
+     * @param StoreInterface      $store     A Store instance
+     * @param SurrogateInterface  $surrogate A SurrogateInterface instance
+     * @param array               $options   An array of options
      */
     public function __construct(HttpKernelInterface $kernel, StoreInterface $store, SurrogateInterface $surrogate = null, array $options = array())
     {
@@ -159,27 +159,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      */
     public function getSurrogate()
     {
-        if (!$this->surrogate instanceof Esi) {
-            throw new \LogicException('This instance of HttpCache was not set up to use ESI as surrogate handler. You must overwrite and use createSurrogate');
-        }
-
         return $this->surrogate;
-    }
-
-    /**
-     * Gets the Esi instance.
-     *
-     * @return Esi An Esi instance
-     *
-     * @throws \LogicException
-     *
-     * @deprecated since version 2.6, to be removed in 3.0. Use getSurrogate() instead
-     */
-    public function getEsi()
-    {
-        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 2.6 and will be removed in 3.0. Use the getSurrogate() method instead.', E_USER_DEPRECATED);
-
-        return $this->getSurrogate();
     }
 
     /**
@@ -198,13 +178,13 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
         $path = $request->getPathInfo();
         if ($qs = $request->getQueryString()) {
-            $path .= '?' . $qs;
+            $path .= '?'.$qs;
         }
-        $this->traces[$request->getMethod() . ' ' . $path] = array();
+        $this->traces[$request->getMethod().' '.$path] = array();
 
-        if (!$request->isMethodSafe(false)) {
+        if (!$request->isMethodSafe()) {
             $response = $this->invalidate($request, $catch);
-        } elseif ($request->headers->has('expect') || !$request->isMethodCacheable()) {
+        } elseif ($request->headers->has('expect')) {
             $response = $this->pass($request, $catch);
         } else {
             $response = $this->lookup($request, $catch);
@@ -247,7 +227,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      * Forwards the Request to the backend without storing the Response in the cache.
      *
      * @param Request $request A Request instance
-     * @param bool $catch Whether to process exceptions
+     * @param bool    $catch   Whether to process exceptions
      *
      * @return Response A Response instance
      */
@@ -262,7 +242,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      * Invalidates non-safe methods (like POST, PUT, and DELETE).
      *
      * @param Request $request A Request instance
-     * @param bool $catch Whether to process exceptions
+     * @param bool    $catch   Whether to process exceptions
      *
      * @return Response A Response instance
      *
@@ -311,7 +291,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      * it triggers "miss" processing.
      *
      * @param Request $request A Request instance
-     * @param bool $catch whether to process exceptions
+     * @param bool    $catch   whether to process exceptions
      *
      * @return Response A Response instance
      *
@@ -363,9 +343,9 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      * The original request is used as a template for a conditional
      * GET request with the backend.
      *
-     * @param Request $request A Request instance
-     * @param Response $entry A Response instance to validate
-     * @param bool $catch Whether to process exceptions
+     * @param Request  $request A Request instance
+     * @param Response $entry   A Response instance to validate
+     * @param bool     $catch   Whether to process exceptions
      *
      * @return Response A Response instance
      */
@@ -374,9 +354,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         $subRequest = clone $request;
 
         // send no head requests because we want content
-        if ('HEAD' === $request->getMethod()) {
-            $subRequest->setMethod('GET');
-        }
+        $subRequest->setMethod('GET');
 
         // add our cached last-modified validator
         $subRequest->headers->set('if_modified_since', $entry->headers->get('Last-Modified'));
@@ -428,7 +406,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      * This methods is triggered when the cache missed or a reload is required.
      *
      * @param Request $request A Request instance
-     * @param bool $catch whether to process exceptions
+     * @param bool    $catch   whether to process exceptions
      *
      * @return Response A Response instance
      */
@@ -437,9 +415,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         $subRequest = clone $request;
 
         // send no head requests because we want content
-        if ('HEAD' === $request->getMethod()) {
-            $subRequest->setMethod('GET');
-        }
+        $subRequest->setMethod('GET');
 
         // avoid that the backend sends no content
         $subRequest->headers->remove('if_modified_since');
@@ -457,9 +433,9 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     /**
      * Forwards the Request to the backend and returns the Response.
      *
-     * @param Request $request A Request instance
-     * @param bool $catch Whether to catch exceptions or not
-     * @param Response $entry A Response instance (the stale entry if present, null otherwise)
+     * @param Request  $request A Request instance
+     * @param bool     $catch   Whether to catch exceptions or not
+     * @param Response $entry   A Response instance (the stale entry if present, null otherwise)
      *
      * @return Response A Response instance
      */
@@ -472,7 +448,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         // modify the X-Forwarded-For header if needed
         $forwardedFor = $request->headers->get('X-Forwarded-For');
         if ($forwardedFor) {
-            $request->headers->set('X-Forwarded-For', $forwardedFor . ', ' . $request->server->get('REMOTE_ADDR'));
+            $request->headers->set('X-Forwarded-For', $forwardedFor.', '.$request->server->get('REMOTE_ADDR'));
         } else {
             $request->headers->set('X-Forwarded-For', $request->server->get('REMOTE_ADDR'));
         }
@@ -518,8 +494,8 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     /**
      * Checks whether the cache entry is "fresh enough" to satisfy the Request.
      *
-     * @param Request $request A Request instance
-     * @param Response $entry A Response instance
+     * @param Request  $request A Request instance
+     * @param Response $entry   A Response instance
      *
      * @return bool true if the cache entry if fresh enough, false otherwise
      */
@@ -539,8 +515,8 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     /**
      * Locks a Request during the call to the backend.
      *
-     * @param Request $request A Request instance
-     * @param Response $entry A Response instance
+     * @param Request  $request A Request instance
+     * @param Response $entry   A Response instance
      *
      * @return bool true if the cache entry can be returned even if it is staled, false otherwise
      */
@@ -597,7 +573,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     /**
      * Writes the Response to the cache.
      *
-     * @param Request $request A Request instance
+     * @param Request  $request  A Request instance
      * @param Response $response A Response instance
      *
      * @throws \Exception
@@ -628,7 +604,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     /**
      * Restores the Response body.
      *
-     * @param Request $request A Request instance
+     * @param Request  $request  A Request instance
      * @param Response $response A Response instance
      */
     private function restoreResponseBody(Request $request, Response $response)
@@ -647,7 +623,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
             if ($response->headers->has('X-Body-File')) {
                 include $response->headers->get('X-Body-File');
             } else {
-                eval('; ?>' . $response->getContent() . '<?php ;');
+                eval('; ?>'.$response->getContent().'<?php ;');
             }
 
             $response->setContent(ob_get_clean());
@@ -700,14 +676,14 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
      * Records that an event took place.
      *
      * @param Request $request A Request instance
-     * @param string $event The event name
+     * @param string  $event   The event name
      */
     private function record(Request $request, $event)
     {
         $path = $request->getPathInfo();
         if ($qs = $request->getQueryString()) {
-            $path .= '?' . $qs;
+            $path .= '?'.$qs;
         }
-        $this->traces[$request->getMethod() . ' ' . $path][] = $event;
+        $this->traces[$request->getMethod().' '.$path][] = $event;
     }
 }

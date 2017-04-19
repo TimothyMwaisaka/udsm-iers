@@ -30,8 +30,8 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
     /**
      * Constructor.
      *
-     * @param string $locale The locale
-     * @param array $messages An array of messages classified by domain
+     * @param string $locale   The locale
+     * @param array  $messages An array of messages classified by domain
      */
     public function __construct($locale, array $messages = array())
     {
@@ -177,10 +177,6 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
         do {
             if ($c->getLocale() === $catalogue->getLocale()) {
                 throw new \LogicException(sprintf('Circular reference detected when adding a fallback catalogue for locale "%s".', $catalogue->getLocale()));
-            }
-
-            foreach ($catalogue->getResources() as $resource) {
-                $c->addResource($resource);
             }
         } while ($c = $c->parent);
 

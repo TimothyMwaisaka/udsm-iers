@@ -29,12 +29,12 @@ class MockSplFileInfo extends \SplFileInfo
             parent::__construct($param);
         } elseif (is_array($param)) {
             $defaults = array(
-                'name' => 'file.txt',
-                'contents' => null,
-                'mode' => null,
-                'type' => null,
-                'relativePath' => null,
-                'relativePathname' => null,
+              'name' => 'file.txt',
+              'contents' => null,
+              'mode' => null,
+              'type' => null,
+              'relativePath' => null,
+              'relativePathname' => null,
             );
             $defaults = array_merge($defaults, $param);
             parent::__construct($defaults['name']);
@@ -95,10 +95,12 @@ class MockSplFileInfo extends \SplFileInfo
         if (is_string($type)) {
             switch ($type) {
                 case 'directory':
+                    $this->type = self::TYPE_DIRECTORY;
                 case 'd':
                     $this->type = self::TYPE_DIRECTORY;
                     break;
                 case 'file':
+                    $this->type = self::TYPE_FILE;
                 case 'f':
                     $this->type = self::TYPE_FILE;
                     break;

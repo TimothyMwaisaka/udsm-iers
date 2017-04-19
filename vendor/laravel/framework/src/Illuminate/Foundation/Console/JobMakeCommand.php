@@ -35,22 +35,22 @@ class JobMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        if ($this->option('queued')) {
-            return __DIR__ . '/stubs/job-queued.stub';
+        if ($this->option('sync')) {
+            return __DIR__.'/stubs/job.stub';
         } else {
-            return __DIR__ . '/stubs/job.stub';
+            return __DIR__.'/stubs/job-queued.stub';
         }
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string $rootNamespace
+     * @param  string  $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Jobs';
+        return $rootNamespace.'\Jobs';
     }
 
     /**
@@ -61,7 +61,7 @@ class JobMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['queued', null, InputOption::VALUE_NONE, 'Indicates that job should be queued.'],
+            ['sync', null, InputOption::VALUE_NONE, 'Indicates that job should be synchronous.'],
         ];
     }
 }

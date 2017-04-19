@@ -61,8 +61,8 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
      * If you use such an index, you can drop `gc_probability` to 0 since
      * no garbage-collection is required.
      *
-     * @param \Mongo|\MongoClient|\MongoDB\Client $mongo A MongoDB\Client, MongoClient or Mongo instance
-     * @param array $options An associative array of field options
+     * @param \Mongo|\MongoClient|\MongoDB\Client $mongo   A MongoDB\Client, MongoClient or Mongo instance
+     * @param array                               $options An associative array of field options
      *
      * @throws \InvalidArgumentException When MongoClient or Mongo instance not provided
      * @throws \InvalidArgumentException When "database" or "collection" not provided
@@ -136,7 +136,7 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        $expiry = $this->createDateTime(time() + (int)ini_get('session.gc_maxlifetime'));
+        $expiry = $this->createDateTime(time() + (int) ini_get('session.gc_maxlifetime'));
 
         $fields = array(
             $this->options['time_field'] => $this->createDateTime(),
@@ -214,8 +214,6 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
      * Return an instance of a MongoDate or \MongoDB\BSON\UTCDateTime
      *
      * @param int $seconds An integer representing UTC seconds since Jan 1 1970.  Defaults to now.
-     *
-     * @return \MongoDate|\MongoDB\BSON\UTCDateTime
      */
     private function createDateTime($seconds = null)
     {

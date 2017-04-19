@@ -4,12 +4,12 @@ namespace Illuminate\Queue;
 
 use Closure;
 use DateTime;
-use RuntimeException;
+use Exception;
 use Illuminate\Support\Arr;
 use SuperClosure\Serializer;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Contracts\Queue\QueueableEntity;
-use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
 
 abstract class Queue
 {
@@ -21,11 +21,18 @@ abstract class Queue
     protected $container;
 
     /**
+     * The encrypter implementation.
+     *
+     * @var \Illuminate\Contracts\Encryption\Encrypter
+     */
+    protected $encrypter;
+
+    /**
      * Push a new job onto the queue.
      *
-     * @param  string $queue
-     * @param  string $job
-     * @param  mixed $data
+     * @param  string  $queue
+     * @param  string  $job
+     * @param  mixed   $data
      * @return mixed
      */
     public function pushOn($queue, $job, $data = '')
@@ -36,10 +43,10 @@ abstract class Queue
     /**
      * Push a new job onto the queue after a delay.
      *
-     * @param  string $queue
-     * @param  \DateTime|int $delay
-     * @param  string $job
-     * @param  mixed $data
+     * @param  string  $queue
+     * @param  \DateTime|int  $delay
+     * @param  string  $job
+     * @param  mixed   $data
      * @return mixed
      */
     public function laterOn($queue, $delay, $job, $data = '')
@@ -48,28 +55,16 @@ abstract class Queue
     }
 
     /**
-     * Marshal a push queue request and fire the job.
-     *
-     * @throws \RuntimeException
-     *
-     * @deprecated since version 5.1.
-     */
-    public function marshal()
-    {
-        throw new RuntimeException('Push queues only supported by Iron.');
-    }
-
-    /**
      * Push an array of jobs onto the queue.
      *
-     * @param  array $jobs
-     * @param  mixed $data
-     * @param  string $queue
+     * @param  array   $jobs
+     * @param  mixed   $data
+     * @param  string  $queue
      * @return mixed
      */
     public function bulk($jobs, $data = '', $queue = null)
     {
-        foreach ((array)$jobs as $job) {
+        foreach ((array) $jobs as $job) {
             $this->push($job, $data, $queue);
         }
     }
@@ -77,19 +72,21 @@ abstract class Queue
     /**
      * Create a payload string from the given job and data.
      *
-     * @param  string $job
-     * @param  mixed $data
-     * @param  string $queue
+     * @param  string  $job
+     * @param  mixed   $data
+     * @param  string  $queue
      * @return string
      */
     protected function createPayload($job, $data = '', $queue = null)
     {
         if ($job instanceof Closure) {
             return json_encode($this->createClosurePayload($job, $data));
-        } elseif (is_object($job)) {
+        }
+
+        if (is_object($job)) {
             return json_encode([
                 'job' => 'Illuminate\Queue\CallQueuedHandler@call',
-                'data' => ['command' => serialize(clone $job)],
+                'data' => ['commandName' => get_class($job), 'command' => serialize(clone $job)],
             ]);
         }
 
@@ -99,8 +96,8 @@ abstract class Queue
     /**
      * Create a typical, "plain" queue payload array.
      *
-     * @param  string $job
-     * @param  mixed $data
+     * @param  string  $job
+     * @param  mixed  $data
      * @return array
      */
     protected function createPlainPayload($job, $data)
@@ -111,7 +108,7 @@ abstract class Queue
     /**
      * Prepare any queueable entities for storage in the queue.
      *
-     * @param  mixed $data
+     * @param  mixed  $data
      * @return mixed
      */
     protected function prepareQueueableEntities($data)
@@ -136,13 +133,13 @@ abstract class Queue
     /**
      * Prepare a single queueable entity for storage on the queue.
      *
-     * @param  mixed $value
+     * @param  mixed  $value
      * @return mixed
      */
     protected function prepareQueueableEntity($value)
     {
         if ($value instanceof QueueableEntity) {
-            return '::entity::|' . get_class($value) . '|' . $value->getQueueableId();
+            return '::entity::|'.get_class($value).'|'.$value->getQueueableId();
         }
 
         return $value;
@@ -151,13 +148,13 @@ abstract class Queue
     /**
      * Create a payload string for the given Closure job.
      *
-     * @param  \Closure $job
-     * @param  mixed $data
-     * @return string
+     * @param  \Closure  $job
+     * @param  mixed     $data
+     * @return array
      */
     protected function createClosurePayload($job, $data)
     {
-        $closure = $this->crypt->encrypt((new Serializer)->serialize($job));
+        $closure = $this->getEncrypter()->encrypt((new Serializer)->serialize($job));
 
         return ['job' => 'IlluminateQueueClosure', 'data' => compact('closure')];
     }
@@ -165,9 +162,9 @@ abstract class Queue
     /**
      * Set additional meta on a payload string.
      *
-     * @param  string $payload
-     * @param  string $key
-     * @param  string $value
+     * @param  string  $payload
+     * @param  string  $key
+     * @param  string  $value
      * @return string
      */
     protected function setMeta($payload, $key, $value)
@@ -180,7 +177,7 @@ abstract class Queue
     /**
      * Calculate the number of seconds with the given delay.
      *
-     * @param  \DateTime|int $delay
+     * @param  \DateTime|int  $delay
      * @return int
      */
     protected function getSeconds($delay)
@@ -189,7 +186,7 @@ abstract class Queue
             return max(0, $delay->getTimestamp() - $this->getTime());
         }
 
-        return (int)$delay;
+        return (int) $delay;
     }
 
     /**
@@ -205,7 +202,7 @@ abstract class Queue
     /**
      * Set the IoC container instance.
      *
-     * @param  \Illuminate\Container\Container $container
+     * @param  \Illuminate\Container\Container  $container
      * @return void
      */
     public function setContainer(Container $container)
@@ -214,13 +211,29 @@ abstract class Queue
     }
 
     /**
-     * Set the encrypter instance.
+     * Get the encrypter implementation.
      *
-     * @param  \Illuminate\Contracts\Encryption\Encrypter $crypt
+     * @return  \Illuminate\Contracts\Encryption\Encrypter
+     *
+     * @throws \Exception
+     */
+    protected function getEncrypter()
+    {
+        if (is_null($this->encrypter)) {
+            throw new Exception('No encrypter has been set on the Queue.');
+        }
+
+        return $this->encrypter;
+    }
+
+    /**
+     * Set the encrypter implementation.
+     *
+     * @param  \Illuminate\Contracts\Encryption\Encrypter  $encrypter
      * @return void
      */
-    public function setEncrypter(EncrypterContract $crypt)
+    public function setEncrypter(Encrypter $encrypter)
     {
-        $this->crypt = $crypt;
+        $this->encrypter = $encrypter;
     }
 }

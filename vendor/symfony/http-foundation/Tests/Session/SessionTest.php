@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
@@ -24,7 +23,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  * @author Robert Schönthal <seroscho@googlemail.com>
  * @author Drak <drak@zikula.org>
  */
-class SessionTest extends TestCase
+class SessionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
@@ -101,7 +100,7 @@ class SessionTest extends TestCase
     {
         $this->session->set($key, $value);
         $this->assertTrue($this->session->has($key));
-        $this->assertFalse($this->session->has($key . 'non_value'));
+        $this->assertFalse($this->session->has($key.'non_value'));
     }
 
     public function testReplace()

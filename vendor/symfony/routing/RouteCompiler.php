@@ -29,19 +29,11 @@ class RouteCompiler implements RouteCompilerInterface
     const SEPARATORS = '/,;.:-_~+*=@|';
 
     /**
-     * The maximum supported length of a PCRE subpattern name
-     * http://pcre.org/current/doc/html/pcre2pattern.html#SEC16.
-     *
-     * @internal
-     */
-    const VARIABLE_MAXIMUM_LENGTH = 32;
-
-    /**
      * {@inheritdoc}
      *
      * @throws \LogicException  If a variable is referenced more than once
-     * @throws \DomainException If a variable name starts with a digit or if it is too long to be successfully used as
-     *                          a PCRE subpattern.
+     * @throws \DomainException If a variable name is numeric because PHP raises an error for such
+     *                          subpatterns in PCRE and thus would break matching, e.g. "(?P<123>.+)".
      */
     public static function compile(Route $route)
     {
@@ -103,17 +95,11 @@ class RouteCompiler implements RouteCompilerInterface
             $precedingChar = strlen($precedingText) > 0 ? substr($precedingText, -1) : '';
             $isSeparator = '' !== $precedingChar && false !== strpos(static::SEPARATORS, $precedingChar);
 
-            // A PCRE subpattern name must start with a non-digit. Also a PHP variable cannot start with a digit so the
-            // variable would not be usable as a Controller action argument.
-            if (preg_match('/^\d/', $varName)) {
-                throw new \DomainException(sprintf('Variable name "%s" cannot start with a digit in route pattern "%s". Please use a different name.', $varName, $pattern));
+            if (is_numeric($varName)) {
+                throw new \DomainException(sprintf('Variable name "%s" cannot be numeric in route pattern "%s". Please use a different name.', $varName, $pattern));
             }
             if (in_array($varName, $variables)) {
                 throw new \LogicException(sprintf('Route pattern "%s" cannot reference variable name "%s" more than once.', $pattern, $varName));
-            }
-
-            if (strlen($varName) > self::VARIABLE_MAXIMUM_LENGTH) {
-                throw new \DomainException(sprintf('Variable name "%s" cannot be longer than %s characters in route pattern "%s". Please use a shorter name.', $varName, self::VARIABLE_MAXIMUM_LENGTH, $pattern));
             }
 
             if ($isSeparator && strlen($precedingText) > 1) {
@@ -124,7 +110,7 @@ class RouteCompiler implements RouteCompilerInterface
 
             $regexp = $route->getRequirement($varName);
             if (null === $regexp) {
-                $followingPattern = (string)substr($pattern, $pos);
+                $followingPattern = (string) substr($pattern, $pos);
                 // Find the next static character after the variable that functions as a separator. By default, this separator and '/'
                 // are disallowed for the variable. This default requirement makes sure that optional variables can be matched at all
                 // and that the generating-matching-combination of URLs unambiguous, i.e. the params used for generating the URL are
@@ -177,7 +163,7 @@ class RouteCompiler implements RouteCompilerInterface
 
         return array(
             'staticPrefix' => 'text' === $tokens[0][0] ? $tokens[0][1] : '',
-            'regex' => self::REGEX_DELIMITER . '^' . $regexp . '$' . self::REGEX_DELIMITER . 's' . ($isHost ? 'i' : ''),
+            'regex' => self::REGEX_DELIMITER.'^'.$regexp.'$'.self::REGEX_DELIMITER.'s'.($isHost ? 'i' : ''),
             'tokens' => array_reverse($tokens),
             'variables' => $variables,
         );
@@ -205,9 +191,9 @@ class RouteCompiler implements RouteCompilerInterface
     /**
      * Computes the regexp used to match a specific token. It can be static text or a subpattern.
      *
-     * @param array $tokens The route tokens
-     * @param int $index The index of the current token
-     * @param int $firstOptional The index of the first optional token
+     * @param array $tokens        The route tokens
+     * @param int   $index         The index of the current token
+     * @param int   $firstOptional The index of the first optional token
      *
      * @return string The regexp pattern for a single token
      */

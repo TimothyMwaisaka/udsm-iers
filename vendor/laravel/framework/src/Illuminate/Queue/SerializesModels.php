@@ -6,6 +6,7 @@ use ReflectionClass;
 use ReflectionProperty;
 use Illuminate\Contracts\Queue\QueueableEntity;
 use Illuminate\Contracts\Database\ModelIdentifier;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 trait SerializesModels
 {
@@ -46,32 +47,57 @@ trait SerializesModels
     /**
      * Get the property value prepared for serialization.
      *
-     * @param  mixed $value
+     * @param  mixed  $value
      * @return mixed
      */
     protected function getSerializedPropertyValue($value)
     {
-        return $value instanceof QueueableEntity
-            ? new ModelIdentifier(get_class($value), $value->getQueueableId()) : $value;
+        if ($value instanceof QueueableEntity) {
+            return new ModelIdentifier(get_class($value), $value->getQueueableId());
+        }
+
+        return $value;
     }
 
     /**
      * Get the restored property value after deserialization.
      *
-     * @param  mixed $value
+     * @param  mixed  $value
      * @return mixed
      */
     protected function getRestoredPropertyValue($value)
     {
-        return $value instanceof ModelIdentifier
-            ? (new $value->class)->newQuery()->useWritePdo()->findOrFail($value->id)
-            : $value;
+        if (! $value instanceof ModelIdentifier) {
+            return $value;
+        }
+
+        return is_array($value->id)
+                ? $this->restoreCollection($value)
+                : (new $value->class)->newQuery()->useWritePdo()->findOrFail($value->id);
+    }
+
+    /**
+     * Restore a queueable collection instance.
+     *
+     * @param  \Illuminate\Contracts\Database\ModelIdentifier  $value
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    protected function restoreCollection($value)
+    {
+        if (! $value->class || count($value->id) === 0) {
+            return new EloquentCollection;
+        }
+
+        $model = new $value->class;
+
+        return $model->newQuery()->useWritePdo()
+                    ->whereIn($model->getKeyName(), $value->id)->get();
     }
 
     /**
      * Get the property value for the given property.
      *
-     * @param  \ReflectionProperty $property
+     * @param  \ReflectionProperty  $property
      * @return mixed
      */
     protected function getPropertyValue(ReflectionProperty $property)

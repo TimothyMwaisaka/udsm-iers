@@ -11,13 +11,12 @@
 
 namespace Symfony\Component\Routing\Tests\Matcher\Dumper;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\Matcher\Dumper\DumperPrefixCollection;
 use Symfony\Component\Routing\Matcher\Dumper\DumperRoute;
 use Symfony\Component\Routing\Matcher\Dumper\DumperCollection;
 
-class DumperPrefixCollectionTest extends TestCase
+class DumperPrefixCollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddPrefixRoute()
     {
@@ -113,7 +112,7 @@ EOF;
         foreach ($collection as $route) {
             if ($route instanceof DumperCollection) {
                 $string .= sprintf("%s|-coll %s\n", $prefix, $route->getPrefix());
-                $string .= $this->collectionToString($route, $prefix . '| ');
+                $string .= $this->collectionToString($route, $prefix.'| ');
             } else {
                 $string .= sprintf("%s|-route %s %s\n", $prefix, $route->getName(), $route->getRoute()->getPath());
             }

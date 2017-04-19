@@ -90,7 +90,6 @@ Route::get('/admin', function () {
 Route::get('/home', 'HomeController@index');
 
 
-
 Route::get('add','MainController@create1');
 Route::post('add','MainController@store1');
 

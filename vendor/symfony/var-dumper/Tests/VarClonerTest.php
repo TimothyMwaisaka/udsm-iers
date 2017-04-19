@@ -11,13 +11,12 @@
 
 namespace Symfony\Component\VarDumper\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class VarClonerTest extends TestCase
+class VarClonerTest extends \PHPUnit_Framework_TestCase
 {
     public function testMaxIntBoundary()
     {
@@ -138,11 +137,7 @@ EOTXT;
 
     public function testJsonCast()
     {
-        if (ini_get('xdebug.overload_var_dump') == 2) {
-            $this->markTestSkipped('xdebug is active');
-        }
-
-        $data = (array)json_decode('{"1":{}}');
+        $data = (array) json_decode('{"1":{}}');
 
         $cloner = new VarCloner();
         $clone = $cloner->cloneVar($data);

@@ -11,14 +11,14 @@
 
 namespace Symfony\Component\Console\Tests\Style;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class SymfonyStyleTest extends TestCase
+class SymfonyStyleTest extends PHPUnit_Framework_TestCase
 {
     /** @var Command */
     protected $command;
@@ -50,9 +50,9 @@ class SymfonyStyleTest extends TestCase
 
     public function inputCommandToOutputFilesProvider()
     {
-        $baseDir = __DIR__ . '/../Fixtures/Style/SymfonyStyle';
+        $baseDir = __DIR__.'/../Fixtures/Style/SymfonyStyle';
 
-        return array_map(null, glob($baseDir . '/command/command_*.php'), glob($baseDir . '/output/output_*.txt'));
+        return array_map(null, glob($baseDir.'/command/command_*.php'), glob($baseDir.'/output/output_*.txt'));
     }
 }
 

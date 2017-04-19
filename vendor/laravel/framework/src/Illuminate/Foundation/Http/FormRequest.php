@@ -80,15 +80,27 @@ class FormRequest extends Request implements ValidatesWhenResolved
         }
 
         return $factory->make(
-            $this->all(), $this->container->call([$this, 'rules']), $this->messages(), $this->attributes()
+            $this->validationData(), $this->container->call([$this, 'rules']), $this->messages(), $this->attributes()
         );
+    }
+
+    /**
+     * Get data to be validated from the request.
+     *
+     * @return array
+     */
+    protected function validationData()
+    {
+        return $this->all();
     }
 
     /**
      * Handle a failed validation attempt.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator $validator
-     * @return mixed
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exception\HttpResponseException
      */
     protected function failedValidation(Validator $validator)
     {
@@ -114,7 +126,9 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Handle a failed authorization attempt.
      *
-     * @return mixed
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exception\HttpResponseException
      */
     protected function failedAuthorization()
     {
@@ -124,18 +138,18 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Get the proper failed validation response for the request.
      *
-     * @param  array $errors
+     * @param  array  $errors
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function response(array $errors)
     {
-        if ($this->ajax() || $this->wantsJson()) {
+        if (($this->ajax() && ! $this->pjax()) || $this->wantsJson()) {
             return new JsonResponse($errors, 422);
         }
 
         return $this->redirector->to($this->getRedirectUrl())
-            ->withInput($this->except($this->dontFlash))
-            ->withErrors($errors, $this->errorBag);
+                                        ->withInput($this->except($this->dontFlash))
+                                        ->withErrors($errors, $this->errorBag);
     }
 
     /**
@@ -151,7 +165,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Format the errors from the given Validator instance.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator $validator
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return array
      */
     protected function formatErrors(Validator $validator)
@@ -182,8 +196,8 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Set the Redirector instance.
      *
-     * @param  \Illuminate\Routing\Redirector $redirector
-     * @return \Illuminate\Foundation\Http\FormRequest
+     * @param  \Illuminate\Routing\Redirector  $redirector
+     * @return $this
      */
     public function setRedirector(Redirector $redirector)
     {
@@ -195,7 +209,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Set the container implementation.
      *
-     * @param  \Illuminate\Container\Container $container
+     * @param  \Illuminate\Container\Container  $container
      * @return $this
      */
     public function setContainer(Container $container)
@@ -206,7 +220,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
     }
 
     /**
-     * Set custom messages for validator errors.
+     * Get custom messages for validator errors.
      *
      * @return array
      */
@@ -216,7 +230,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
     }
 
     /**
-     * Set custom attributes for validator errors.
+     * Get custom attributes for validator errors.
      *
      * @return array
      */

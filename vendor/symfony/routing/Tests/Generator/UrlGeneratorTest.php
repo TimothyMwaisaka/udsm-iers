@@ -11,14 +11,13 @@
 
 namespace Symfony\Component\Routing\Tests\Generator;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 
-class UrlGeneratorTest extends TestCase
+class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testAbsoluteUrlWithPort80()
     {
@@ -209,7 +208,7 @@ class UrlGeneratorTest extends TestCase
     public function testGenerateForRouteWithInvalidOptionalParameterNonStrictWithLogger()
     {
         $routes = $this->getRoutes('test', new Route('/testing/{foo}', array('foo' => '1'), array('foo' => 'd+')));
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())
             ->method('error');
         $generator = $this->getGenerator($routes, array(), $logger);
@@ -331,8 +330,8 @@ class UrlGeneratorTest extends TestCase
         $chars = '@:[]/()*\'" +,;-._~&$<>|{}%\\^`!?foo=bar#id';
         $routes = $this->getRoutes('test', new Route("/$chars/{varpath}", array(), array('varpath' => '.+')));
         $this->assertSame('/app.php/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
-            . '/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
-            . '?query=%40%3A%5B%5D/%28%29%2A%27%22+%2B%2C%3B-._%7E%26%24%3C%3E%7C%7B%7D%25%5C%5E%60%21%3Ffoo%3Dbar%23id',
+           .'/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
+           .'?query=%40%3A%5B%5D/%28%29%2A%27%22+%2B%2C%3B-._%7E%26%24%3C%3E%7C%7B%7D%25%5C%5E%60%21%3Ffoo%3Dbar%23id',
             $this->getGenerator($routes)->generate('test', array(
                 'varpath' => $chars,
                 'query' => $chars,
@@ -359,7 +358,7 @@ class UrlGeneratorTest extends TestCase
 
         // The default requirement for 'x' should not allow the separator '.' in this case because it would otherwise match everything
         // and following optional variables like _format could never match.
-        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Routing\Exception\InvalidParameterException');
+        $this->setExpectedException('Symfony\Component\Routing\Exception\InvalidParameterException');
         $generator->generate('test', array('x' => 'do.t', 'y' => '123', 'z' => 'bar', '_format' => 'xml'));
     }
 
@@ -469,27 +468,6 @@ class UrlGeneratorTest extends TestCase
         $this->assertSame('//EN.FooBar.com/app.php/', $generator->generate('test', array('locale' => 'EN'), UrlGeneratorInterface::NETWORK_PATH));
     }
 
-    /**
-     * @group legacy
-     */
-    public function testLegacyGenerateNetworkPath()
-    {
-        $routes = $this->getRoutes('test', new Route('/{name}', array(), array('_scheme' => 'http'), array(), '{locale}.example.com'));
-
-        $this->assertSame('//fr.example.com/app.php/Fabien', $this->getGenerator($routes)->generate('test',
-            array('name' => 'Fabien', 'locale' => 'fr'), UrlGeneratorInterface::NETWORK_PATH), 'network path with different host'
-        );
-        $this->assertSame('//fr.example.com/app.php/Fabien?query=string', $this->getGenerator($routes, array('host' => 'fr.example.com'))->generate('test',
-            array('name' => 'Fabien', 'locale' => 'fr', 'query' => 'string'), UrlGeneratorInterface::NETWORK_PATH), 'network path although host same as context'
-        );
-        $this->assertSame('http://fr.example.com/app.php/Fabien', $this->getGenerator($routes, array('scheme' => 'https'))->generate('test',
-            array('name' => 'Fabien', 'locale' => 'fr'), UrlGeneratorInterface::NETWORK_PATH), 'absolute URL because scheme requirement does not match context'
-        );
-        $this->assertSame('http://fr.example.com/app.php/Fabien', $this->getGenerator($routes)->generate('test',
-            array('name' => 'Fabien', 'locale' => 'fr'), UrlGeneratorInterface::ABSOLUTE_URL), 'absolute URL with same scheme because it is requested'
-        );
-    }
-
     public function testGenerateNetworkPath()
     {
         $routes = $this->getRoutes('test', new Route('/{name}', array(), array(), array(), '{locale}.example.com', array('http')));
@@ -535,7 +513,7 @@ class UrlGeneratorTest extends TestCase
             array('author' => 'bernhard', 'article' => 'forms-are-great'), UrlGeneratorInterface::RELATIVE_PATH)
         );
         $this->assertSame('https://example.com/app.php/bernhard/blog', $generator->generate('scheme',
-            array('author' => 'bernhard'), UrlGeneratorInterface::RELATIVE_PATH)
+                array('author' => 'bernhard'), UrlGeneratorInterface::RELATIVE_PATH)
         );
         $this->assertSame('../../about', $generator->generate('unrelated',
             array(), UrlGeneratorInterface::RELATIVE_PATH)
@@ -660,7 +638,7 @@ class UrlGeneratorTest extends TestCase
     {
         $context = new RequestContext('/app.php');
         foreach ($parameters as $key => $value) {
-            $method = 'set' . $key;
+            $method = 'set'.$key;
             $context->$method($value);
         }
 

@@ -42,9 +42,9 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
     /**
      * Constructor.
      *
-     * @param EventDispatcherInterface $dispatcher An EventDispatcherInterface instance
-     * @param ControllerResolverInterface $resolver A ControllerResolverInterface instance
-     * @param RequestStack $requestStack A stack for master/sub requests
+     * @param EventDispatcherInterface    $dispatcher   An EventDispatcherInterface instance
+     * @param ControllerResolverInterface $resolver     A ControllerResolverInterface instance
+     * @param RequestStack                $requestStack A stack for master/sub requests
      */
     public function __construct(EventDispatcherInterface $dispatcher, ControllerResolverInterface $resolver, RequestStack $requestStack = null)
     {
@@ -109,7 +109,7 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
      * Exceptions are not caught.
      *
      * @param Request $request A Request instance
-     * @param int $type The type of the request (one of HttpKernelInterface::MASTER_REQUEST or HttpKernelInterface::SUB_REQUEST)
+     * @param int     $type    The type of the request (one of HttpKernelInterface::MASTER_REQUEST or HttpKernelInterface::SUB_REQUEST)
      *
      * @return Response A Response instance
      *
@@ -170,8 +170,8 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
      * Filters a response object.
      *
      * @param Response $response A Response instance
-     * @param Request $request An error message in case the response is not a Response object
-     * @param int $type The type of the request (one of HttpKernelInterface::MASTER_REQUEST or HttpKernelInterface::SUB_REQUEST)
+     * @param Request  $request  An error message in case the response is not a Response object
+     * @param int      $type     The type of the request (one of HttpKernelInterface::MASTER_REQUEST or HttpKernelInterface::SUB_REQUEST)
      *
      * @return Response The filtered Response instance
      *
@@ -196,7 +196,7 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
      * weird results.
      *
      * @param Request $request
-     * @param int $type
+     * @param int     $type
      */
     private function finishRequest(Request $request, $type)
     {
@@ -207,9 +207,9 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
     /**
      * Handles an exception by trying to convert it to a Response.
      *
-     * @param \Exception $e An \Exception instance
-     * @param Request $request A Request instance
-     * @param int $type The type of the request
+     * @param \Exception $e       An \Exception instance
+     * @param Request    $request A Request instance
+     * @param int        $type    The type of the request
      *
      * @return Response A Response instance
      *
@@ -285,6 +285,6 @@ class HttpKernel implements HttpKernelInterface, TerminableInterface
             return 'true';
         }
 
-        return (string)$var;
+        return (string) $var;
     }
 }

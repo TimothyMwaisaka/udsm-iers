@@ -12,8 +12,10 @@ class Parser
     /**
      * Parse the given console command definition into an array.
      *
-     * @param  string $expression
+     * @param  string  $expression
      * @return array
+     *
+     * @throws \InvalidArgumentException
      */
     public static function parse($expression)
     {
@@ -43,7 +45,7 @@ class Parser
     /**
      * Extract all of the parameters from the tokens.
      *
-     * @param  array $tokens
+     * @param  array  $tokens
      * @return array
      */
     protected static function parameters(array $tokens)
@@ -53,7 +55,7 @@ class Parser
         $options = [];
 
         foreach ($tokens as $token) {
-            if (!Str::startsWith($token, '--')) {
+            if (! Str::startsWith($token, '--')) {
                 $arguments[] = static::parseArgument($token);
             } else {
                 $options[] = static::parseOption(ltrim($token, '-'));
@@ -66,7 +68,7 @@ class Parser
     /**
      * Parse an argument expression.
      *
-     * @param  string $token
+     * @param  string  $token
      * @return \Symfony\Component\Console\Input\InputArgument
      */
     protected static function parseArgument($token)
@@ -98,7 +100,7 @@ class Parser
     /**
      * Parse an option expression.
      *
-     * @param  string $token
+     * @param  string  $token
      * @return \Symfony\Component\Console\Input\InputOption
      */
     protected static function parseOption($token)

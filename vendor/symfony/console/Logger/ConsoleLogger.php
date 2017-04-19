@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  *
- * @see http://www.php-fig.org/psr/psr-3/
+ * @link http://www.php-fig.org/psr/psr-3/
  */
 class ConsoleLogger extends AbstractLogger
 {
@@ -62,8 +62,8 @@ class ConsoleLogger extends AbstractLogger
 
     /**
      * @param OutputInterface $output
-     * @param array $verbosityLevelMap
-     * @param array $formatLevelMap
+     * @param array           $verbosityLevelMap
+     * @param array           $formatLevelMap
      */
     public function __construct(OutputInterface $output, array $verbosityLevelMap = array(), array $formatLevelMap = array())
     {
@@ -99,7 +99,7 @@ class ConsoleLogger extends AbstractLogger
      * @author PHP Framework Interoperability Group
      *
      * @param string $message
-     * @param array $context
+     * @param array  $context
      *
      * @return string
      */

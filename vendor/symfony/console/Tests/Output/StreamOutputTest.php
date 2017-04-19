@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\Console\Tests\Output;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\StreamOutput;
 
-class StreamOutputTest extends TestCase
+class StreamOutputTest extends \PHPUnit_Framework_TestCase
 {
     protected $stream;
 
@@ -56,6 +55,6 @@ class StreamOutputTest extends TestCase
         $output = new StreamOutput($this->stream);
         $output->writeln('foo');
         rewind($output->getStream());
-        $this->assertEquals('foo' . PHP_EOL, stream_get_contents($output->getStream()), '->doWrite() writes to the stream');
+        $this->assertEquals('foo'.PHP_EOL, stream_get_contents($output->getStream()), '->doWrite() writes to the stream');
     }
 }

@@ -70,10 +70,10 @@ abstract class FileDumper implements DumperInterface
         // save a file for each domain
         foreach ($messages->getDomains() as $domain) {
             // backup
-            $fullpath = $options['path'] . '/' . $this->getRelativePath($domain, $messages->getLocale());
+            $fullpath = $options['path'].'/'.$this->getRelativePath($domain, $messages->getLocale());
             if (file_exists($fullpath)) {
                 if ($this->backup) {
-                    copy($fullpath, $fullpath . '~');
+                    copy($fullpath, $fullpath.'~');
                 }
             } else {
                 $directory = dirname($fullpath);
@@ -82,7 +82,7 @@ abstract class FileDumper implements DumperInterface
                 }
             }
             // save file
-            file_put_contents($fullpath, $this->format($messages, $domain));
+            file_put_contents($fullpath, $this->formatCatalogue($messages, $domain, $options));
         }
     }
 
@@ -90,11 +90,12 @@ abstract class FileDumper implements DumperInterface
      * Transforms a domain of a message catalogue to its string representation.
      *
      * @param MessageCatalogue $messages
-     * @param string $domain
+     * @param string           $domain
+     * @param array            $options
      *
      * @return string representation
      */
-    abstract protected function format(MessageCatalogue $messages, $domain);
+    abstract public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array());
 
     /**
      * Gets the file extension of the dumper.

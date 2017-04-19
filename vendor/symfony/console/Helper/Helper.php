@@ -35,7 +35,7 @@ abstract class Helper implements HelperInterface
     /**
      * Gets the helper set associated with this helper.
      *
-     * @return HelperSet|null
+     * @return HelperSet A HelperSet instance
      */
     public function getHelperSet()
     {
@@ -51,10 +51,6 @@ abstract class Helper implements HelperInterface
      */
     public static function strlen($string)
     {
-        if (!function_exists('mb_strwidth')) {
-            return strlen($string);
-        }
-
         if (false === $encoding = mb_detect_encoding($string, null, true)) {
             return strlen($string);
         }
@@ -85,7 +81,7 @@ abstract class Helper implements HelperInterface
                         return $format[1];
                     }
 
-                    return floor($secs / $format[2]) . ' ' . $format[1];
+                    return floor($secs / $format[2]).' '.$format[1];
                 }
             }
         }

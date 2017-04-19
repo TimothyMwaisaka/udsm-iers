@@ -38,10 +38,10 @@ class Pivot extends Model
     /**
      * Create a new pivot model instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $parent
-     * @param  array $attributes
-     * @param  string $table
-     * @param  bool $exists
+     * @param  \Illuminate\Database\Eloquent\Model  $parent
+     * @param  array   $attributes
+     * @param  string  $table
+     * @param  bool    $exists
      * @return void
      */
     public function __construct(Model $parent, $attributes, $table, $exists = false)
@@ -70,9 +70,27 @@ class Pivot extends Model
     }
 
     /**
+     * Create a new pivot model from raw values returned from a query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $parent
+     * @param  array   $attributes
+     * @param  string  $table
+     * @param  bool    $exists
+     * @return static
+     */
+    public static function fromRawAttributes(Model $parent, $attributes, $table, $exists = false)
+    {
+        $instance = new static($parent, $attributes, $table, $exists);
+
+        $instance->setRawAttributes($attributes, true);
+
+        return $instance;
+    }
+
+    /**
      * Set the keys for a save update query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
     protected function setKeysForSaveQuery(Builder $query)
@@ -129,8 +147,8 @@ class Pivot extends Model
     /**
      * Set the key names for the pivot model instance.
      *
-     * @param  string $foreignKey
-     * @param  string $otherKey
+     * @param  string  $foreignKey
+     * @param  string  $otherKey
      * @return $this
      */
     public function setPivotKeys($foreignKey, $otherKey)

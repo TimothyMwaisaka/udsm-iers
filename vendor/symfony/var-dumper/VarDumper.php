@@ -16,7 +16,7 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 
 // Load the global dump() function
-require_once __DIR__ . '/Resources/functions/dump.php';
+require_once __DIR__.'/Resources/functions/dump.php';
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
@@ -38,12 +38,8 @@ class VarDumper
         return call_user_func(self::$handler, $var);
     }
 
-    public static function setHandler($callable)
+    public static function setHandler(callable $callable = null)
     {
-        if (null !== $callable && !is_callable($callable, true)) {
-            throw new \InvalidArgumentException('Invalid PHP callback.');
-        }
-
         $prevHandler = self::$handler;
         self::$handler = $callable;
 

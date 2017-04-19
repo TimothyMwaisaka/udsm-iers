@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\Console\Tests\Formatter;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-class OutputFormatterTest extends TestCase
+class OutputFormatterTest extends \PHPUnit_Framework_TestCase
 {
     public function testEmptyTag()
     {
@@ -100,12 +99,12 @@ class OutputFormatterTest extends TestCase
 
         $this->assertEquals(
             "(\033[32mz>=2.0,<<<a2.3\\\033[39m)",
-            $formatter->format('(<info>' . $formatter->escape('z>=2.0,<\\<<a2.3\\') . '</info>)')
+            $formatter->format('(<info>'.$formatter->escape('z>=2.0,<\\<<a2.3\\').'</info>)')
         );
 
         $this->assertEquals(
             "\033[32m<error>some error</error>\033[39m",
-            $formatter->format('<info>' . $formatter->escape('<error>some error</error>') . '</info>')
+            $formatter->format('<info>'.$formatter->escape('<error>some error</error>').'</info>')
         );
     }
 
@@ -164,7 +163,7 @@ class OutputFormatterTest extends TestCase
     {
         $formatter = new OutputFormatter(true);
         $long = str_repeat('\\', 14000);
-        $this->assertEquals("\033[37;41msome error\033[39;49m" . $long, $formatter->format('<error>some error</error>' . $long));
+        $this->assertEquals("\033[37;41msome error\033[39;49m".$long, $formatter->format('<error>some error</error>'.$long));
     }
 
     public function testFormatToStringObject()
@@ -196,9 +195,6 @@ class OutputFormatterTest extends TestCase
         $this->assertEquals(
             'some question', $formatter->format('<question>some question</question>')
         );
-        $this->assertEquals(
-            'some text with inline style', $formatter->format('<fg=red>some text with inline style</>')
-        );
 
         $formatter->setDecorated(true);
 
@@ -214,9 +210,6 @@ class OutputFormatterTest extends TestCase
         $this->assertEquals(
             "\033[30;46msome question\033[39;49m", $formatter->format('<question>some question</question>')
         );
-        $this->assertEquals(
-            "\033[31msome text with inline style\033[39m", $formatter->format('<fg=red>some text with inline style</>')
-        );
     }
 
     public function testContentWithLineBreaks()
@@ -231,7 +224,7 @@ EOF
 <info>
 some text</info>
 EOF
-            ));
+        ));
 
         $this->assertEquals(<<<EOF
 \033[32msome text
@@ -241,7 +234,7 @@ EOF
 <info>some text
 </info>
 EOF
-            ));
+        ));
 
         $this->assertEquals(<<<EOF
 \033[32m
@@ -253,7 +246,7 @@ EOF
 some text
 </info>
 EOF
-            ));
+        ));
 
         $this->assertEquals(<<<EOF
 \033[32m
@@ -267,7 +260,7 @@ some text
 more text
 </info>
 EOF
-            ));
+        ));
     }
 }
 

@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\HttpKernel\Tests\Config;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Config\EnvParametersResource;
 
-class EnvParametersResourceTest extends TestCase
+class EnvParametersResourceTest extends \PHPUnit_Framework_TestCase
 {
     protected $prefix = '__DUMMY_';
     protected $initialEnv;
@@ -23,8 +22,8 @@ class EnvParametersResourceTest extends TestCase
     protected function setUp()
     {
         $this->initialEnv = array(
-            $this->prefix . '1' => 'foo',
-            $this->prefix . '2' => 'bar',
+            $this->prefix.'1' => 'foo',
+            $this->prefix.'2' => 'bar',
         );
 
         foreach ($this->initialEnv as $key => $value) {
@@ -56,7 +55,7 @@ class EnvParametersResourceTest extends TestCase
     {
         $this->assertSame(
             serialize(array('prefix' => $this->prefix, 'variables' => $this->initialEnv)),
-            (string)$this->resource
+            (string) $this->resource
         );
     }
 
@@ -92,7 +91,7 @@ class EnvParametersResourceTest extends TestCase
 
     public function testIsFreshValueAdded()
     {
-        $_SERVER[$this->prefix . '3'] = 'foo';
+        $_SERVER[$this->prefix.'3'] = 'foo';
 
         $this->assertFalse(
             $this->resource->isFresh(time()),

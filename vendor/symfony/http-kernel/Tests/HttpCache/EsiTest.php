@@ -11,12 +11,11 @@
 
 namespace Symfony\Component\HttpKernel\Tests\HttpCache;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EsiTest extends TestCase
+class EsiTest extends \PHPUnit_Framework_TestCase
 {
     public function testHasSurrogateEsiCapability()
     {
@@ -78,7 +77,7 @@ class EsiTest extends TestCase
         $this->assertEquals('<esi:include src="/" onerror="continue" alt="/alt" />', $esi->renderIncludeTag('/', '/alt', true));
         $this->assertEquals('<esi:include src="/" alt="/alt" />', $esi->renderIncludeTag('/', '/alt', false));
         $this->assertEquals('<esi:include src="/" onerror="continue" />', $esi->renderIncludeTag('/'));
-        $this->assertEquals('<esi:comment text="some comment" />' . "\n" . '<esi:include src="/" onerror="continue" alt="/alt" />', $esi->renderIncludeTag('/', '/alt', true, 'some comment'));
+        $this->assertEquals('<esi:comment text="some comment" />'."\n".'<esi:include src="/" onerror="continue" alt="/alt" />', $esi->renderIncludeTag('/', '/alt', true, 'some comment'));
     }
 
     public function testProcessDoesNothingIfContentTypeIsNotHtml()
@@ -98,7 +97,7 @@ class EsiTest extends TestCase
         $esi = new Esi();
 
         $request = Request::create('/');
-        $response = new Response('<esi:remove> <a href="http://www.example.com">www.example.com</a> </esi:remove> Keep this' . "<esi:remove>\n <a>www.example.com</a> </esi:remove> And this");
+        $response = new Response('<esi:remove> <a href="http://www.example.com">www.example.com</a> </esi:remove> Keep this'."<esi:remove>\n <a>www.example.com</a> </esi:remove> And this");
         $esi->process($request, $response);
 
         $this->assertEquals(' Keep this And this', $response->getContent());
@@ -123,23 +122,23 @@ class EsiTest extends TestCase
         $response = new Response('foo <esi:comment text="some comment" /><esi:include src="..." alt="alt" onerror="continue" />');
         $esi->process($request, $response);
 
-        $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'...\', \'alt\', true) ?>' . "\n", $response->getContent());
+        $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'...\', \'alt\', true) ?>'."\n", $response->getContent());
         $this->assertEquals('ESI', $response->headers->get('x-body-eval'));
 
         $response = new Response('foo <esi:comment text="some comment" /><esi:include src="foo\'" alt="bar\'" onerror="continue" />');
         $esi->process($request, $response);
 
-        $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'foo\\\'\', \'bar\\\'\', true) ?>' . "\n", $response->getContent());
+        $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'foo\\\'\', \'bar\\\'\', true) ?>'."\n", $response->getContent());
 
         $response = new Response('foo <esi:include src="..." />');
         $esi->process($request, $response);
 
-        $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'...\', \'\', false) ?>' . "\n", $response->getContent());
+        $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'...\', \'\', false) ?>'."\n", $response->getContent());
 
         $response = new Response('foo <esi:include src="..."></esi:include>');
         $esi->process($request, $response);
 
-        $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'...\', \'\', false) ?>' . "\n", $response->getContent());
+        $this->assertEquals('foo <?php echo $this->surrogate->handle($this, \'...\', \'\', false) ?>'."\n", $response->getContent());
     }
 
     public function testProcessEscapesPhpTags()
@@ -226,18 +225,21 @@ class EsiTest extends TestCase
 
     protected function getCache($request, $response)
     {
-        $cache = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpCache\HttpCache')->setMethods(array('getRequest', 'handle'))->disableOriginalConstructor()->getMock();
+        $cache = $this->getMock('Symfony\Component\HttpKernel\HttpCache\HttpCache', array('getRequest', 'handle'), array(), '', false);
         $cache->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
+              ->method('getRequest')
+              ->will($this->returnValue($request))
+        ;
         if (is_array($response)) {
             $cache->expects($this->any())
-                ->method('handle')
-                ->will(call_user_func_array(array($this, 'onConsecutiveCalls'), $response));
+                  ->method('handle')
+                  ->will(call_user_func_array(array($this, 'onConsecutiveCalls'), $response))
+            ;
         } else {
             $cache->expects($this->any())
-                ->method('handle')
-                ->will($this->returnValue($response));
+                  ->method('handle')
+                  ->will($this->returnValue($response))
+            ;
         }
 
         return $cache;

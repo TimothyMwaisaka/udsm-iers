@@ -31,7 +31,7 @@ class XmlFileLoader extends FileLoader
     /**
      * Loads an XML file.
      *
-     * @param string $file An XML file path
+     * @param string      $file An XML file path
      * @param string|null $type The resource type
      *
      * @return RouteCollection A RouteCollection instance
@@ -64,9 +64,9 @@ class XmlFileLoader extends FileLoader
      * Parses a node from a loaded XML file.
      *
      * @param RouteCollection $collection Collection to associate with the node
-     * @param \DOMElement $node Element to parse
-     * @param string $path Full path of the XML file being processed
-     * @param string $file Loaded file name
+     * @param \DOMElement     $node       Element to parse
+     * @param string          $path       Full path of the XML file being processed
+     * @param string          $file       Loaded file name
      *
      * @throws \InvalidArgumentException When the XML is invalid
      */
@@ -100,50 +100,21 @@ class XmlFileLoader extends FileLoader
      * Parses a route and adds it to the RouteCollection.
      *
      * @param RouteCollection $collection RouteCollection instance
-     * @param \DOMElement $node Element to parse that represents a Route
-     * @param string $path Full path of the XML file being processed
+     * @param \DOMElement     $node       Element to parse that represents a Route
+     * @param string          $path       Full path of the XML file being processed
      *
      * @throws \InvalidArgumentException When the XML is invalid
      */
     protected function parseRoute(RouteCollection $collection, \DOMElement $node, $path)
     {
-        if ('' === ($id = $node->getAttribute('id')) || (!$node->hasAttribute('pattern') && !$node->hasAttribute('path'))) {
+        if ('' === ($id = $node->getAttribute('id')) || !$node->hasAttribute('path')) {
             throw new \InvalidArgumentException(sprintf('The <route> element in file "%s" must have an "id" and a "path" attribute.', $path));
-        }
-
-        if ($node->hasAttribute('pattern')) {
-            if ($node->hasAttribute('path')) {
-                throw new \InvalidArgumentException(sprintf('The <route> element in file "%s" cannot define both a "path" and a "pattern" attribute. Use only "path".', $path));
-            }
-
-            @trigger_error(sprintf('The "pattern" option in file "%s" is deprecated since version 2.2 and will be removed in 3.0. Use the "path" option in the route definition instead.', $path), E_USER_DEPRECATED);
-
-            $node->setAttribute('path', $node->getAttribute('pattern'));
-            $node->removeAttribute('pattern');
         }
 
         $schemes = preg_split('/[\s,\|]++/', $node->getAttribute('schemes'), -1, PREG_SPLIT_NO_EMPTY);
         $methods = preg_split('/[\s,\|]++/', $node->getAttribute('methods'), -1, PREG_SPLIT_NO_EMPTY);
 
         list($defaults, $requirements, $options, $condition) = $this->parseConfigs($node, $path);
-
-        if (isset($requirements['_method'])) {
-            if (0 === count($methods)) {
-                $methods = explode('|', $requirements['_method']);
-            }
-
-            unset($requirements['_method']);
-            @trigger_error(sprintf('The "_method" requirement of route "%s" in file "%s" is deprecated since version 2.2 and will be removed in 3.0. Use the "methods" attribute instead.', $id, $path), E_USER_DEPRECATED);
-        }
-
-        if (isset($requirements['_scheme'])) {
-            if (0 === count($schemes)) {
-                $schemes = explode('|', $requirements['_scheme']);
-            }
-
-            unset($requirements['_scheme']);
-            @trigger_error(sprintf('The "_scheme" requirement of route "%s" in file "%s" is deprecated since version 2.2 and will be removed in 3.0. Use the "schemes" attribute instead.', $id, $path), E_USER_DEPRECATED);
-        }
 
         $route = new Route($node->getAttribute('path'), $defaults, $requirements, $options, $node->getAttribute('host'), $schemes, $methods, $condition);
         $collection->add($id, $route);
@@ -153,9 +124,9 @@ class XmlFileLoader extends FileLoader
      * Parses an import and adds the routes in the resource to the RouteCollection.
      *
      * @param RouteCollection $collection RouteCollection instance
-     * @param \DOMElement $node Element to parse that represents a Route
-     * @param string $path Full path of the XML file being processed
-     * @param string $file Loaded file name
+     * @param \DOMElement     $node       Element to parse that represents a Route
+     * @param string          $path       Full path of the XML file being processed
+     * @param string          $file       Loaded file name
      *
      * @throws \InvalidArgumentException When the XML is invalid
      */
@@ -210,14 +181,14 @@ class XmlFileLoader extends FileLoader
      */
     protected function loadFile($file)
     {
-        return XmlUtils::loadFile($file, __DIR__ . static::SCHEME_PATH);
+        return XmlUtils::loadFile($file, __DIR__.static::SCHEME_PATH);
     }
 
     /**
      * Parses the config elements (default, requirement, option).
      *
      * @param \DOMElement $node Element to parse that contains the configs
-     * @param string $path Full path of the XML file being processed
+     * @param string      $path Full path of the XML file being processed
      *
      * @return array An array with the defaults as first item, requirements as second and options as third
      *

@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpKernel\Tests\Fragment;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @group time-sensitive
  */
-class FragmentHandlerTest extends TestCase
+class FragmentHandlerTest extends \PHPUnit_Framework_TestCase
 {
     private $requestStack;
 
@@ -27,11 +26,13 @@ class FragmentHandlerTest extends TestCase
     {
         $this->requestStack = $this->getMockBuilder('Symfony\\Component\\HttpFoundation\\RequestStack')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
         $this->requestStack
             ->expects($this->any())
             ->method('getCurrentRequest')
-            ->will($this->returnValue(Request::create('/')));
+            ->will($this->returnValue(Request::create('/')))
+        ;
     }
 
     /**
@@ -39,7 +40,7 @@ class FragmentHandlerTest extends TestCase
      */
     public function testRenderWhenRendererDoesNotExist()
     {
-        $handler = new FragmentHandler(array(), null, $this->requestStack);
+        $handler = new FragmentHandler($this->requestStack);
         $handler->render('/', 'foo');
     }
 
@@ -73,21 +74,23 @@ class FragmentHandlerTest extends TestCase
 
     protected function getHandler($returnValue, $arguments = array())
     {
-        $renderer = $this->getMockBuilder('Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface')->getMock();
+        $renderer = $this->getMock('Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface');
         $renderer
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('foo'));
+            ->will($this->returnValue('foo'))
+        ;
         $e = $renderer
             ->expects($this->any())
             ->method('render')
-            ->will($returnValue);
+            ->will($returnValue)
+        ;
 
         if ($arguments) {
             call_user_func_array(array($e, 'with'), $arguments);
         }
 
-        $handler = new FragmentHandler(array(), null, $this->requestStack);
+        $handler = new FragmentHandler($this->requestStack);
         $handler->addRenderer($renderer);
 
         return $handler;

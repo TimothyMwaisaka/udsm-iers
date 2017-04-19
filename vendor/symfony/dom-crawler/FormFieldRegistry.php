@@ -112,8 +112,8 @@ class FormFieldRegistry
     /**
      * Set the value of a field and its children.
      *
-     * @param string $name The fully qualified name of the field
-     * @param mixed $value The value
+     * @param string $name  The fully qualified name of the field
+     * @param mixed  $value The value
      *
      * @throws \InvalidArgumentException if the field does not exist
      */
@@ -148,8 +148,8 @@ class FormFieldRegistry
      * This function is made private because it allows overriding the $base and
      * the $values properties without any type checking.
      *
-     * @param string $base The fully qualified name of the base field
-     * @param array $values The values of the fields
+     * @param string $base   The fully qualified name of the base field
+     * @param array  $values The values of the fields
      *
      * @return static
      */
@@ -165,9 +165,9 @@ class FormFieldRegistry
     /**
      * Transforms a PHP array in a list of fully qualified name / value.
      *
-     * @param array $array The PHP array
-     * @param string $base The name of the base field
-     * @param array $output The initial values
+     * @param array  $array  The PHP array
+     * @param string $base   The name of the base field
+     * @param array  $output The initial values
      *
      * @return array The list of fields as array((string) Fully qualified name => (mixed) value)
      */

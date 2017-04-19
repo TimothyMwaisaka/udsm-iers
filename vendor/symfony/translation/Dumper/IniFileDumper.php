@@ -23,13 +23,13 @@ class IniFileDumper extends FileDumper
     /**
      * {@inheritdoc}
      */
-    public function format(MessageCatalogue $messages, $domain = 'messages')
+    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
     {
         $output = '';
 
         foreach ($messages->all($domain) as $source => $target) {
             $escapeTarget = str_replace('"', '\"', $target);
-            $output .= $source . '="' . $escapeTarget . "\"\n";
+            $output .= $source.'="'.$escapeTarget."\"\n";
         }
 
         return $output;

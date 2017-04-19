@@ -11,13 +11,12 @@
 
 namespace Symfony\Component\Console\Tests\Tester;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CommandTesterTest extends TestCase
+class CommandTesterTest extends \PHPUnit_Framework_TestCase
 {
     protected $command;
     protected $tester;
@@ -27,9 +26,7 @@ class CommandTesterTest extends TestCase
         $this->command = new Command('foo');
         $this->command->addArgument('command');
         $this->command->addArgument('foo');
-        $this->command->setCode(function ($input, $output) {
-            $output->writeln('foo');
-        });
+        $this->command->setCode(function ($input, $output) { $output->writeln('foo'); });
 
         $this->tester = new CommandTester($this->command);
         $this->tester->execute(array('foo' => 'bar'), array('interactive' => false, 'decorated' => false, 'verbosity' => Output::VERBOSITY_VERBOSE));
@@ -56,12 +53,12 @@ class CommandTesterTest extends TestCase
     public function testGetOutput()
     {
         rewind($this->tester->getOutput()->getStream());
-        $this->assertEquals('foo' . PHP_EOL, stream_get_contents($this->tester->getOutput()->getStream()), '->getOutput() returns the current output instance');
+        $this->assertEquals('foo'.PHP_EOL, stream_get_contents($this->tester->getOutput()->getStream()), '->getOutput() returns the current output instance');
     }
 
     public function testGetDisplay()
     {
-        $this->assertEquals('foo' . PHP_EOL, $this->tester->getDisplay(), '->getDisplay() returns the display of the last execution');
+        $this->assertEquals('foo'.PHP_EOL, $this->tester->getDisplay(), '->getDisplay() returns the display of the last execution');
     }
 
     public function testGetStatusCode()
@@ -75,9 +72,7 @@ class CommandTesterTest extends TestCase
         $application->setAutoExit(false);
 
         $command = new Command('foo');
-        $command->setCode(function ($input, $output) {
-            $output->writeln('foo');
-        });
+        $command->setCode(function ($input, $output) { $output->writeln('foo'); });
 
         $application->add($command);
 

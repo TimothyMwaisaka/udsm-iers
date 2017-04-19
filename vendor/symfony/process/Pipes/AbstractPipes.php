@@ -35,7 +35,7 @@ abstract class AbstractPipes implements PipesInterface
         } elseif (is_string($input)) {
             $this->inputBuffer = $input;
         } else {
-            $this->inputBuffer = (string)$input;
+            $this->inputBuffer = (string) $input;
         }
     }
 
@@ -109,7 +109,7 @@ abstract class AbstractPipes implements PipesInterface
             }
 
             if ($input) {
-                for (; ;) {
+                for (;;) {
                     $data = fread($input, self::CHUNK_SIZE);
                     if (!isset($data[0])) {
                         break;
@@ -134,7 +134,9 @@ abstract class AbstractPipes implements PipesInterface
         if (null === $this->input && !isset($this->inputBuffer[0])) {
             fclose($this->pipes[0]);
             unset($this->pipes[0]);
-        } elseif (!$w) {
+        }
+
+        if (!$w) {
             return array($this->pipes[0]);
         }
     }

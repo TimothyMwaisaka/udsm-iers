@@ -11,15 +11,14 @@
 
 namespace Symfony\Component\Routing\Tests\Loader;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\PhpFileLoader;
 
-class PhpFileLoaderTest extends TestCase
+class PhpFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testSupports()
     {
-        $loader = new PhpFileLoader($this->getMockBuilder('Symfony\Component\Config\FileLocator')->getMock());
+        $loader = new PhpFileLoader($this->getMock('Symfony\Component\Config\FileLocator'));
 
         $this->assertTrue($loader->supports('foo.php'), '->supports() returns true if the resource is loadable');
         $this->assertFalse($loader->supports('foo.foo'), '->supports() returns true if the resource is loadable');
@@ -30,7 +29,7 @@ class PhpFileLoaderTest extends TestCase
 
     public function testLoadWithRoute()
     {
-        $loader = new PhpFileLoader(new FileLocator(array(__DIR__ . '/../Fixtures')));
+        $loader = new PhpFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
         $routeCollection = $loader->load('validpattern.php');
         $routes = $routeCollection->all();
 
@@ -49,7 +48,7 @@ class PhpFileLoaderTest extends TestCase
 
     public function testLoadWithImport()
     {
-        $loader = new PhpFileLoader(new FileLocator(array(__DIR__ . '/../Fixtures')));
+        $loader = new PhpFileLoader(new FileLocator(array(__DIR__.'/../Fixtures')));
         $routeCollection = $loader->load('validresource.php');
         $routes = $routeCollection->all();
 
@@ -68,7 +67,7 @@ class PhpFileLoaderTest extends TestCase
 
     public function testThatDefiningVariableInConfigFileHasNoSideEffects()
     {
-        $locator = new FileLocator(array(__DIR__ . '/../Fixtures'));
+        $locator = new FileLocator(array(__DIR__.'/../Fixtures'));
         $loader = new PhpFileLoader($locator);
         $routeCollection = $loader->load('with_define_path_variable.php');
         $resources = $routeCollection->getResources();
@@ -77,7 +76,7 @@ class PhpFileLoaderTest extends TestCase
         $fileResource = reset($resources);
         $this->assertSame(
             realpath($locator->locate('with_define_path_variable.php')),
-            (string)$fileResource
+            (string) $fileResource
         );
     }
 }

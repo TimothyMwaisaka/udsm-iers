@@ -31,9 +31,9 @@ class UnixPipes extends AbstractPipes
 
     public function __construct($ttyMode, $ptyMode, $input, $disableOutput)
     {
-        $this->ttyMode = (bool)$ttyMode;
-        $this->ptyMode = (bool)$ptyMode;
-        $this->disableOutput = (bool)$disableOutput;
+        $this->ttyMode = (bool) $ttyMode;
+        $this->ptyMode = (bool) $ptyMode;
+        $this->disableOutput = (bool) $disableOutput;
 
         parent::__construct($input);
     }
@@ -120,7 +120,7 @@ class UnixPipes extends AbstractPipes
             do {
                 $data = fread($pipe, self::CHUNK_SIZE);
                 $read[$type] .= $data;
-            } while (isset($data[0]) && ($close || isset($data[self::CHUNK_SIZE - 1])));
+            } while (isset($data[0]));
 
             if (!isset($read[$type][0])) {
                 unset($read[$type]);
@@ -140,16 +140,16 @@ class UnixPipes extends AbstractPipes
      */
     public function areOpen()
     {
-        return (bool)$this->pipes;
+        return (bool) $this->pipes;
     }
 
     /**
      * Creates a new UnixPipes instance.
      *
-     * @param Process $process
+     * @param Process         $process
      * @param string|resource $input
      *
-     * @return static
+     * @return UnixPipes
      */
     public static function create(Process $process, $input)
     {

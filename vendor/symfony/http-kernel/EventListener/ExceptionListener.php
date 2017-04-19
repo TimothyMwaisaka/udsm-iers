@@ -80,7 +80,7 @@ class ExceptionListener implements EventSubscriberInterface
      * Logs an exception.
      *
      * @param \Exception $exception The \Exception instance
-     * @param string $message The error message to log
+     * @param string     $message   The error message to log
      */
     protected function logException(\Exception $exception, $message)
     {
@@ -97,7 +97,7 @@ class ExceptionListener implements EventSubscriberInterface
      * Clones the request for the exception.
      *
      * @param \Exception $exception The thrown exception
-     * @param Request $request The original request
+     * @param Request    $request   The original request
      *
      * @return Request $request The cloned request
      */
@@ -107,10 +107,6 @@ class ExceptionListener implements EventSubscriberInterface
             '_controller' => $this->controller,
             'exception' => FlattenException::create($exception),
             'logger' => $this->logger instanceof DebugLoggerInterface ? $this->logger : null,
-            // keep for BC -- as $format can be an argument of the controller callable
-            // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
-            // @deprecated since version 2.4, to be removed in 3.0
-            'format' => $request->getRequestFormat(),
         );
         $request = $request->duplicate(null, null, $attributes);
         $request->setMethod('GET');

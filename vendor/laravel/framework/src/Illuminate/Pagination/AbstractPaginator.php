@@ -4,8 +4,11 @@ namespace Illuminate\Pagination;
 
 use Closure;
 use ArrayIterator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Illuminate\Contracts\Support\Htmlable;
 
-abstract class AbstractPaginator
+abstract class AbstractPaginator implements Htmlable
 {
     /**
      * All of the items being paginated.
@@ -80,7 +83,7 @@ abstract class AbstractPaginator
     /**
      * Determine if the given value is a valid page number.
      *
-     * @param  int $page
+     * @param  int  $page
      * @return bool
      */
     protected function isValidPageNumber($page)
@@ -91,8 +94,8 @@ abstract class AbstractPaginator
     /**
      * Create a range of pagination URLs.
      *
-     * @param  int $start
-     * @param  int $end
+     * @param  int  $start
+     * @param  int  $end
      * @return string
      */
     public function getUrlRange($start, $end)
@@ -109,7 +112,7 @@ abstract class AbstractPaginator
     /**
      * Get a URL for a given page number.
      *
-     * @param  int $page
+     * @param  int  $page
      * @return string
      */
     public function url($page)
@@ -127,9 +130,10 @@ abstract class AbstractPaginator
             $parameters = array_merge($this->query, $parameters);
         }
 
-        return $this->path . '?'
-        . http_build_query($parameters, '', '&')
-        . $this->buildFragment();
+        return $this->path
+                        .(Str::contains($this->path, '?') ? '&' : '?')
+                        .http_build_query($parameters, '', '&')
+                        .$this->buildFragment();
     }
 
     /**
@@ -147,7 +151,7 @@ abstract class AbstractPaginator
     /**
      * Get / set the URL fragment to be appended to URLs.
      *
-     * @param  string|null $fragment
+     * @param  string|null  $fragment
      * @return $this|string|null
      */
     public function fragment($fragment = null)
@@ -164,8 +168,8 @@ abstract class AbstractPaginator
     /**
      * Add a set of query string values to the paginator.
      *
-     * @param  array|string $key
-     * @param  string|null $value
+     * @param  array|string  $key
+     * @param  string|null  $value
      * @return $this
      */
     public function appends($key, $value = null)
@@ -180,7 +184,7 @@ abstract class AbstractPaginator
     /**
      * Add an array of query string values.
      *
-     * @param  array $keys
+     * @param  array  $keys
      * @return $this
      */
     protected function appendArray(array $keys)
@@ -195,8 +199,8 @@ abstract class AbstractPaginator
     /**
      * Add a query string value to the paginator.
      *
-     * @param  string $key
-     * @param  string $value
+     * @param  string  $key
+     * @param  string  $value
      * @return $this
      */
     public function addQuery($key, $value)
@@ -215,7 +219,7 @@ abstract class AbstractPaginator
      */
     protected function buildFragment()
     {
-        return $this->fragment ? '#' . $this->fragment : '';
+        return $this->fragment ? '#'.$this->fragment : '';
     }
 
     /**
@@ -235,6 +239,10 @@ abstract class AbstractPaginator
      */
     public function firstItem()
     {
+        if (count($this->items) === 0) {
+            return;
+        }
+
         return ($this->currentPage - 1) * $this->perPage + 1;
     }
 
@@ -245,6 +253,10 @@ abstract class AbstractPaginator
      */
     public function lastItem()
     {
+        if (count($this->items) === 0) {
+            return;
+        }
+
         return $this->firstItem() + $this->count() - 1;
     }
 
@@ -275,13 +287,13 @@ abstract class AbstractPaginator
      */
     public function hasPages()
     {
-        return !($this->currentPage() == 1 && !$this->hasMorePages());
+        return ! ($this->currentPage() == 1 && ! $this->hasMorePages());
     }
 
     /**
      * Resolve the current request path or return the default value.
      *
-     * @param  string $default
+     * @param  string  $default
      * @return string
      */
     public static function resolveCurrentPath($default = '/')
@@ -296,7 +308,7 @@ abstract class AbstractPaginator
     /**
      * Set the current request path resolver callback.
      *
-     * @param  \Closure $resolver
+     * @param  \Closure  $resolver
      * @return void
      */
     public static function currentPathResolver(Closure $resolver)
@@ -307,8 +319,8 @@ abstract class AbstractPaginator
     /**
      * Resolve the current page or return the default value.
      *
-     * @param  string $pageName
-     * @param  int $default
+     * @param  string  $pageName
+     * @param  int  $default
      * @return int
      */
     public static function resolveCurrentPage($pageName = 'page', $default = 1)
@@ -323,7 +335,7 @@ abstract class AbstractPaginator
     /**
      * Set the current page resolver callback.
      *
-     * @param  \Closure $resolver
+     * @param  \Closure  $resolver
      * @return void
      */
     public static function currentPageResolver(Closure $resolver)
@@ -334,7 +346,7 @@ abstract class AbstractPaginator
     /**
      * Set the default Presenter resolver.
      *
-     * @param  \Closure $resolver
+     * @param  \Closure  $resolver
      * @return void
      */
     public static function presenter(Closure $resolver)
@@ -355,7 +367,7 @@ abstract class AbstractPaginator
     /**
      * Set the query string variable used to store the page.
      *
-     * @param  string $name
+     * @param  string  $name
      * @return $this
      */
     public function setPageName($name)
@@ -368,7 +380,7 @@ abstract class AbstractPaginator
     /**
      * Set the base path to assign to all URLs.
      *
-     * @param  string $path
+     * @param  string  $path
      * @return $this
      */
     public function setPath($path)
@@ -419,9 +431,22 @@ abstract class AbstractPaginator
     }
 
     /**
+     * Set the paginator's underlying collection.
+     *
+     * @param  \Illuminate\Support\Collection  $collection
+     * @return $this
+     */
+    public function setCollection(Collection $collection)
+    {
+        $this->items = $collection;
+
+        return $this;
+    }
+
+    /**
      * Determine if the given item exists.
      *
-     * @param  mixed $key
+     * @param  mixed  $key
      * @return bool
      */
     public function offsetExists($key)
@@ -432,7 +457,7 @@ abstract class AbstractPaginator
     /**
      * Get the item at the given offset.
      *
-     * @param  mixed $key
+     * @param  mixed  $key
      * @return mixed
      */
     public function offsetGet($key)
@@ -443,8 +468,8 @@ abstract class AbstractPaginator
     /**
      * Set the item at the given offset.
      *
-     * @param  mixed $key
-     * @param  mixed $value
+     * @param  mixed  $key
+     * @param  mixed  $value
      * @return void
      */
     public function offsetSet($key, $value)
@@ -455,7 +480,7 @@ abstract class AbstractPaginator
     /**
      * Unset the item at the given key.
      *
-     * @param  mixed $key
+     * @param  mixed  $key
      * @return void
      */
     public function offsetUnset($key)
@@ -464,10 +489,20 @@ abstract class AbstractPaginator
     }
 
     /**
+     * Render the contents of the paginator to HTML.
+     *
+     * @return string
+     */
+    public function toHtml()
+    {
+        return (string) $this->render();
+    }
+
+    /**
      * Make dynamic calls into the collection.
      *
-     * @param  string $method
-     * @param  array $parameters
+     * @param  string  $method
+     * @param  array  $parameters
      * @return mixed
      */
     public function __call($method, $parameters)
@@ -482,6 +517,6 @@ abstract class AbstractPaginator
      */
     public function __toString()
     {
-        return $this->render();
+        return (string) $this->render();
     }
 }

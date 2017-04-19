@@ -24,12 +24,12 @@ class EventServiceProvider extends ServiceProvider
     /**
      * Register the application's event listeners.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher $events
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      * @return void
      */
     public function boot(DispatcherContract $events)
     {
-        foreach ($this->listen as $event => $listeners) {
+        foreach ($this->listens() as $event => $listeners) {
             foreach ($listeners as $listener) {
                 $events->listen($event, $listener);
             }

@@ -11,8 +11,8 @@ class PhpEngine implements EngineInterface
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  string $path
-     * @param  array $data
+     * @param  string  $path
+     * @param  array   $data
      * @return string
      */
     public function get($path, array $data = [])
@@ -23,8 +23,8 @@ class PhpEngine implements EngineInterface
     /**
      * Get the evaluated contents of the view at the given path.
      *
-     * @param  string $__path
-     * @param  array $__data
+     * @param  string  $__path
+     * @param  array   $__data
      * @return string
      */
     protected function evaluatePath($__path, $__data)
@@ -52,13 +52,13 @@ class PhpEngine implements EngineInterface
     /**
      * Handle a view exception.
      *
-     * @param  \Exception $e
-     * @param  int $obLevel
+     * @param  \Exception  $e
+     * @param  int  $obLevel
      * @return void
      *
      * @throws $e
      */
-    protected function handleViewException($e, $obLevel)
+    protected function handleViewException(Exception $e, $obLevel)
     {
         while (ob_get_level() > $obLevel) {
             ob_end_clean();

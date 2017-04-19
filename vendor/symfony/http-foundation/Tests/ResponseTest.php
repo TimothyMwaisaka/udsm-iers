@@ -442,7 +442,7 @@ class ResponseTest extends ResponseTestCase
 
     public function testDefaultContentType()
     {
-        $headerMock = $this->getMockBuilder('Symfony\Component\HttpFoundation\ResponseHeaderBag')->setMethods(array('set'))->getMock();
+        $headerMock = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag', array('set'));
         $headerMock->expects($this->at(0))
             ->method('set')
             ->with('Content-Type', 'text/html');
@@ -808,7 +808,7 @@ class ResponseTest extends ResponseTestCase
     {
         $response = new Response();
         $response->setContent($content);
-        $this->assertEquals((string)$content, $response->getContent());
+        $this->assertEquals((string) $content, $response->getContent());
     }
 
     /**

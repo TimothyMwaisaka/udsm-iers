@@ -40,8 +40,8 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
      * Constructor.
      *
      * @param string $path
-     * @param int $flags
-     * @param bool $ignoreUnreadableDirs
+     * @param int    $flags
+     * @param bool   $ignoreUnreadableDirs
      *
      * @throws \RuntimeException
      */
@@ -53,7 +53,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
 
         parent::__construct($path, $flags);
         $this->ignoreUnreadableDirs = $ignoreUnreadableDirs;
-        $this->rootPath = (string)$path;
+        $this->rootPath = $path;
         if ('/' !== DIRECTORY_SEPARATOR && !($flags & self::UNIX_PATHS)) {
             $this->directorySeparator = DIRECTORY_SEPARATOR;
         }
@@ -69,14 +69,14 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
         // the logic here avoids redoing the same work in all iterations
 
         if (null === $subPathname = $this->subPath) {
-            $subPathname = $this->subPath = (string)$this->getSubPath();
+            $subPathname = $this->subPath = (string) $this->getSubPath();
         }
         if ('' !== $subPathname) {
             $subPathname .= $this->directorySeparator;
         }
         $subPathname .= $this->getFilename();
 
-        return new SplFileInfo($this->rootPath . $this->directorySeparator . $subPathname, $this->subPath, $subPathname);
+        return new SplFileInfo($this->rootPath.$this->directorySeparator.$subPathname, $this->subPath, $subPathname);
     }
 
     /**
@@ -135,11 +135,6 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     {
         if (null !== $this->rewindable) {
             return $this->rewindable;
-        }
-
-        // workaround for an HHVM bug, should be removed when https://github.com/facebook/hhvm/issues/7281 is fixed
-        if ('' === $this->getPath()) {
-            return $this->rewindable = false;
         }
 
         if (false !== $stream = @opendir($this->getPath())) {

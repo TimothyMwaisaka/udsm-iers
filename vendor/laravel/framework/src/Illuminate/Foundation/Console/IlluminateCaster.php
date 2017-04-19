@@ -30,12 +30,13 @@ class IlluminateCaster
         'langPath',
         'publicPath',
         'storagePath',
+        'bootstrapPath',
     ];
 
     /**
      * Get an array representing the properties of an application.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      * @return array
      */
     public static function castApplication(Application $app)
@@ -46,8 +47,8 @@ class IlluminateCaster
             try {
                 $val = $app->$property();
 
-                if (!is_null($val)) {
-                    $results[Caster::PREFIX_VIRTUAL . $property] = $val;
+                if (! is_null($val)) {
+                    $results[Caster::PREFIX_VIRTUAL.$property] = $val;
                 }
             } catch (Exception $e) {
                 //
@@ -60,20 +61,20 @@ class IlluminateCaster
     /**
      * Get an array representing the properties of a collection.
      *
-     * @param  \Illuminate\Support\Collection $collection
+     * @param  \Illuminate\Support\Collection  $collection
      * @return array
      */
     public static function castCollection(Collection $collection)
     {
         return [
-            Caster::PREFIX_VIRTUAL . 'all' => $collection->all(),
+            Caster::PREFIX_VIRTUAL.'all' => $collection->all(),
         ];
     }
 
     /**
      * Get an array representing the properties of a model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return array
      */
     public static function castModel(Model $model)
@@ -89,7 +90,7 @@ class IlluminateCaster
         $results = [];
 
         foreach (array_intersect_key($attributes, $visible) as $key => $value) {
-            $results[(isset($visible[$key]) ? Caster::PREFIX_VIRTUAL : Caster::PREFIX_PROTECTED) . $key] = $value;
+            $results[(isset($visible[$key]) ? Caster::PREFIX_VIRTUAL : Caster::PREFIX_PROTECTED).$key] = $value;
         }
 
         return $results;

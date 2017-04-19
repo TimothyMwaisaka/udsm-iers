@@ -25,7 +25,7 @@ class DateRangeFilterIterator extends FilterIterator
     /**
      * Constructor.
      *
-     * @param \Iterator $iterator The Iterator to filter
+     * @param \Iterator        $iterator    The Iterator to filter
      * @param DateComparator[] $comparators An array of DateComparator instances
      */
     public function __construct(\Iterator $iterator, array $comparators)
@@ -44,7 +44,7 @@ class DateRangeFilterIterator extends FilterIterator
     {
         $fileinfo = $this->current();
 
-        if (!file_exists($fileinfo->getPathname())) {
+        if (!file_exists($fileinfo->getRealPath())) {
             return false;
         }
 

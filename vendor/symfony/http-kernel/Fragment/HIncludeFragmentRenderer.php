@@ -32,10 +32,10 @@ class HIncludeFragmentRenderer extends RoutableFragmentRenderer
     /**
      * Constructor.
      *
-     * @param EngineInterface|\Twig_Environment $templating An EngineInterface or a \Twig_Environment instance
-     * @param UriSigner $signer A UriSigner instance
-     * @param string $globalDefaultTemplate The global default content (it can be a template name or the content)
-     * @param string $charset
+     * @param EngineInterface|\Twig_Environment $templating            An EngineInterface or a \Twig_Environment instance
+     * @param UriSigner                         $signer                A UriSigner instance
+     * @param string                            $globalDefaultTemplate The global default content (it can be a template name or the content)
+     * @param string                            $charset
      */
     public function __construct($templating = null, UriSigner $signer = null, $globalDefaultTemplate = null, $charset = 'utf-8')
     {
@@ -107,11 +107,7 @@ class HIncludeFragmentRenderer extends RoutableFragmentRenderer
         }
         $renderedAttributes = '';
         if (count($attributes) > 0) {
-            if (PHP_VERSION_ID >= 50400) {
-                $flags = ENT_QUOTES | ENT_SUBSTITUTE;
-            } else {
-                $flags = ENT_QUOTES;
-            }
+            $flags = ENT_QUOTES | ENT_SUBSTITUTE;
             foreach ($attributes as $attribute => $value) {
                 $renderedAttributes .= sprintf(
                     ' %s="%s"',
@@ -140,16 +136,12 @@ class HIncludeFragmentRenderer extends RoutableFragmentRenderer
         }
 
         $loader = $this->templating->getLoader();
-        if ($loader instanceof \Twig_ExistsLoaderInterface || method_exists($loader, 'exists')) {
+        if ($loader instanceof \Twig_ExistsLoaderInterface) {
             return $loader->exists($template);
         }
 
         try {
-            if (method_exists($loader, 'getSourceContext')) {
-                $loader->getSourceContext($template);
-            } else {
-                $loader->getSource($template);
-            }
+            $loader->getSource($template);
 
             return true;
         } catch (\Twig_Error_Loader $e) {

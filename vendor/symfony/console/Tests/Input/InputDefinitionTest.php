@@ -11,12 +11,11 @@
 
 namespace Symfony\Component\Console\Tests\Input;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
-class InputDefinitionTest extends TestCase
+class InputDefinitionTest extends \PHPUnit_Framework_TestCase
 {
     protected static $fixtures;
 
@@ -27,7 +26,7 @@ class InputDefinitionTest extends TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$fixtures = __DIR__ . '/../Fixtures/';
+        self::$fixtures = __DIR__.'/../Fixtures/';
     }
 
     public function testConstructorArguments()
@@ -186,7 +185,7 @@ class InputDefinitionTest extends TestCase
             new InputArgument('foo1', InputArgument::OPTIONAL),
             new InputArgument('foo2', InputArgument::OPTIONAL, '', 'default'),
             new InputArgument('foo3', InputArgument::OPTIONAL | InputArgument::IS_ARRAY),
-            //  new InputArgument('foo4', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, '', array(1, 2)),
+        //  new InputArgument('foo4', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, '', array(1, 2)),
         ));
         $this->assertEquals(array('foo1' => null, 'foo2' => 'default', 'foo3' => array()), $definition->getArgumentDefaults(), '->getArgumentDefaults() return the default values for each argument');
 
@@ -361,7 +360,7 @@ class InputDefinitionTest extends TestCase
      */
     public function testGetSynopsis(InputDefinition $definition, $expectedSynopsis, $message = null)
     {
-        $this->assertEquals($expectedSynopsis, $definition->getSynopsis(), $message ? '->getSynopsis() ' . $message : '');
+        $this->assertEquals($expectedSynopsis, $definition->getSynopsis(), $message ? '->getSynopsis() '.$message : '');
     }
 
     public function getGetSynopsisData()
@@ -385,41 +384,6 @@ class InputDefinitionTest extends TestCase
     {
         $definition = new InputDefinition(array(new InputOption('foo'), new InputOption('bar'), new InputArgument('cat')));
         $this->assertEquals('[options] [--] [<cat>]', $definition->getSynopsis(true), '->getSynopsis(true) groups options in [options]');
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testLegacyAsText()
-    {
-        $definition = new InputDefinition(array(
-            new InputArgument('foo', InputArgument::OPTIONAL, 'The foo argument'),
-            new InputArgument('baz', InputArgument::OPTIONAL, 'The baz argument', true),
-            new InputArgument('bar', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The bar argument', array('http://foo.com/')),
-            new InputOption('foo', 'f', InputOption::VALUE_REQUIRED, 'The foo option'),
-            new InputOption('baz', null, InputOption::VALUE_OPTIONAL, 'The baz option', false),
-            new InputOption('bar', 'b', InputOption::VALUE_OPTIONAL, 'The bar option', 'bar'),
-            new InputOption('qux', '', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The qux option', array('http://foo.com/', 'bar')),
-            new InputOption('qux2', '', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The qux2 option', array('foo' => 'bar')),
-        ));
-
-        $this->assertStringEqualsFile(self::$fixtures . '/definition_astext.txt', $definition->asText(), '->asText() returns a textual representation of the InputDefinition');
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testLegacyAsXml()
-    {
-        $definition = new InputDefinition(array(
-            new InputArgument('foo', InputArgument::OPTIONAL, 'The foo argument'),
-            new InputArgument('baz', InputArgument::OPTIONAL, 'The baz argument', true),
-            new InputArgument('bar', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'The bar argument', array('bar')),
-            new InputOption('foo', 'f', InputOption::VALUE_REQUIRED, 'The foo option'),
-            new InputOption('baz', null, InputOption::VALUE_OPTIONAL, 'The baz option', false),
-            new InputOption('bar', 'b', InputOption::VALUE_OPTIONAL, 'The bar option', 'bar'),
-        ));
-        $this->assertXmlStringEqualsXmlFile(self::$fixtures . '/definition_asxml.txt', $definition->asXml(), '->asXml() returns an XML representation of the InputDefinition');
     }
 
     protected function initializeArguments()

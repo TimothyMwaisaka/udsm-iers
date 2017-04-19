@@ -11,14 +11,13 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Storage\Handler;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler;
 
 /**
  * @requires extension memcached
  * @group time-sensitive
  */
-class MemcachedSessionHandlerTest extends TestCase
+class MemcachedSessionHandlerTest extends \PHPUnit_Framework_TestCase
 {
     const PREFIX = 'prefix_';
     const TTL = 1000;
@@ -38,11 +37,11 @@ class MemcachedSessionHandlerTest extends TestCase
 
         parent::setUp();
 
-        if (version_compare(phpversion('memcached'), '2.2.0', '>=') && version_compare(phpversion('memcached'), '3.0.0b1', '<')) {
-            $this->markTestSkipped('Tests can only be run with memcached extension 2.1.0 or lower, or 3.0.0b1 or higher');
+        if (version_compare(phpversion('memcached'), '2.2.0', '>=')) {
+            $this->markTestSkipped('Tests can only be run with memcached extension 2.1.0 or lower');
         }
 
-        $this->memcached = $this->getMockBuilder('Memcached')->getMock();
+        $this->memcached = $this->getMock('Memcached');
         $this->storage = new MemcachedSessionHandler(
             $this->memcached,
             array('prefix' => self::PREFIX, 'expiretime' => self::TTL)
@@ -71,7 +70,8 @@ class MemcachedSessionHandlerTest extends TestCase
         $this->memcached
             ->expects($this->once())
             ->method('get')
-            ->with(self::PREFIX . 'id');
+            ->with(self::PREFIX.'id')
+        ;
 
         $this->assertEquals('', $this->storage->read('id'));
     }
@@ -81,8 +81,9 @@ class MemcachedSessionHandlerTest extends TestCase
         $this->memcached
             ->expects($this->once())
             ->method('set')
-            ->with(self::PREFIX . 'id', 'data', $this->equalTo(time() + self::TTL, 2))
-            ->will($this->returnValue(true));
+            ->with(self::PREFIX.'id', 'data', $this->equalTo(time() + self::TTL, 2))
+            ->will($this->returnValue(true))
+        ;
 
         $this->assertTrue($this->storage->write('id', 'data'));
     }
@@ -92,8 +93,9 @@ class MemcachedSessionHandlerTest extends TestCase
         $this->memcached
             ->expects($this->once())
             ->method('delete')
-            ->with(self::PREFIX . 'id')
-            ->will($this->returnValue(true));
+            ->with(self::PREFIX.'id')
+            ->will($this->returnValue(true))
+        ;
 
         $this->assertTrue($this->storage->destroy('id'));
     }

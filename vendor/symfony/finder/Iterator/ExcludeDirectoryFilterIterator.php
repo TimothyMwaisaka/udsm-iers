@@ -26,8 +26,8 @@ class ExcludeDirectoryFilterIterator extends FilterIterator implements \Recursiv
     /**
      * Constructor.
      *
-     * @param \Iterator $iterator The Iterator to filter
-     * @param array $directories An array of directories to exclude
+     * @param \Iterator $iterator    The Iterator to filter
+     * @param array     $directories An array of directories to exclude
      */
     public function __construct(\Iterator $iterator, array $directories)
     {
@@ -35,7 +35,6 @@ class ExcludeDirectoryFilterIterator extends FilterIterator implements \Recursiv
         $this->isRecursive = $iterator instanceof \RecursiveIterator;
         $patterns = array();
         foreach ($directories as $directory) {
-            $directory = rtrim($directory, '/');
             if (!$this->isRecursive || false !== strpos($directory, '/')) {
                 $patterns[] = preg_quote($directory, '#');
             } else {
@@ -43,7 +42,7 @@ class ExcludeDirectoryFilterIterator extends FilterIterator implements \Recursiv
             }
         }
         if ($patterns) {
-            $this->excludedPattern = '#(?:^|/)(?:' . implode('|', $patterns) . ')(?:/|$)#';
+            $this->excludedPattern = '#(?:^|/)(?:'.implode('|', $patterns).')(?:/|$)#';
         }
 
         parent::__construct($iterator);
@@ -52,7 +51,7 @@ class ExcludeDirectoryFilterIterator extends FilterIterator implements \Recursiv
     /**
      * Filters the iterator values.
      *
-     * @return bool True if the value should be kept, false otherwise
+     * @return bool true if the value should be kept, false otherwise
      */
     public function accept()
     {

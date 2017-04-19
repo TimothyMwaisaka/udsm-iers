@@ -49,7 +49,7 @@ class Profiler
      * Constructor.
      *
      * @param ProfilerStorageInterface $storage A ProfilerStorageInterface instance
-     * @param LoggerInterface $logger A LoggerInterface instance
+     * @param LoggerInterface          $logger  A LoggerInterface instance
      */
     public function __construct(ProfilerStorageInterface $storage, LoggerInterface $logger = null)
     {
@@ -78,7 +78,7 @@ class Profiler
      *
      * @param Response $response A Response instance
      *
-     * @return Profile|false A Profile instance
+     * @return Profile A Profile instance
      */
     public function loadProfileFromResponse(Response $response)
     {
@@ -133,46 +133,14 @@ class Profiler
     }
 
     /**
-     * Exports the current profiler data.
-     *
-     * @param Profile $profile A Profile instance
-     *
-     * @return string The exported data
-     */
-    public function export(Profile $profile)
-    {
-        return base64_encode(serialize($profile));
-    }
-
-    /**
-     * Imports data into the profiler storage.
-     *
-     * @param string $data A data string as exported by the export() method
-     *
-     * @return Profile|false A Profile instance
-     */
-    public function import($data)
-    {
-        $profile = unserialize(base64_decode($data));
-
-        if ($this->storage->read($profile->getToken())) {
-            return false;
-        }
-
-        $this->saveProfile($profile);
-
-        return $profile;
-    }
-
-    /**
      * Finds profiler tokens for the given criteria.
      *
-     * @param string $ip The IP
-     * @param string $url The URL
-     * @param string $limit The maximum number of tokens to return
+     * @param string $ip     The IP
+     * @param string $url    The URL
+     * @param string $limit  The maximum number of tokens to return
      * @param string $method The request method
-     * @param string $start The start date to search from
-     * @param string $end The end date to search to
+     * @param string $start  The start date to search from
+     * @param string $end    The end date to search to
      *
      * @return array An array of tokens
      *
@@ -186,8 +154,8 @@ class Profiler
     /**
      * Collects data for the given Response.
      *
-     * @param Request $request A Request instance
-     * @param Response $response A Response instance
+     * @param Request    $request   A Request instance
+     * @param Response   $response  A Response instance
      * @param \Exception $exception An exception instance if the request threw one
      *
      * @return Profile|null A Profile instance or null if the profiler is disabled
@@ -291,7 +259,7 @@ class Profiler
         }
 
         try {
-            $value = new \DateTime(is_numeric($value) ? '@' . $value : $value);
+            $value = new \DateTime(is_numeric($value) ? '@'.$value : $value);
         } catch (\Exception $e) {
             return;
         }

@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\HttpKernel\Tests\Fragment;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
-class RoutableFragmentRendererTest extends TestCase
+class RoutableFragmentRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getGenerateFragmentUriData
@@ -30,7 +29,7 @@ class RoutableFragmentRendererTest extends TestCase
      */
     public function testGenerateAbsoluteFragmentUri($uri, $controller)
     {
-        $this->assertEquals('http://localhost' . $uri, $this->callGenerateFragmentUriMethod($controller, Request::create('/'), true));
+        $this->assertEquals('http://localhost'.$uri, $this->callGenerateFragmentUriMethod($controller, Request::create('/'), true));
     }
 
     public function getGenerateFragmentUriData()

@@ -77,22 +77,6 @@ class Esi implements SurrogateInterface
     }
 
     /**
-     * Checks that at least one surrogate has ESI/1.0 capability.
-     *
-     * @param Request $request A Request instance
-     *
-     * @return bool true if one surrogate has ESI/1.0 capability, false otherwise
-     *
-     * @deprecated since version 2.6, to be removed in 3.0. Use hasSurrogateCapability() instead
-     */
-    public function hasSurrogateEsiCapability(Request $request)
-    {
-        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 2.6 and will be removed in 3.0. Use the hasSurrogateCapability() method instead.', E_USER_DEPRECATED);
-
-        return $this->hasSurrogateCapability($request);
-    }
-
-    /**
      * Adds ESI/1.0 capability to the given Request.
      *
      * @param Request $request A Request instance
@@ -102,21 +86,7 @@ class Esi implements SurrogateInterface
         $current = $request->headers->get('Surrogate-Capability');
         $new = 'symfony2="ESI/1.0"';
 
-        $request->headers->set('Surrogate-Capability', $current ? $current . ', ' . $new : $new);
-    }
-
-    /**
-     * Adds ESI/1.0 capability to the given Request.
-     *
-     * @param Request $request A Request instance
-     *
-     * @deprecated since version 2.6, to be removed in 3.0. Use addSurrogateCapability() instead
-     */
-    public function addSurrogateEsiCapability(Request $request)
-    {
-        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 2.6 and will be removed in 3.0. Use the addSurrogateCapability() method instead.', E_USER_DEPRECATED);
-
-        $this->addSurrogateCapability($request);
+        $request->headers->set('Surrogate-Capability', $current ? $current.', '.$new : $new);
     }
 
     /**
@@ -146,32 +116,16 @@ class Esi implements SurrogateInterface
             return false;
         }
 
-        return (bool)preg_match('#content="[^"]*ESI/1.0[^"]*"#', $control);
-    }
-
-    /**
-     * Checks that the Response needs to be parsed for ESI tags.
-     *
-     * @param Response $response A Response instance
-     *
-     * @return bool true if the Response needs to be parsed, false otherwise
-     *
-     * @deprecated since version 2.6, to be removed in 3.0. Use needsParsing() instead
-     */
-    public function needsEsiParsing(Response $response)
-    {
-        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 2.6 and will be removed in 3.0. Use the needsParsing() method instead.', E_USER_DEPRECATED);
-
-        return $this->needsParsing($response);
+        return (bool) preg_match('#content="[^"]*ESI/1.0[^"]*"#', $control);
     }
 
     /**
      * Renders an ESI tag.
      *
-     * @param string $uri A URI
-     * @param string $alt An alternate URI
-     * @param bool $ignoreErrors Whether to ignore errors or not
-     * @param string $comment A comment to add as an esi:include tag
+     * @param string $uri          A URI
+     * @param string $alt          An alternate URI
+     * @param bool   $ignoreErrors Whether to ignore errors or not
+     * @param string $comment      A comment to add as an esi:include tag
      *
      * @return string
      */
@@ -193,7 +147,7 @@ class Esi implements SurrogateInterface
     /**
      * Replaces a Response ESI tags with the included resource content.
      *
-     * @param Request $request A Request instance
+     * @param Request  $request  A Request instance
      * @param Response $response A Response instance
      *
      * @return Response
@@ -230,7 +184,7 @@ class Esi implements SurrogateInterface
                 throw new \RuntimeException('Unable to process an ESI tag without a "src" attribute.');
             }
 
-            $chunks[$i] = sprintf('<?php echo $this->surrogate->handle($this, %s, %s, %s) ?>' . "\n",
+            $chunks[$i] = sprintf('<?php echo $this->surrogate->handle($this, %s, %s, %s) ?>'."\n",
                 var_export($options['src'], true),
                 var_export(isset($options['alt']) ? $options['alt'] : '', true),
                 isset($options['onerror']) && 'continue' === $options['onerror'] ? 'true' : 'false'
@@ -260,10 +214,10 @@ class Esi implements SurrogateInterface
     /**
      * Handles an ESI from the cache.
      *
-     * @param HttpCache $cache An HttpCache instance
-     * @param string $uri The main URI
-     * @param string $alt An alternative URI
-     * @param bool $ignoreErrors Whether to ignore errors or not
+     * @param HttpCache $cache        An HttpCache instance
+     * @param string    $uri          The main URI
+     * @param string    $alt          An alternative URI
+     * @param bool      $ignoreErrors Whether to ignore errors or not
      *
      * @return string
      *

@@ -36,13 +36,8 @@ class UndefinedMethodFatalErrorHandler implements FatalErrorHandlerInterface
 
         $message = sprintf('Attempted to call an undefined method named "%s" of class "%s".', $methodName, $className);
 
-        if (!class_exists($className) || null === $methods = get_class_methods($className)) {
-            // failed to get the class or its methods on which an unknown method was called (for example on an anonymous class)
-            return new UndefinedMethodException($message, $exception);
-        }
-
         $candidates = array();
-        foreach ($methods as $definedMethodName) {
+        foreach (get_class_methods($className) as $definedMethodName) {
             $lev = levenshtein($methodName, $definedMethodName);
             if ($lev <= strlen($methodName) / 3 || false !== strpos($definedMethodName, $methodName)) {
                 $candidates[] = $definedMethodName;
@@ -51,14 +46,13 @@ class UndefinedMethodFatalErrorHandler implements FatalErrorHandlerInterface
 
         if ($candidates) {
             sort($candidates);
-            $last = array_pop($candidates) . '"?';
+            $last = array_pop($candidates).'"?';
             if ($candidates) {
-                $candidates = 'e.g. "' . implode('", "', $candidates) . '" or "' . $last;
+                $candidates = 'e.g. "'.implode('", "', $candidates).'" or "'.$last;
             } else {
-                $candidates = '"' . $last;
+                $candidates = '"'.$last;
             }
-
-            $message .= "\nDid you mean to call " . $candidates;
+            $message .= "\nDid you mean to call ".$candidates;
         }
 
         return new UndefinedMethodException($message, $exception);

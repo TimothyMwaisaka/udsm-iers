@@ -5,7 +5,7 @@ namespace Illuminate\Database;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container;
 
-class Seeder
+abstract class Seeder
 {
     /**
      * The container instance.
@@ -26,15 +26,12 @@ class Seeder
      *
      * @return void
      */
-    public function run()
-    {
-        //
-    }
+    abstract public function run();
 
     /**
      * Seed the given connection from the given path.
      *
-     * @param  string $class
+     * @param  string  $class
      * @return void
      */
     public function call($class)
@@ -49,7 +46,7 @@ class Seeder
     /**
      * Resolve an instance of the given seeder class.
      *
-     * @param  string $class
+     * @param  string  $class
      * @return \Illuminate\Database\Seeder
      */
     protected function resolve($class)
@@ -72,7 +69,7 @@ class Seeder
     /**
      * Set the IoC container instance.
      *
-     * @param  \Illuminate\Container\Container $container
+     * @param  \Illuminate\Container\Container  $container
      * @return $this
      */
     public function setContainer(Container $container)
@@ -85,7 +82,7 @@ class Seeder
     /**
      * Set the console command instance.
      *
-     * @param  \Illuminate\Console\Command $command
+     * @param  \Illuminate\Console\Command  $command
      * @return $this
      */
     public function setCommand(Command $command)
