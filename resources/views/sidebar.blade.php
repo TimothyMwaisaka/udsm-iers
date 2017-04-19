@@ -3,8 +3,7 @@
 
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-
-        <!-- search form (Optional) -->
+        <!-- search form (Optional)
         <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search...">
@@ -15,7 +14,6 @@
             </div>
         </form>
         <!-- /.search form -->
-
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             <li class="treeview">
@@ -27,16 +25,22 @@
                 <ul class="treeview-menu">
                     <li><a href="#"><i class="fa fa-chevron-circle-right"></i> MANAGE USERS</a>
                         <ul class="treeview-menu">
-                            <li><a href="{{ url('/list/admins') }}"><i class="fa fa-arrow-right"></i> Administrators</a></li>
-                            <li><a href="{{ url('/list/instructors') }}"><i class="fa fa-arrow-right"></i> Instructors</a></li>
-                            <li><a href="{{ url('/list/students') }}"><i class="fa fa-arrow-right"></i> Students</a></li>
+                            <li><a href="{{ url('/list/admins') }}"><i class="fa fa-arrow-right"></i> Administrators</a>
+                            </li>
+                            <li><a href="{{ url('/list/instructors') }}"><i class="fa fa-arrow-right"></i>
+                                    Instructors</a></li>
+                            <li><a href="{{ url('/list/students') }}"><i class="fa fa-arrow-right"></i> Students</a>
+                            </li>
                         </ul>
                     </li>
-                    <li><a href="{{ url('/list/colleges') }}"><i class="fa fa-chevron-circle-right"></i> MANAGE COLLEGES</a></li>
-                    <li><a href="{{ url('/list/courses') }}"><i class="fa fa-chevron-circle-right"></i> MANAGE COURSES</a></li>
+                    <li><a href="{{ url('/list/colleges') }}"><i class="fa fa-chevron-circle-right"></i> MANAGE COLLEGES</a>
+                    </li>
+                    <li><a href="{{ url('/list/courses') }}"><i class="fa fa-chevron-circle-right"></i> MANAGE
+                            COURSES</a></li>
                 </ul>
             </li>
-            <li class="active"><a href="{{ url('/list/forms') }}"><i class="fa fa-link"></i> <span> FORMS</span></a></li>
+            <li class="active"><a href="{{ url('/list/forms') }}"><i class="fa fa-link"></i> <span> FORMS</span></a>
+            </li>
         </ul>
         <!-- /.sidebar-menu -->
     </section>
