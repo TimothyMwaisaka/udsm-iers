@@ -11,8 +11,6 @@
 |
 */
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -54,11 +52,11 @@ Route::post('login/system', [
 /* Routes :: Get records from the database */
 Route::get('list/admins', 'MainController@getAdmins');
 Route::get('list/colleges', 'MainController@getColleges');
-//Route::get('list/college', 'MainController@getCollege');
 Route::get('list/instructors', 'MainController@getInstructors');
 Route::get('list/students', 'MainController@getStudents');
-Route::get('list/forms', 'MainController@getFormCourse');
+Route::get('list/forms', 'MainController@getForms');
 Route::get('list/forms/{id}', 'MainController@showForms');
+Route::get('admin/instructor-course', 'MainController@getInstructorsCourses');
 
 /* Routes :: Delete records from the database */
 Route::get('list/admins/delete/{id}', 'MainController@deleteAdmins');
@@ -70,26 +68,18 @@ Route::get('list/students/delete/{id}', 'MainController@deleteStudents');
 Route::post('add/admin', 'MainController@addAdmin');
 Route::post('add/college', 'MainController@addCollege');
 Route::post('add/instructor', 'MainController@addInstructor');
-Route::get('add/instructor', 'MainController@getFKColleges');
 Route::post('add-students', 'MainController@addStudents');
+Route::post('list/forms/{id}', 'MainController@addRating');
+Route::post('admin/instructor-course', 'MainController@assign');
 
 /* Routes :: Update records */
-//Route::get('edit/admins/{id}', 'MainController@editAdmins');
-Route::get('edit/admins/{id}', function($id)
-{
-    $admins = App\Admin::find($id);
-    return view::make('edit_instructors')->with('admins', $admins);;
-    //$course = App\Course::where('course_id', $id);
-});
+Route::get('edit/admins/{id}', 'MainController@editAdmins');
+Route::post('edit/admins/{id}', 'MainController@updateAdmins');
+Route::get('edit/colleges/{id}', 'MainController@editColleges');
+Route::post('edit/colleges/{id}', 'MainController@updateColleges');
 
 Route::auth();
 Route::get('/admin', function () {
     return view('admin');
 })->name('admin');
-
-Route::get('/home', 'HomeController@index');
-
-
-Route::get('add','MainController@create1');
-Route::post('add','MainController@store1');
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Forms</title>
+    <title>IERS - Edit Colleges</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css") }}">
-    <!-- custom style -->
-    <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/custom.css") }}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css") }}">
@@ -36,55 +34,60 @@
 <!-- Sidebar -->
 @include('sidebar')
 
-<!-- Content Wrapper. Contains page content -->
+    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">forms</li>
+                <li class="active">edit colleges</li>
             </ol>
         </section>
+
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-header box-header-title">
-                            <h3 class="box-title">ASSESSMENT FORMS</h3>
-                            <a href="{{ url('/add/form') }}" class="btn btn-default pull-right"><i
-                                        class="fa fa-plus-circle"></i> ADD FORM</a>
+                <!-- right column -->
+                <div class="col-md-8 col-md-offset-2">
+                    <!-- Horizontal Form -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">EDIT COLLEGE</h3>
                         </div>
                         <!-- /.box-header -->
-                        <div class="box-body">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>FORM</th>
-                                    <th>ACTION</th>
-                                </tr>
-                                </thead>
-                                @foreach($data as $value)
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ $value->course_code }} - {{ $value->course_name }}</td>
-                                        <td>
-                                            <a href="/list/forms/{{ $value->course_id }}"
-                                               class="btn btn-info btn-flat">VIEW</a>
-                                            <a href="/list/forms/delete/{{ $value->course_id }}"
-                                               class="btn btn-danger btn-flat">DELETE</a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                @endforeach
-                            </table>
-                        </div>
-                        <!-- /.box-body -->
+                        <!-- form start -->
+                        <form class="form-horizontal" action="" method="post">
+                            <div class="box-body">
+                                {{ csrf_field() }}
+                                <div class="form-group">
+                                    <label for="collegeShortName" class="col-sm-2 control-label">SHORT NAME</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="collegeShortName" name="collegeShortName" value="{{ $data[0]->college_short_name }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="collegeName" class="col-sm-2 control-label">COLLEGE NAME</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="collegeName" name="collegeName"
+                                               value="{{ $data[0]->college_name }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="submit" name="submit" class="btn btn-info pull-right">Save</button>
+                            </div>
+                            <!-- /.box-footer -->
+                        </form>
                     </div>
                     <!-- /.box -->
+                    <!-- general form elements disabled -->
+                    <!-- /.box -->
                 </div>
-                <!-- /.col -->
+                <!--/.col (right) -->
             </div>
             <!-- /.row -->
         </section>
@@ -92,7 +95,6 @@
     </div>
     <!-- /.content-wrapper -->
 @include('footer')
-<!-- Control Sidebar -->
 </div>
 <!-- ./wrapper -->
 
@@ -100,13 +102,11 @@
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="{{ asset ("/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
-<!-- SlimScroll -->
-<script src="{{ asset ("/bower_components/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- FastClick -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/fastclick/fastclick.js") }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ asset ("/bower_components/AdminLTE/dist/js/demo.js") }}"></script>
+
 </body>
 </html>

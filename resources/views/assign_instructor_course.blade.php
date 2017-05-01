@@ -3,11 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Add Admins</title>
+    <title>IERS - Add Instructors</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/bootstrap/css/bootstrap.min.css") }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.min.css") }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
@@ -34,17 +36,16 @@
 <!-- Sidebar -->
 @include('sidebar')
 
-    <!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">add admins</li>
+                <li class="active">instructor-course</li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
             <div class="row">
@@ -53,7 +54,7 @@
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">ADD ADMIN</h3>
+                            <h3 class="box-title">ASSIGN INSTRUCTOR COURSE</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
@@ -61,34 +62,25 @@
                             <div class="box-body">
                                 {{ csrf_field() }}
                                 <div class="form-group">
-                                    <label for="adminID" class="col-sm-2 control-label">Staff ID</label>
-
+                                    <label class="col-sm-2 control-label">INSTRUCTOR</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="adminID" name="adminID" placeholder="Enter Staff ID">
+                                        <select name="instructor" class="form-control select2" style="width: 100%;">
+                                            <option selected disabled>Choose Instructor..</option>
+                                            @foreach($instructors as $value)
+                                                <option>{{ $value->firstname ." ". $value->middlename ." ". $value->lastname }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="adminFirstName" class="col-sm-2 control-label">First Name</label>
-
+                                    <label class="col-sm-2 control-label">COURSE</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="adminFirstName" name="adminFirstName"
-                                               placeholder="Enter First Name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="adminMiddleName" class="col-sm-2 control-label">Middle Name</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="adminMiddleName" name="adminMiddleName"
-                                               placeholder="Enter Middle Name">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="adminLastName" class="col-sm-2 control-label">Last Name</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="adminLastName" name="adminLastName"
-                                               placeholder="Enter Last Name">
+                                        <select name="course" class="form-control select2" style="width: 100%;">
+                                            <option selected disabled>Choose Course..</option>
+                                            @foreach($courses as $value)
+                                                <option>{{ $value->course_code ." - ". $value->course_name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -125,6 +117,9 @@
 <!-- AdminLTE App -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
+<script src="{{ asset ("/bower_components/AdminLTE/dist/js/demo.js") }}"></script>
+<!-- Select2 -->
+<script src="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
 
 </body>
 </html>
