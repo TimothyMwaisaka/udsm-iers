@@ -36,6 +36,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('list/forms/{id}', 'MainController@showForms');
     Route::get('admin/instructor-course', 'MainController@getInstructorsCourses');
     Route::get('list/instructors-courses', 'MainController@showInstructorsCourses');
+    Route::get('admin/student-course', 'MainController@getStudentsCourses');
+    Route::get('list/students-courses', 'MainController@showStudentsCourses');
+    Route::get('list/students/{id}', 'MainController@showStudentDetails');
 
     /* Routes :: Delete records from the database */
     Route::get('list/admins/delete/{id}', 'MainController@deleteAdmins');
@@ -51,6 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('add/instructor', 'MainController@addInstructor');
     Route::post('add-students', 'MainController@addStudents');
     Route::post('admin/instructor-course', 'MainController@assignInstructorsCourses');
+    Route::post('admin/student-course', 'MainController@assignStudentsCourses');
 
     /* Routes :: Update records */
     Route::get('edit/admins/{id}', 'MainController@editAdmins');
@@ -59,6 +63,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('edit/colleges/{id}', 'MainController@updateColleges');
     Route::get('add/admin', function () {
         return view('add_admins');
+    });
+    Route::get('profile', function () {
+        return view('profile');
     });
     Route::get('add/college', ['middleware' => ['auth', 'Admin'], function () {
         return view('add_colleges');
