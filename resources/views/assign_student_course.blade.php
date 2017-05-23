@@ -3,11 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Edit Colleges</title>
+    <title>IERS - Assign Students</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/bootstrap/css/bootstrap.min.css") }}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.min.css") }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
@@ -34,17 +36,16 @@
 <!-- Sidebar -->
 @include('sidebar')
 
-    <!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">edit colleges</li>
+                <li class="active">instructor-course</li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
             <div class="row">
@@ -53,31 +54,49 @@
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">EDIT COLLEGE</h3>
+                            <h3 class="box-title">ASSIGN STUDENT COURSE</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
                         <form class="form-horizontal" action="" method="post">
                             <div class="box-body">
                                 {{ csrf_field() }}
-                                <div class="form-group">
-                                    <label for="college_short_name" class="col-sm-2 control-label">SHORT NAME</label>
-
+                                <div class="form-group{{ $errors->has('stud_id') ? ' has-error' : '' }}">
+                                    <label class="col-sm-2 control-label">STUDENT</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="college_short_name" name="college_short_name" value="{{ $data[0]->college_short_name }}">
+                                        <select name="stud_id" class="form-control select2" style="width: 100%;">
+                                            <option selected disabled>Choose Student..</option>
+                                            @foreach($students as $value)
+                                                <option value="{{ $value->id }}">{{ $value->firstname ." ". $value->middlename ." ". $value->lastname }}</option>
+                                                @if ($errors->has('stud_id'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('stud_id') }}</strong>
+                                                    </span>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="college_name" class="col-sm-2 control-label">COLLEGE NAME</label>
-
+                                <div class="form-group{{ $errors->has('course_id') ? ' has-error' : '' }}">
+                                    <label class="col-sm-2 control-label">COURSE</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="college_name" name="college_name"
-                                               value="{{ $data[0]->college_name }}">
+                                        <select name="course_id" class="form-control select2" style="width: 100%;">
+                                            <option selected disabled>Choose Course..</option>
+                                            @foreach($courses as $value)
+                                                <option value="{{ $value->course_id }}">{{ $value->course_code ." - ". $value->course_name}}</option>
+                                                @if ($errors->has('course_id'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('course_id') }}</strong>
+                                                    </span>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
+                                <button type="reset" class="btn btn-default">Clear</button>
                                 <button type="submit" name="submit" class="btn btn-info pull-right">Save</button>
                             </div>
                             <!-- /.box-footer -->
@@ -85,6 +104,7 @@
                     </div>
                     <!-- /.box -->
                     <!-- general form elements disabled -->
+
                     <!-- /.box -->
                 </div>
                 <!--/.col (right) -->
@@ -94,7 +114,7 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-@include('footer')
+    @include('footer')
 </div>
 <!-- ./wrapper -->
 
@@ -107,6 +127,9 @@
 <!-- AdminLTE App -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
+<script src="{{ asset ("/bower_components/AdminLTE/dist/js/demo.js") }}"></script>
+<!-- Select2 -->
+<script src="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
 
 </body>
 </html>

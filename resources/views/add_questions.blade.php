@@ -49,7 +49,7 @@
         <section class="content">
             <div class="row">
                 <!-- right column -->
-                <div class="col-md-9">
+                <div class="col-md-10 col-md-offset-1">
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
@@ -61,7 +61,6 @@
                             <div class="box-body">
                                 {{ csrf_field() }}
                                 <div id="box">
-                                    <form action="{{url('add')}}" method="post">
                                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                                         <input name="name[]" type="text" id="name" class="name" placeholder="Input 1">
                                         <a href="#" id="add">Add More Input Field</a>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Edit Colleges</title>
+    <title>IERS - Course Instructors</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- custom style -->
+    <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/custom.css") }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css") }}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -27,67 +29,61 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
     <!-- Header -->
 @include('header')
-
 <!-- Sidebar -->
 @include('sidebar')
-
-    <!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">edit colleges</li>
+                <li class="active">students courses</li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <!-- right column -->
-                <div class="col-md-10 col-md-offset-1">
-                    <!-- Horizontal Form -->
-                    <div class="box box-info">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">EDIT COLLEGE</h3>
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header box-header-title">
+                            <h3 class="box-title">COURSES</h3>
+                            <div class="box-body">
+                                <a href="{{ url('/admin/student-course') }}" class="btn btn-default pull-right"><i
+                                            class="fa fa-plus-circle"></i> ASSIGN COURSE TO STUDENT</a>
                         </div>
                         <!-- /.box-header -->
-                        <!-- form start -->
-                        <form class="form-horizontal" action="" method="post">
-                            <div class="box-body">
-                                {{ csrf_field() }}
-                                <div class="form-group">
-                                    <label for="college_short_name" class="col-sm-2 control-label">SHORT NAME</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="college_short_name" name="college_short_name" value="{{ $data[0]->college_short_name }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="college_name" class="col-sm-2 control-label">COLLEGE NAME</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="college_name" name="college_name"
-                                               value="{{ $data[0]->college_name }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.box-body -->
-                            <div class="box-footer">
-                                <button type="submit" name="submit" class="btn btn-info pull-right">Save</button>
-                            </div>
-                            <!-- /.box-footer -->
-                        </form>
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>STUDENT</th>
+                                    <th>COURSE</th>
+                                    <th>ACTION</th>
+                                </tr>
+                                </thead>
+                                @foreach($students_courses as $student_course)
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ $student_course->student->firstname ." ". $student_course->student->middlename ." ". $student_course->student->lastname }}</td>
+                                        <td>
+                                            {{ $student_course->course->course_name }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-flat">EDIT</button>
+                                            <a href="/list/students-courses/delete/{{ $student_course->course->course_id }}"
+                                               class="btn btn-danger btn-flat" onClick="return confirm('Are you sure you want to delete this student?')">DELETE</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                @endforeach
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
                     </div>
                     <!-- /.box -->
-                    <!-- general form elements disabled -->
-                    <!-- /.box -->
                 </div>
-                <!--/.col (right) -->
+                <!-- /.col -->
             </div>
             <!-- /.row -->
         </section>
@@ -97,16 +93,17 @@
 @include('footer')
 </div>
 <!-- ./wrapper -->
-
 <!-- jQuery 2.2.3 -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="{{ asset ("/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
+<!-- SlimScroll -->
+<script src="{{ asset ("/bower_components/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- FastClick -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/fastclick/fastclick.js") }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
-
+<script src="{{ asset ("/bower_components/AdminLTE/dist/js/demo.js") }}"></script>
 </body>
 </html>

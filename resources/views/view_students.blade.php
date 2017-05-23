@@ -79,6 +79,7 @@
                                         <td>{{ $student->programme }}</td>
                                         <td>{{ $student->evaluation }}</td>
                                         <td>
+                                            <a href="/list/students/{{ $student->id }}" class="btn btn-primary btn-flat">VIEW</a>
                                             <button type="button" class="btn btn-primary btn-flat">EDIT</button>
                                             <a href="/list/students/delete/{{ $student->id }}" class="btn btn-danger btn-flat">DELETE</a>
                                         </td>

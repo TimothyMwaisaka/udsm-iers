@@ -51,7 +51,7 @@
         <section class="content">
             <div class="row">
                 <!-- right column -->
-                <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-10 col-md-offset-1">
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
