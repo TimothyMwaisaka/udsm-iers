@@ -7,6 +7,7 @@ use App\College;
 use App\Course;
 use App\Instructor;
 use App\Instructor_course;
+use App\Student_course;
 use App\Question;
 use App\Student;
 use Illuminate\Http\Request;
@@ -174,6 +175,18 @@ class MainController extends Controller
         $instructor_course->save();
         return redirect('list/instructors-courses');
     }
+    public function assignStudentsCourses(Request $req)
+    {
+        $this->validate($req, array(
+            'stud_id' => 'required|max:255',
+            'course_id' => 'required|max:255'
+        ));
+        $student_course = new Student_course();
+        $student_course->stud_id = $req->stud_id;
+        $student_course->course_id = $req->course_id;
+        $student_course->save();
+        return redirect('list/students-courses');
+    }
 
     /* Functions to view data from database */
     public function getAdmins()
@@ -222,11 +235,23 @@ class MainController extends Controller
         $courses = Course::all();
         return view('assign_instructor_course', compact('instructors', 'courses'));
     }
+    public function getStudentsCourses()
+    {
+        $students = Student::all();
+        $courses = Course::all();
+        return view('assign_student_course', compact('students', 'courses'));
+    }
 
     public function showInstructorsCourses()
     {
         $instructors_courses = Instructor_course::all();
         return view('view_instructors_courses', compact('instructors_courses'));
+    }
+
+    public function showStudentsCourses()
+    {
+        $students_courses = Student_course::orderBy('stud_id')->get();
+        return view('view_students_courses', compact('students_courses'));
     }
 
     public function showForms($id)
@@ -239,6 +264,16 @@ class MainController extends Controller
             ->where('forms.course_id', $id)
             ->get();
         return view('view_assessment_form', $data);
+    }
+    public function showStudentDetails($id)
+    {
+        $students['students'] = DB::table('students')
+            ->join('students_courses', 'students.id', '=', 'students_courses.stud_id')
+            ->join('courses', 'students_courses.course_id', '=', 'courses.course_id')
+            ->select('students.*', 'courses.*', 'students_courses.*')
+            ->where('students_courses.stud_id', $id)
+            ->get();
+        return view('view_student_details', $students);
     }
 
     /*  Functions to update records  */
