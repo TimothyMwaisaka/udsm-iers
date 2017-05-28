@@ -126,6 +126,22 @@
                                                name="password" placeholder="Enter Password">
                                     </div>
                                 </div>
+                                <div class="form-group{{ $errors->has('college_id') ? ' has-error' : '' }}">
+                                    <label class="col-sm-2 control-label">College</label>
+                                    <div class="col-sm-10">
+                                        <select name="college_id" class="form-control select2" style="width: 100%;">
+                                            <option selected disabled>Choose college..</option>
+                                            @foreach($colleges as $college)
+                                                <option value="{{ $college->college_id }}">{{ $college->college_name }}</option>
+                                                @if ($errors->has('college_id'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('college_id') }}</strong>
+                                                    </span>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">

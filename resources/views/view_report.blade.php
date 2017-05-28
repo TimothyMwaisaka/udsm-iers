@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Admins</title>
+    <title>IERS - Report</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -19,7 +19,6 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css") }}">
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -29,13 +28,10 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
     <!-- Header -->
 @include('header')
-
 <!-- Sidebar -->
 @include('sidebar')
-
 <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -43,70 +39,64 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">admins</li>
+                <li class="active">report</li>
             </ol>
         </section>
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <div class="col-xs-12">
-                    @if(session()->has('message'))
-                        <div class="alert alert-success alert-dismissable">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                            {{ session()->get('message') }}
+                <div class="col-md-6">
+                    <!-- Widget: user widget style 1 -->
+                    <div class="box box-widget widget-user-2">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-light-blue">
+                            <!-- /.widget-user-image -->
+                            <h3 class="widget-user-username">GENERAL INFORMATION</h3>
+                            <h5 class="widget-user-desc"></h5>
                         </div>
-                    @endif
-                    <div class="box">
-                        <div class="box-header box-header-title">
-                            <h3 class="box-title">LIST OF ADMINISTRATORS</h3>
-                            <a href="{{ url('/add/admin') }}" class="btn btn-default pull-right"><i
-                                        class="fa fa-plus-square"></i> ADD ADMIN</a>
+                        <div class="box-footer no-padding">
+                            <ul class="nav nav-stacked">
+                                <li><a href="#">TOTAL COURSES <span
+                                                class="pull-right badge bg-blue">{{ $total_courses }}</span></a></li>
+                                <li><a href="#">TOTAL STUDENTS <span
+                                                class="pull-right badge bg-red">{{ $total_students }}</span></a></li>
+                            </ul>
                         </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>STAFF ID</th>
-                                    <th>FIRST NAME</th>
-                                    <th>MIDDLE NAME</th>
-                                    <th>LAST NAME</th>
-                                    <th>ACTION</th>
-                                </tr>
-                                </thead>
-                                @foreach($admins as $admin)
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ $admin->email }}</td>
-                                        <td>{{ $admin->name }}</td>
-                                        <td>{{ $admin->middlename }}</td>
-                                        <td>{{ $admin->lastname }}</td>
-                                        <td>
-                                            <a href="/edit/admins/{{ $admin->id }}" class="btn btn-primary btn-flat">EDIT</a>
-                                            <a href="/list/admins/delete/{{ $admin->id }}"
-                                               class="btn btn-danger btn-flat"
-                                               onClick="return confirm('Are you sure you want to delete this Admin?')">DELETE</a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                @endforeach
-                            </table>
-                        </div>
-                        <!-- /.box-body -->
                     </div>
-                    <!-- /.box -->
+                    <!-- /.widget-user -->
                 </div>
-                <!-- /.col -->
+                <div class="col-md-6">
+                    <!-- Widget: user widget style 1 -->
+                    <div class="box box-widget widget-user-2">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-light-blue">
+                            <!-- /.widget-user-image -->
+                            <h3 class="widget-user-username">ASSESSMENT INFORMATION</h3>
+                            <h5 class="widget-user-desc"></h5>
+                        </div>
+                        <div class="box-footer no-padding">
+                            <ul class="nav nav-stacked">
+                                <li><a href="#">TOTAL COURSES ASSESSED <span
+                                                class="pull-right badge bg-blue">{{ $total_ratings_courses }}</span></a>
+                                </li>
+                                <li><a href="#">TOTAL STUDENTS DONE ASSESSMENT <span
+                                                class="pull-right badge bg-red">{{ $total_ratings_students }}</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.widget-user -->
+                </div>
             </div>
             <!-- /.row -->
         </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    @include('footer')
+@include('footer')
+<!-- Control Sidebar -->
 </div>
 <!-- ./wrapper -->
-
 <!-- jQuery 2.2.3 -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>
 <!-- Bootstrap 3.3.6 -->

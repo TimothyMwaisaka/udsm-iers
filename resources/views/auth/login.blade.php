@@ -35,7 +35,7 @@
         <form role="form" action="{{ url('/login') }}" method="post">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} has-feedback">
-                <input id="email" type="text" class="form-control" name="email" placeholder="E-mail"
+                <input id="email" type="text" class="form-control" name="email" placeholder="ID Number"
                        value="{{ old('email') }}">
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 @if ($errors->has('email'))

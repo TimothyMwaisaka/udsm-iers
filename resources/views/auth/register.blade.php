@@ -67,6 +67,13 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="middlename" class="col-md-4 control-label">Middle Name</label>
+                            <div class="col-md-6">
+                                <input id="middlename" type="middlename" class="form-control" name="middlename" value="{{ old('middlename') }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-btn fa-user"></i> Register

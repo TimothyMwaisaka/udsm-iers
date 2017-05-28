@@ -55,7 +55,7 @@
                             <h3 class="box-title">LIST OF COURSES</h3>
                             <div class="box-body">
                                 <a href="{{ url('/list/instructors-courses') }}" class="btn btn-default"><i
-                                            class="fa fa-plus-circle"></i> ASSIGN INSTRUCTOR</a>
+                                            class="fa fa-plus-square"></i> ASSIGN INSTRUCTOR</a>
                                 <a href="{{ url('/add/course') }}" class="btn btn-default pull-right"><i
                                             class="fa fa-plus-circle"></i> ADD COURSE</a>
                         </div>

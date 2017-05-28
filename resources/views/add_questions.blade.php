@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Add Admins</title>
+    <title>IERS - Add Question</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -27,13 +27,10 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
     <!-- Header -->
 @include('header')
-
 <!-- Sidebar -->
 @include('sidebar')
-
 <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -41,10 +38,9 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">add admins</li>
+                <li class="active">add questions</li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
             <div class="row">
@@ -53,7 +49,7 @@
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">ADD ADMIN</h3>
+                            <h3 class="box-title">ADD QUESTIONS</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
@@ -61,10 +57,17 @@
                             <div class="box-body">
                                 {{ csrf_field() }}
                                 <div id="box">
-                                        <input type="hidden" name="_token" value="{{csrf_token()}}">
-                                        <input name="name[]" type="text" id="name" class="name" placeholder="Input 1">
-                                        <a href="#" id="add">Add More Input Field</a>
-                                        <input type="submit" value="submit">
+                                    <div class="form-group">
+                                        <div class="col-sm-10 input_fields_wrap">
+                                            <div style="padding-bottom: 10px;">
+                                                <button class="add_field_button btn btn-info"><i
+                                                            class="fa fa-plus-square"></i> ADD MORE QUESTIONS
+                                                </button>
+                                            </div>
+                                            <input type="text" name="content[]" class="form-control"
+                                                   placeholder="Enter Question">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- /.box-body -->
@@ -87,7 +90,7 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-@include('footer')
+    @include('footer')
 </div>
 <!-- ./wrapper -->
 
@@ -103,17 +106,26 @@
 
 <script>
     $(document).ready(function () {
-        $('#add').click(function () {
-            var inp = $('#box');
-            var i = $('input').size() + 1;
-            $('<div id="box' + i + '"><input type="text" id="name" class="name" name="name' + i + '" placeholder="Input ' + i + '"/> </div>').appendTo(inp);
-            i++;
-        });
-        $('body').on('click', '#remove', function () {
-            $(this).parent('div').remove();
-        });
-    });
+        var max_fields = 10; //maximum input boxes allowed
+        var wrapper = $(".input_fields_wrap"); //Fields wrapper
+        var add_button = $(".add_field_button"); //Add button ID
 
+        var x = 1; //initlal text box count
+        $(add_button).click(function (e) { //on add input button click
+            e.preventDefault();
+            if (x < max_fields) { //max input box allowed
+                x++; //text box increment
+                $("#rm").remove();
+                $(wrapper).append('<div class="col-sm-10 input_fields_wrap"><div style="padding: 10px 0;" id="divs"><input type="text" name="content[]" class="form-control" placeholder="Enter Question"/><a href="#" id="rm" class="remove_field">Remove</a></div></div>'); //add input box
+                $(wrapper).append('<br>')
+            }
+        });
+        $(wrapper).on("click", ".remove_field", function (e) { //user click on remove text
+            e.preventDefault();
+            $("#divs").remove();
+            x--;
+        })
+    });
 </script>
 
 </body>

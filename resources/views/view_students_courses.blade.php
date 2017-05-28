@@ -52,7 +52,7 @@
                             <h3 class="box-title">COURSES</h3>
                             <div class="box-body">
                                 <a href="{{ url('/admin/student-course') }}" class="btn btn-default pull-right"><i
-                                            class="fa fa-plus-circle"></i> ASSIGN COURSE TO STUDENT</a>
+                                            class="fa fa-plus-square"></i> ASSIGN COURSE TO STUDENT</a>
                         </div>
                         <!-- /.box-header -->
                             <table id="example1" class="table table-bordered table-striped">

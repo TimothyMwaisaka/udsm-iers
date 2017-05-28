@@ -50,10 +50,16 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
+                    @if(session()->has('message'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
                     <div class="box">
                         <div class="box-header box-header-title">
                             <h3 class="box-title">LIST OF STUDENTS</h3>
-                            <a href="{{ url('/add/student') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-circle"></i> ADD STUDENT</a>
+                            <a href="{{ url('/add/student') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-square"></i> ADD STUDENT</a>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -64,20 +70,16 @@
                                     <th>FIRST NAME</th>
                                     <th>MIDDLE NAME</th>
                                     <th>LAST NAME</th>
-                                    <th>PROGRAMME</th>
-                                    <th>ASSESSMENT STATUS</th>
                                     <th>ACTION</th>
                                 </tr>
                                 </thead>
                                 @foreach($students as $student)
                                     <tbody>
                                     <tr>
-                                        <td>{{ $student->student_id }}</td>
-                                        <td>{{ $student->firstname }}</td>
+                                        <td>{{ $student->email }}</td>
+                                        <td>{{ $student->name }}</td>
                                         <td>{{ $student->middlename }}</td>
                                         <td>{{ $student->lastname }}</td>
-                                        <td>{{ $student->programme }}</td>
-                                        <td>{{ $student->evaluation }}</td>
                                         <td>
                                             <a href="/list/students/{{ $student->id }}" class="btn btn-primary btn-flat">VIEW</a>
                                             <button type="button" class="btn btn-primary btn-flat">EDIT</button>

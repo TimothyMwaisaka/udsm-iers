@@ -50,10 +50,16 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
+                    @if(session()->has('message'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
                     <div class="box">
                         <div class="box-header box-header-title">
                             <h3 class="box-title">LIST OF INSTRUCTORS</h3>
-                            <a href="{{ url('/add/instructor') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-circle"></i> ADD INSTRUCTOR</a>
+                            <a href="{{ url('/add/instructor') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-square"></i> ADD INSTRUCTOR</a>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -71,8 +77,8 @@
                                 @foreach($instructors as $instructor)
                                     <tbody>
                                     <tr>
-                                        <td>{{ $instructor->instructor_id }}</td>
-                                        <td>{{ $instructor->firstname }}</td>
+                                        <td>{{ $instructor->email }}</td>
+                                        <td>{{ $instructor->name }}</td>
                                         <td>{{ $instructor->middlename }}</td>
                                         <td>{{ $instructor->lastname }}</td>
                                         <td>{{ $instructor->college->college_short_name }}</td>

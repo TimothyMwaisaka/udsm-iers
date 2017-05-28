@@ -50,11 +50,29 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
+                    @if(session()->has('message'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
+                    @if(session()->has('message_info'))
+                        <div class="alert alert-danger alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message_info') }}
+                        </div>
+                    @endif
+                    @if(session()->has('message_create_form'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message_create_form') }}
+                        </div>
+                    @endif
                     <div class="box">
                         <div class="box-header box-header-title">
                             <h3 class="box-title">ASSESSMENT FORMS</h3>
                             <a href="{{ url('/add/form') }}" class="btn btn-default pull-right"><i
-                                        class="fa fa-plus-circle"></i> ADD FORM</a>
+                                        class="fa fa-plus-square"></i> ADD FORM</a>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">

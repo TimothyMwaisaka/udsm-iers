@@ -3,13 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Instructor :: course</title>
+    <title>IERS - Add Instructors</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/bootstrap/css/bootstrap.min.css") }}">
-    <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.min.css") }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
@@ -19,6 +17,8 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css") }}">
+    <!-- Parsley Form validation -->
+    <link rel="stylesheet" href="{{ asset("/jsvalidation/parsley.css") }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -43,43 +43,95 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">add instructor</li>
+                <li class="active">add instructors</li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
-            <div class="row">
-                <!-- right column -->
-                <div class="col-md-10 col-md-offset-1">
-                    <!-- Horizontal Form -->
+            <!-- right column -->
+            <div class="col-md-10 col-md-offset-1">
+                <div class="row">
+                <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">ASSIGN INSTRUCTOR - COURSE</h3>
+                            <h3 class="box-title">ADD INSTRUCTOR</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form class="form-horizontal" action="" method="post">
+                        <form class="form-horizontal" action="" method="post" data-parsley-validate>
                             <div class="box-body">
                                 {{ csrf_field() }}
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">COLLEGE</label>
+                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                    <label for="name" class="col-sm-2 control-label">First Name</label>
                                     <div class="col-sm-10">
-                                        <select class="form-control select2" style="width: 100%;">
-                                            <option selected disabled>Select College..</option>
-                                            @foreach($data as $value)
-                                                <option>{{ $value->college_short_name }}</option>
-                                            @endforeach
-                                        </select>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                               placeholder="Enter First Name">
+                                        @if ($errors->has('name'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group{{ $errors->has('middlename') ? ' has-error' : '' }}">
+                                    <label for="middlename" class="col-sm-2 control-label">Middle Name</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="middlename" name="middlename"
+                                               placeholder="Enter Middle Name">
+                                        @if ($errors->has('middlename'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('middlename') }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group{{ $errors->has('lastname') ? ' has-error' : '' }}">
+                                    <label for="lastname" class="col-sm-2 control-label">Last Name</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="lastname" name="lastname"
+                                               placeholder="Enter Last Name">
+                                        @if ($errors->has('lastname'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('lastname') }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                    <label for="email" class="col-sm-2 control-label">Reg Number</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="email"
+                                               name="email"
+                                               placeholder="Reg #">
+                                        @if ($errors->has('email'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">COLLEGE</label>
+                                    <label for="password" class="col-sm-2 control-label">Password</label>
                                     <div class="col-sm-10">
-                                        <select class="form-control select2" style="width: 100%;">
-                                            <option selected disabled>Select College..</option>
-                                            @foreach($data as $value)
-                                                <option>{{ $value->college_short_name }}</option>
+                                        <input type="password" class="form-control" id="password"
+                                               name="password" placeholder="Enter Password">
+                                    </div>
+                                </div>
+                                <div class="form-group{{ $errors->has('college_id') ? ' has-error' : '' }}">
+                                    <label class="col-sm-2 control-label">College</label>
+                                    <div class="col-sm-10">
+                                        <select name="college_id" class="form-control select2" style="width: 100%;">
+                                            <option selected disabled>Choose college..</option>
+                                            @foreach($colleges as $college)
+                                                <option value="{{ $college->college_id }}">{{ $college->college_name }}</option>
+                                                @if ($errors->has('college_id'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('college_id') }}</strong>
+                                                    </span>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
@@ -117,10 +169,9 @@
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/fastclick/fastclick.js") }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
+<!-- Parsley validation -->
+<script src="{{ asset ("/jsvalidation/parsley.min.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ asset ("/bower_components/AdminLTE/dist/js/demo.js") }}"></script>
-<!-- Select2 -->
-<script src="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
 
 </body>
 </html>

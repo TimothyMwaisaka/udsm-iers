@@ -55,13 +55,13 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
+
                     <div class="box">
                         <div class="box-header assessment-form-header">
-                            <h3 class="box-title">ASSESSMENT FORM: <span> {{ $data[0]->course_code ." - ". $data[0]->course_name }}</span></h3>
+                            <h3 class="box-title">ASSESSMENT FORM:
+                                <span> {{ $data[0]->course_code ." - ". $data[0]->course_name }}</span></h3>
                         </div>
-                        <div class="box-header assessment-form-header">
-                            <p><h3 class="box-title">INSTRUCTOR: <span>{{ $data[0]->firstname ." ". $data[0]->lastname  }}</span></h3></p>
-                        </div>
+
                         <!-- /.box-header -->
                         <div class="box-body">
                             <form method="post">
@@ -73,27 +73,41 @@
                                     </tr>
                                     @foreach($data as $value)
                                         <tr>
+                                            <div class="form-group">
+                                                <input name="course_id" type="hidden" value="{{ $data[0]->course_id }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="user_id" type="hidden" value="{{ Auth::user()->id }}">
+                                            </div>
                                             <td>{{ $value->content }}</td>
                                             <td>
+                                                <div class="form-group">
+                                                    <input name="question_id['{{$value->question_id}}']" type="hidden" value="{{$value->question_id}}">
+                                                </div>
                                                 <div class="control-group">
                                                     <label class="control control--radio" style="width: 60px;">1
-                                                        <input type="radio" name= "results['{{$value->question_id}}']" value="1"/>
+                                                        <input type="radio" name="answer['{{$value->question_id}}']"
+                                                               value="1"/>
                                                         <div class="control__indicator"></div>
                                                     </label>
                                                     <label class="control control--radio" style="width: 60px;">2
-                                                        <input type="radio" name="{{ $value->question_id }}" value="2"/>
+                                                        <input type="radio" name="answer['{{$value->question_id}}']"
+                                                               value="2"/>
                                                         <div class="control__indicator"></div>
                                                     </label>
                                                     <label class="control control--radio" style="width: 60px;">3
-                                                        <input type="radio" name="{{ $value->question_id }}" value="3"/>
+                                                        <input type="radio" name="answer['{{$value->question_id}}']"
+                                                               value="3"/>
                                                         <div class="control__indicator"></div>
                                                     </label>
                                                     <label class="control control--radio" style="width: 60px;">4
-                                                        <input type="radio" name="{{ $value->question_id }}" value="4"/>
+                                                        <input type="radio" name="answer['{{$value->question_id}}']"
+                                                               value="4"/>
                                                         <div class="control__indicator"></div>
                                                     </label>
                                                     <label class="control control--radio" style="width: 60px;">5
-                                                        <input type="radio" name="{{ $value->question_id }}" value="5"/>
+                                                        <input type="radio" name="answer['{{$value->question_id}}']"
+                                                               value="5"/>
                                                         <div class="control__indicator"></div>
                                                     </label>
                                                 </div>
@@ -115,7 +129,7 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-@include('footer')
+    @include('footer')
 </div>
 <!-- ./wrapper -->
 
@@ -168,21 +182,21 @@
         $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
         //Date range as a button
         $('#daterange-btn').daterangepicker(
-                {
-                    ranges: {
-                        'Today': [moment(), moment()],
-                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                        'This Month': [moment().startOf('month'), moment().endOf('month')],
-                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                    },
-                    startDate: moment().subtract(29, 'days'),
-                    endDate: moment()
+            {
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 },
-                function (start, end) {
-                    $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                }
+                startDate: moment().subtract(29, 'days'),
+                endDate: moment()
+            },
+            function (start, end) {
+                $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
         );
 
         //Date picker

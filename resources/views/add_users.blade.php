@@ -49,58 +49,72 @@
 
         <!-- Main content -->
         <section class="content">
-            @if(Session::has('success'))
-                <div class="alert alert-success" role="alert">
-                    <strong>Success:</strong> {{ Session::get('success') }}
-                </div>
-            @endif
-            <div class="row">
-                <!-- right column -->
-                <div class="col-md-8 col-md-offset-2">
-                    <!-- Horizontal Form -->
+            <!-- right column -->
+            <div class="col-md-10 col-md-offset-1">
+                <div class="row">
+                    @if(session()->has('message'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
+                <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">ADD ADMIN</h3>
+                            <h3 class="box-title">ADD USER</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form class="form-horizontal" action="{{ url('/register') }}" method="post" data-parsley-validate>
+                        <form class="form-horizontal" action="" method="post" data-parsley-validate>
                             <div class="box-body">
                                 {{ csrf_field() }}
-                                <div class="form-group{{ $errors->has('user_id') ? ' has-error' : '' }}">
-                                    <label for="adminID" class="col-sm-2 control-label">Staff ID</label>
+                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                    <label for="adminID" class="col-sm-2 control-label">First Name</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="admin_id" name="admin_id"
-                                               placeholder="Enter Staff ID">
-                                        @if ($errors->has('user_id'))
+                                        <input type="text" class="form-control" id="name" name="name"
+                                               placeholder="Enter First Name">
+                                        @if ($errors->has('name'))
                                             <span class="help-block">
-                                        <strong>{{ $errors->first('user_id') }}</strong>
+                                        <strong>{{ $errors->first('name') }}</strong>
                                     </span>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="form-group{{ $errors->has('firstname') ? ' has-error' : '' }}">
-                                    <label for="firstname" class="col-sm-2 control-label">First Name</label>
+                                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                    <label for="email" class="col-sm-2 control-label">Reg #</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="firstname"
-                                               name="firstname"
-                                               placeholder="Enter First Name">
-                                        @if ($errors->has('firstname'))
+                                        <input type="text" class="form-control" id="email"
+                                               name="email"
+                                               placeholder="Reg #">
+                                        @if ($errors->has('email'))
                                             <span class="help-block">
-                                        <strong>{{ $errors->first('firstname') }}</strong>
+                                        <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                         @endif
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="password" class="col-sm-2 control-label">Password</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="password"
+                                               name="password"
+                                               placeholder="Enter Password">
+                                    </div>
+                                </div>
+                                <div class="form-group{{ $errors->has('middlename') ? ' has-error' : '' }}">
                                     <label for="middlename" class="col-sm-2 control-label">Middle Name</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="middlename"
-                                               name="middlename"
+                                        <input type="text" class="form-control" id="middlename" name="middlename"
                                                placeholder="Enter Middle Name">
+                                        @if ($errors->has('middlename'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('middlename') }}</strong>
+                                        </span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="form-group{{ $errors->has('lastname') ? ' has-error' : '' }}">
@@ -113,58 +127,6 @@
                                             <span class="help-block">
                                         <strong>{{ $errors->first('lastname') }}</strong>
                                         </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group{{ $errors->has('college_id') ? ' has-error' : '' }}">
-                                    <label for="college_id" class="col-sm-2 control-label">College</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="college_id" name="college_id"
-                                               placeholder="Enter Last Name">
-                                        @if ($errors->has('college_id'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('college_id') }}</strong>
-                                        </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group{{ $errors->has('type_id') ? ' has-error' : '' }}">
-                                    <label for="type_id" class="col-sm-2 control-label">User Type</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="type_id" name="type_id"
-                                               placeholder="Enter Last Name">
-                                        @if ($errors->has('type_id'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('type_id') }}</strong>
-                                        </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                    <label for="password" class="col-sm-2 control-label">Password</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="password" name="password"
-                                               placeholder="Enter Last Name">
-                                        @if ($errors->has('password'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                        </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                                    <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                                    <div class="col-md-6">
-                                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
-
-                                        @if ($errors->has('password_confirmation'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
                                         @endif
                                     </div>
                                 </div>

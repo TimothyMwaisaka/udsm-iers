@@ -104,7 +104,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Students</span>
-                                <span class="info-box-number">{{ App\Student::count() }}</span>
+                                <span class="info-box-number">{{ App\User::count() }}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>

@@ -53,7 +53,7 @@
                     <div class="box">
                         <div class="box-header box-header-title">
                             <h3 class="box-title">LIST OF COLLEGES</h3>
-                            <a href="{{ url('/add/college') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-circle"></i> ADD COLLEGE</a>
+                            <a href="{{ url('/add/college') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-square"></i> ADD COLLEGE</a>
                         </div>
 
                         <!-- /.box-header -->
