@@ -81,10 +81,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('instructor', function () {
         return view('instructor.home');
     });
+    Route::get('add/question', function () {
+        return view('add_questions');
+    });
     Route::get('list/courses', function () {
         $courses = App\Course::all();
         return View::make('view_courses')->with('courses', $courses);
     });
 
     Route::get('report', 'ReportController@reports');
+    Route::get('add/form', 'FormController@show');
+    Route::post('add/form', 'FormController@store');
+    Route::post('add/question', 'QuestionController@store');
+
 });
