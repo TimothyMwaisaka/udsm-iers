@@ -170,9 +170,8 @@ class MainController extends Controller
 
     }
 
-    public function addRating(Request $req, $id)
+    public function addRating(Request $req)
     {
-
         foreach ($req->get('question_id') as $question => $value) {
             if (Rating::where('user_id', '=', Input::get('user_id'))->exists() && Rating::where('course_id', '=', Input::get('course_id'))->exists()) {
                 return redirect('list/forms')->with('message_info', 'You have already done assessment for this course!');
