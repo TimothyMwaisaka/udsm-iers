@@ -11,4 +11,7 @@ class College extends Model
     public function instructor(){
         return $this->hasMany(Instructor::class);
     }
+    public function user(){
+        return $this->hasMany(User::class, 'college_id');
+    }
 }
