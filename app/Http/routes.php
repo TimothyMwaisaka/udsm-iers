@@ -39,6 +39,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('admin/student-course', 'MainController@getStudentsCourses');
     Route::get('list/students-courses', 'MainController@showStudentsCourses');
     Route::get('list/students/{id}', 'MainController@showStudentDetails');
+    Route::get('add/student', 'MainController@getStudentsColleges');
+    Route::get('add/instructor', 'MainController@getInstructorsColleges');
 
     /* Routes :: Delete records from the database */
     Route::get('list/admins/delete/{id}', 'MainController@deleteAdmins');
@@ -48,11 +50,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('list/instructors-courses/delete/{id}', 'MainController@deleteInstructorCourse');
 
     /* Routes :: Insert records into the database */
-    //Route::post('add/admin', 'MainController@addAdmin');
+    Route::post('add/student', 'MainController@addStudent');
+    Route::post('add/instructor', 'MainController@addInstructor');
+    Route::post('list/forms/{id}', 'MainController@addRating');
+    Route::post('add/user', 'MainController@addUser');
     Route::post('add/admin', 'MainController@addAdmin');
     Route::post('add/college', 'MainController@addCollege');
     Route::post('add/instructor', 'MainController@addInstructor');
-    Route::post('add-students', 'MainController@addStudents');
     Route::post('admin/instructor-course', 'MainController@assignInstructorsCourses');
     Route::post('admin/student-course', 'MainController@assignStudentsCourses');
 
@@ -61,6 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('edit/admins/{id}', 'MainController@updateAdmins');
     Route::get('edit/colleges/{id}', 'MainController@editColleges');
     Route::post('edit/colleges/{id}', 'MainController@updateColleges');
+
     Route::get('add/admin', function () {
         return view('add_admins');
     });
@@ -70,9 +75,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('add/college', ['middleware' => ['auth', 'Admin'], function () {
         return view('add_colleges');
     }]);
-    Route::get('add/instructor', function () {
-        return view('add_instructors');
-    });
     Route::get('student', function () {
         return view('student.home');
     });
@@ -83,4 +85,6 @@ Route::group(['middleware' => ['auth']], function () {
         $courses = App\Course::all();
         return View::make('view_courses')->with('courses', $courses);
     });
+
+    Route::get('report', 'ReportController@reports');
 });

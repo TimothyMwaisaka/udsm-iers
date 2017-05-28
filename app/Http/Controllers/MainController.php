@@ -7,21 +7,26 @@ use App\College;
 use App\Course;
 use App\Instructor;
 use App\Instructor_course;
-use App\Student_course;
-use App\Question;
+use App\Rating;
 use App\Student;
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use App\User;
+use App\Student_course;
+use App\Question;
+use App\Http\Requests;
+use Illuminate\Support\Facades\Redirect;
 
 
 class MainController extends Controller
 {
-    public function _construct(){
+    public function _construct()
+    {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -99,35 +104,50 @@ class MainController extends Controller
     }
 
     /* Functions to insert data into database */
+    public function addStudent(Request $req)
+    {
+        $student = new User();
+        $student->name = $req->name;
+        $student->email = $req->email;
+        $student->remember_token = '';
+        $student->password = bcrypt(Input::get('password'));
+        $student->middlename = $req->middlename;
+        $student->lastname = $req->lastname;
+        $student->college_id = $req->college_id;
+        $student->type = 'student';
+        $student->save();
+        return redirect('list/student')->with('message', 'Student Added Successfully!');
+    }
+
     public function addAdmin(Request $req)
     {
-        //validation
-        $this->validate($req, array(
-            'admin_id' => 'required|max:255|unique:administrators',
-            'firstname' => 'required',
-            'lastname' => 'required'
-        ));
-
-        $admin_id = $req->input('admin_id');
-        $firstname = $req->input('firstname');
-        $middlename = $req->input('middlename');
-        $lastname = $req->input('lastname');
-        $data = array('admin_id' => $admin_id, 'firstname' => $firstname, 'middlename' => $middlename, 'lastname' => $lastname);
-        DB::table('administrators')->insert($data);
-
-        return redirect('list/admins');
-        Session::put('success','Admin saved successfully');
+        $admin = new User();
+        $admin->name = $req->name;
+        $admin->email = $req->email;
+        $admin->remember_token = '';
+        $admin->password = bcrypt(Input::get('password'));
+        $admin->middlename = $req->middlename;
+        $admin->lastname = $req->lastname;
+        $admin->college_id = "";
+        $admin->type = 'admin';
+        $admin->save();
+        return redirect('list/admins')->with('message', 'Administrator Added Successfully!');
     }
 
     public function addInstructor(Request $req)
     {
-        $instructorID = $req->input('adminID');
-        $instructorFirstName = $req->input('firstname');
-        $instructorMiddleName = $req->input('middlename');
-        $instructorLastName = $req->input('lastname');
-        $data = array('instructor_id' => $instructorID, 'firstname' => $instructorFirstName, 'middlename' => $instructorMiddleName, 'lastname' => $instructorLastName);
-        DB::table('administrators')->insert($data);
-        return redirect('add/instructor');
+        $instructor = new User();
+        $instructor->name = $req->name;
+        $instructor->email = $req->email;
+        $instructor->remember_token = '';
+        $instructor->password = bcrypt(Input::get('password'));
+        $instructor->middlename = $req->middlename;
+        $instructor->lastname = $req->lastname;
+        $instructor->college_id = $req->college_id;
+        $instructor->type = 'instructor';
+        $instructor->save();
+        return redirect('list/instructors')->with('message', 'Instructor Added Successfully!');
+
     }
 
     public function addCollege(Request $req)
@@ -136,7 +156,7 @@ class MainController extends Controller
         $this->validate($req, array(
             'college_short_name' => 'required|max:255|unique:colleges',
             'college_name' => 'required|max:255|unique:colleges'
-            ));
+        ));
 
         $college_short_name = $req->input('college_short_name');
         $college_name = $req->input('college_name');
@@ -150,17 +170,24 @@ class MainController extends Controller
 
     }
 
-    public function addRating(Request $req)
+    public function addRating(Request $req, $id)
     {
-        $inputs = Input::get();
-        foreach($inputs['results'] as $userId => $result){
-            TestResults::updateCandidate($userId, $result);
+
+        foreach ($req->get('question_id') as $question => $value) {
+            if (Rating::where('user_id', '=', Input::get('user_id'))->exists() && Rating::where('course_id', '=', Input::get('course_id'))->exists()) {
+                return redirect('list/forms')->with('message_info', 'You have already done assessment for this course!');
+            }
+            else{
+                $rating = new Rating();
+                $rating->course_id = $req->course_id;
+                $rating->user_id = $req->user_id;
+                $rating->question_id = $value;
+                $rating->answer = $req->get('answer')[$question];
+                $rating->save();
+            }
+            return redirect('list/forms')->with('message', 'Ratings recorded successfully!');
         }
-        $question_id = $req->get('question_id');
-        $question = Question::where([ 'question_id' => $question_id])->first();
-        $insert = $req->input($question);
-        $data = array('answer' => $insert);
-        DB::table('ratings')->insert($data);
+
     }
 
     public function assignInstructorsCourses(Request $req)
@@ -175,6 +202,7 @@ class MainController extends Controller
         $instructor_course->save();
         return redirect('list/instructors-courses');
     }
+
     public function assignStudentsCourses(Request $req)
     {
         $this->validate($req, array(
@@ -191,19 +219,19 @@ class MainController extends Controller
     /* Functions to view data from database */
     public function getAdmins()
     {
-        $admins = Admin::all();
+        $admins = User::all()->where('type', "admin");
         return view('view_admins', compact('admins'));
     }
 
     public function getInstructors()
     {
-        $instructors = Instructor::all();
+        $instructors = User::all()->where('type', "instructor");
         return view('view_instructors', compact('instructors'));
     }
 
     public function getStudents()
     {
-        $students = Student::all();
+        $students = User::all()->where('type', "student");
         return view('view_students', compact('students'));
     }
 
@@ -235,11 +263,24 @@ class MainController extends Controller
         $courses = Course::all();
         return view('assign_instructor_course', compact('instructors', 'courses'));
     }
+
     public function getStudentsCourses()
     {
         $students = Student::all();
         $courses = Course::all();
         return view('assign_student_course', compact('students', 'courses'));
+    }
+
+    public function getStudentsColleges()
+    {
+        $colleges = College::all();
+        return view('add_students', compact('colleges'));
+    }
+
+    public function getInstructorsColleges()
+    {
+        $colleges = College::all();
+        return view('add_instructors', compact('colleges'));
     }
 
     public function showInstructorsCourses()
@@ -259,12 +300,12 @@ class MainController extends Controller
         $data['data'] = DB::table('questions')
             ->join('forms', 'questions.question_id', '=', 'forms.question_id')
             ->join('courses', 'forms.course_id', '=', 'courses.course_id')
-            ->join('instructors', 'forms.instr_id', '=', 'instructors.id')
-            ->select('questions.question_id', 'questions.content', 'courses.course_id', 'courses.course_code', 'courses.course_name', 'instructors.*')
+            ->select('questions.question_id', 'questions.content', 'courses.course_id', 'courses.course_code', 'courses.course_name')
             ->where('forms.course_id', $id)
             ->get();
         return view('view_assessment_form', $data);
     }
+
     public function showStudentDetails($id)
     {
         $students['students'] = DB::table('students')
