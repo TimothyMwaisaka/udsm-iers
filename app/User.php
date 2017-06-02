@@ -50,4 +50,7 @@ class User extends Authenticatable
     public function college(){
         return $this->belongsTo(College::class, 'college_id');
     }
+    public function student_course(){
+        return $this->hasMany(Student_course::class);
+    }
 }

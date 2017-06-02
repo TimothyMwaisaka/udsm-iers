@@ -12,7 +12,7 @@ class ReportController extends Controller
 {
     public function reports()
     {
-        $total_students = User::All()->count();
+        $total_students = DB::table('users')->where('type', "student")->count('id');
         $total_courses = Course::All()->count();
         $total_ratings_students = DB::table('ratings')->distinct('user_id')->count('user_id');
         $total_ratings_courses = DB::table('ratings')->distinct('course_id')->count('course_id');

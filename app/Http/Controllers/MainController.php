@@ -116,7 +116,7 @@ class MainController extends Controller
         $student->college_id = $req->college_id;
         $student->type = 'student';
         $student->save();
-        return redirect('list/student')->with('message', 'Student Added Successfully!');
+        return redirect('list/students')->with('message', 'Student Added Successfully!');
     }
 
     public function addAdmin(Request $req)
@@ -173,20 +173,14 @@ class MainController extends Controller
     public function addRating(Request $req)
     {
         foreach ($req->get('question_id') as $question => $value) {
-            if (Rating::where('user_id', '=', Input::get('user_id'))->exists() && Rating::where('course_id', '=', Input::get('course_id'))->exists()) {
-                return redirect('list/forms')->with('message_info', 'You have already done assessment for this course!');
-            }
-            else{
                 $rating = new Rating();
                 $rating->course_id = $req->course_id;
                 $rating->user_id = $req->user_id;
                 $rating->question_id = $value;
                 $rating->answer = $req->get('answer')[$question];
                 $rating->save();
-            }
-            return redirect('list/forms')->with('message', 'Ratings recorded successfully!');
         }
-
+        return redirect('list/forms')->with('message', 'Ratings recorded successfully!');
     }
 
     public function assignInstructorsCourses(Request $req)
@@ -265,7 +259,7 @@ class MainController extends Controller
 
     public function getStudentsCourses()
     {
-        $students = Student::all();
+        $students = User::where('type', "student");
         $courses = Course::all();
         return view('assign_student_course', compact('students', 'courses'));
     }
@@ -388,5 +382,10 @@ class MainController extends Controller
     {
         DB::table('instructors_courses')->where('course_id', $cid)->delete();
         return redirect('list/instructors-courses');
+    }
+    public function deleteForms($cid)
+    {
+        DB::table('forms')->where('course_id', $cid)->delete();
+        return redirect('list/forms')->with('message_info', 'Form Deleted Successfully!');
     }
 }

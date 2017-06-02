@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('list/instructors/delete/{id}', 'MainController@deleteInstructors');
     Route::get('list/students/delete/{id}', 'MainController@deleteStudents');
     Route::get('list/instructors-courses/delete/{id}', 'MainController@deleteInstructorCourse');
+    Route::get('list/forms/delete/{id}', 'MainController@deleteForms');
 
     /* Routes :: Insert records into the database */
     Route::post('add/student', 'MainController@addStudent');

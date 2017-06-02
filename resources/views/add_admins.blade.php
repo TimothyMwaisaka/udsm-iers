@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Add Students</title>
+    <title>IERS - Add Admins</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -43,7 +43,7 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">add students</li>
+                <li class="active">add admins</li>
             </ol>
         </section>
         <!-- Main content -->
@@ -60,7 +60,7 @@
                 <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">ADD STUDENT</h3>
+                            <h3 class="box-title">ADD ADMIN</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->

@@ -104,13 +104,48 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">Students</span>
-                                <span class="info-box-number">{{ App\User::count() }}</span>
+                                <span class="info-box-number">{{ DB::table('users')->where('type', "student")->count('id') }}</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
                     </a>
                     <!-- /.info-box -->
                 </div>
+                <!-- /.col -->
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <a href="{{ url('/list/instructors') }}" style="display: block;">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Instructors</span>
+                                <span class="info-box-number">{{ DB::table('users')->where('type', "instructor")->count('id') }}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </a>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <a href="{{ url('/list/admins') }}" style="display: block;">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-blue-gradient"><i class="ion ion-ios-people-outline"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Administrators</span>
+                                <span class="info-box-number">{{ DB::table('users')->where('type', "admin")->count('id') }}</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </a>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <!-- fix for small devices only -->
+                <div class="clearfix visible-sm-block"></div>
+
                 <!-- /.col -->
             </div>
         </section>

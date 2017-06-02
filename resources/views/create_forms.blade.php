@@ -92,8 +92,7 @@
                                                 <td>
                                                     @foreach($questions as $question)
                                                         <label>
-                                                            <input type="checkbox" name="question_id[]"
-                                                                   value="{{$question->question_id}}">
+                                                            <input type="checkbox" name="question_id['{{$question->question_id}}']" value="{{$question->question_id}}">
                                                             {{ $question->content }}
                                                         </label>
                                                         <br>

@@ -55,21 +55,41 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
-
                     <div class="box">
-                        <div class="box-header assessment-form-header">
-                            <h3 class="box-title">ASSESSMENT FORM:
-                                <span> {{ $data[0]->course_code ." - ". $data[0]->course_name }}</span></h3>
-                        </div>
-
-                        <!-- /.box-header -->
                         <div class="box-body">
+                            <div class="box box-default">
+                                <div class="box-header with-border" style="text-align: center;">
+                                    <h3 class="box-title">STUDENT COURSE EVALUATION FORM</h3>
+                                </div>
+                                <div class="box-body">
+                                    <strong>Instructions:</strong> This form aims at capturing feedback from you
+                                    regarding the quality of
+                                    instruction you have received in this course. The information is confidential and
+                                    will not be associated with your identity. Your honesty and constructive opinions
+                                    will be useful in improving the delivery and quality of the course. Please take your
+                                    time and carefully provide information on the various issues raised below.
+                                </div>
+                            </div>
+                            <div class="box box-default">
+                                <div class="box-body">
+                                    COURSE CODE: {{ $data[0]->course_code }}<br>
+                                    COURSE TITLE: {{ $data[0]->course_name }}<br>
+                                    COLLEGE:<br>
+                                    INSTRUCTOR'S FULL NAME:
+                                </div>
+                            </div>
                             <form method="post">
                                 {{ csrf_field() }}
                                 <table class="table table-bordered">
                                     <tr>
-                                        <th>QUESTIONS</th>
-                                        <th>RATINGS</th>
+                                        <th>5=Excellent; 4=Very Good; 3=Satisfactory; 2=Poor; 1=Very Poor</th>
+                                        <th>
+                                            <div class="col-sm-1">5</div>
+                                            <div class="col-sm-1">4</div>
+                                            <div class="col-sm-1">3</div>
+                                            <div class="col-sm-1">2</div>
+                                            <div class="col-sm-1">1</div>
+                                        </th>
                                     </tr>
                                     @foreach($data as $value)
                                         <tr>
@@ -81,35 +101,47 @@
                                             </div>
                                             <td>{{ $value->content }}</td>
                                             <td>
+
                                                 <div class="form-group">
-                                                    <input name="question_id['{{$value->question_id}}']" type="hidden" value="{{$value->question_id}}">
+                                                    <input name="question_id['{{$value->question_id}}']" type="hidden"
+                                                           value="{{$value->question_id}}">
                                                 </div>
                                                 <div class="control-group">
-                                                    <label class="control control--radio" style="width: 60px;">1
-                                                        <input type="radio" name="answer['{{$value->question_id}}']"
-                                                               value="1"/>
-                                                        <div class="control__indicator"></div>
-                                                    </label>
-                                                    <label class="control control--radio" style="width: 60px;">2
-                                                        <input type="radio" name="answer['{{$value->question_id}}']"
-                                                               value="2"/>
-                                                        <div class="control__indicator"></div>
-                                                    </label>
-                                                    <label class="control control--radio" style="width: 60px;">3
-                                                        <input type="radio" name="answer['{{$value->question_id}}']"
-                                                               value="3"/>
-                                                        <div class="control__indicator"></div>
-                                                    </label>
-                                                    <label class="control control--radio" style="width: 60px;">4
-                                                        <input type="radio" name="answer['{{$value->question_id}}']"
-                                                               value="4"/>
-                                                        <div class="control__indicator"></div>
-                                                    </label>
-                                                    <label class="control control--radio" style="width: 60px;">5
-                                                        <input type="radio" name="answer['{{$value->question_id}}']"
-                                                               value="5"/>
-                                                        <div class="control__indicator"></div>
-                                                    </label>
+                                                    <div class="col-sm-1">
+                                                        <label class="control control--radio" style="width: 60px;">
+                                                            <input type="radio" name="answer['{{$value->question_id}}']"
+                                                                   value="5"/>
+                                                            <div class="control__indicator"></div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <label class="control control--radio" style="width: 60px;">
+                                                            <input type="radio" name="answer['{{$value->question_id}}']"
+                                                                   value="4"/>
+                                                            <div class="control__indicator"></div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <label class="control control--radio" style="width: 60px;">
+                                                            <input type="radio" name="answer['{{$value->question_id}}']"
+                                                                   value="3"/>
+                                                            <div class="control__indicator"></div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <label class="control control--radio" style="width: 60px;">
+                                                            <input type="radio" name="answer['{{$value->question_id}}']"
+                                                                   value="2"/>
+                                                            <div class="control__indicator"></div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <label class="control control--radio" style="width: 60px;">
+                                                            <input type="radio" name="answer['{{$value->question_id}}']"
+                                                                   value="1"/>
+                                                            <div class="control__indicator"></div>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
