@@ -103,6 +103,31 @@ class MainController extends Controller
         //
     }
 
+    public function adminIndex()
+    {
+        return view('admin');
+    }
+    public function studentIndex()
+    {
+        return view('student.home');
+    }
+    public function instructorIndex()
+    {
+        return view('instructor.home');
+    }
+    public function addCollegeIndex()
+    {
+        return view('add_colleges');
+    }
+    public function addAdminIndex()
+    {
+        return view('add_admins');
+    }
+    public function addQuestionIndex()
+    {
+        return view('add_questions');
+    }
+
     /* Functions to insert data into database */
     public function addStudent(Request $req)
     {
@@ -246,8 +271,8 @@ class MainController extends Controller
 
     public function getCourses()
     {
-        $courses = DB::table('courses')->distinct()->select('courses.course_id', 'courses.course_code')->join('forms', 'courses.course_id', '=', 'forms.course_id')->get();
-        return view('view_forms', compact('courses'));
+        $courses = Course::all();
+        return View('view_courses', compact('courses'));
     }
 
     public function getInstructorsCourses()
@@ -284,7 +309,7 @@ class MainController extends Controller
 
     public function showStudentsCourses()
     {
-        $students_courses = Student_course::orderBy('stud_id')->get();
+        $students_courses = Student_course::all();
         return view('view_students_courses', compact('students_courses'));
     }
 

@@ -101,7 +101,41 @@
                         </ul>
                         <div class="tab-content">
                             <div class="active tab-pane" id="activity">
-                                Content
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- Widget: user widget style 1 -->
+                                        <div class="box box-widget widget-user-2">
+                                            <!-- Add the bg color to the header using any of the bg-* classes -->
+                                            <div class="widget-user-header bg-light-blue">
+                                                <!-- /.widget-user-image -->
+                                                <h3 class="widget-user-username">ASSESSMENT FORMS</h3>
+                                                <h5 class="widget-user-desc"></h5>
+                                            </div>
+                                            <div class="box-footer no-padding">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>COURSE</th>
+                                                    </tr>
+                                                    </thead>
+                                                    @foreach(Auth::user()->student_course as $course)
+                                                        <tbody>
+                                                        <tr class="tr">
+                                                            <td>
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{URL::to('list/forms/'.$course->course->course_id)}}">{{ $course->course->course_code." - ". $course->course->course_name }}</a>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    @endforeach
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- /.widget-user -->
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="timeline">
@@ -124,7 +158,7 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-@include('footer')
+    @include('footer')
 </div>
 <!-- ./wrapper -->
 
@@ -140,5 +174,7 @@
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/demo.js") }}"></script>
+<!-- custom script -->
+<script src="{{ asset ("/bower_components/AdminLTE/dist/js/script.js") }}"></script>
 </body>
 </html>

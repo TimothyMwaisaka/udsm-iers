@@ -23,6 +23,9 @@ class CheckRole
         if ($request->user()->hasAnyRole($roles) || !$roles){
             return $next($request);
         }
-        return response("No permission", 401);
+        return response()->view('errors.403');
+
     }
+
+
 }

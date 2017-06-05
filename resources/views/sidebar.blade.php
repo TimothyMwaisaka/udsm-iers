@@ -16,6 +16,7 @@
         <!-- /.search form -->
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
+            @if( Auth::User()->hasRole(['Admin']) )
             <li class="treeview">
                 <a href="#"><i class="fa fa-link"></i> <span> MANAGE</span>
                     <span class="pull-right-container">
@@ -39,9 +40,13 @@
                             COURSES</a></li>
                 </ul>
             </li>
-            <li class="active"><a href="{{ url('/list/forms') }}"><i class="fa fa-link"></i> <span> FORMS</span></a></li>
-            <li class="active"><a href="{{ url('report') }}"><i class="fa fa-link"></i> <span> REPORTS</span></a></li>
-        </ul>
+            @endif
+                <li class="active"><a href="{{ url('/list/forms') }}"><i class="fa fa-link"></i> <span> FORMS</span></a></li>
+                @if( Auth::User()->hasRole(['Admin']) )
+                <li class="active"><a href="{{ url('report') }}"><i class="fa fa-link"></i> <span> REPORTS</span></a></li>
+                @endif
+
+            </ul>
         <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

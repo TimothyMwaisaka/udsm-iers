@@ -49,51 +49,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </section>
             <!-- Main content -->
             <section class="content">
-                <!-- Your Page Content Here -->
-                <section class="content">
-                    <div class="callout callout-info row" style="padding: 90px 30px 110px 15px">
-                        <div class="col-md-2">
-                            <a href="#"><img src={{asset('img/udsm.png')}} alt="udsm" height="150px"></a>
-                        </div>
-                        <div class="col-md-10" style="font-size: 120%">
-                            <h3>Wecome!</h3>
-                            <p>IERS - Instructors Evaluation and Rating System is an online system for Quality Assurance
-                                Bureau (QAB) of the University of Dar es salaam (UDSM). The system is used to conduct
-                                instructors assessment, rating and evaluation. The aim of the system is to make rating
-                                and
-                                evaluation of instructors efficient and less time consuming</p>
-                        </div>
+                <div class="error-page">
+                    <h2 class="headline text-red"> 403</h2>
+                    <div class="error-content">
+                        <h3><i class="fa fa-warning text-red"></i> Oops! Forbidden</h3>
+                        <p>
+                            You dont have permissions to view this page.
+                            Meanwhile, you may <a href="{{ url('/') }}">return to dashboard</a> or contact the FYP
+                            members, UDSM.
+                        </p>
                     </div>
-                    <div class="box box-default">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">USER LOGIN</h3>
-                        </div>
-                        <div class="box-body">
-                            @if(Auth::guest())
-                                You are not logged in, to access IERS please <strong><a href="/login">LOGIN
-                                        HERE</a></strong>
-                            @elseif( Auth::User()->hasRole(['Admin']) )
-                                <script>
-                                    window.location.href = '{{url("/admin")}}';
-                                </script>
-                            @elseif( Auth::User()->hasRole(['Student']) )
-                                <script>
-                                    window.location.href = '{{url("/student")}}';
-                                </script>
-                            @elseif( Auth::User()->hasRole(['Instructor']) )
-                                <script>
-                                    window.location.href = '{{url("/instructor")}}';
-                                </script>
-                            @else
-                                <script>
-                                    window.location.href = '{{url("/")}}';
-                                </script>
-                            @endif
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-                    <!-- /.box -->
-                </section>
+                    <!-- /.error-content -->
+                </div>
+                <!-- /.error-page -->
             </section>
             <!-- /.content -->
         </div>

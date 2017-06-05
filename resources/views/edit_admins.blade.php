@@ -35,7 +35,7 @@
 <!-- Sidebar -->
 @include('sidebar')
 
-<!-- Content Wrapper. Contains page content -->
+    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -65,32 +65,28 @@
                                     <label for="admin_id" class="col-sm-2 control-label">Staff ID</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="admin_id" name="admin_id"
-                                               value="{{ $data[0]->admin_id }}" required>
+                                        <input type="text" class="form-control" id="admin_id" name="admin_id" value="{{ $data[0]->admin_id }}" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="firstname" class="col-sm-2 control-label">First Name</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="firstname" name="firstname"
-                                               value="{{ $data[0]->firstname }}" required>
+                                        <input type="text" class="form-control" id="firstname" name="firstname" value="{{ $data[0]->firstname }}" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="middlename" class="col-sm-2 control-label">Middle Name</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="middlename" name="middlename"
-                                               value="{{ $data[0]->middlename }}">
+                                        <input type="text" class="form-control" id="middlename" name="middlename" value="{{ $data[0]->middlename }}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="lastname" class="col-sm-2 control-label">Last Name</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="lastname" name="lastname"
-                                               value="{{ $data[0]->lastname }}" required>
+                                        <input type="text" class="form-control" id="lastname" name="lastname" value="{{ $data[0]->lastname }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +109,7 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    @include('footer')
+@include('footer')
 </div>
 <!-- ./wrapper -->
 

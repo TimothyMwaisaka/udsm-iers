@@ -24,33 +24,46 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    public function roles(){
-        $this->belongsToMany(Role::class, 'user_role', 'user_id', 'role_id');
+
+    public function college()
+    {
+        return $this->belongsTo(College::class, 'college_id');
     }
-    public function hasAnyRole($roles){
-        if (is_array($roles)){
-            foreach ($roles as $role){
-                if($this->hasRole($role)){
+
+    public function student_course()
+    {
+        return $this->belongsToMany(Student_course::class, 'courses', 'course_id', 'instr_id');
+    }
+    public function course(){
+        return $this->hasMany(Course::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_role', 'user_id', 'role_id');
+    }
+
+    public function hasAnyRole($roles)
+    {
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if ($this->hasRole($role)) {
                     return true;
                 }
             }
-        }else{
-            if($this->hasRole($roles)){
+        } else {
+            if ($this->hasRole($roles)) {
                 return true;
             }
         }
         return false;
     }
-    public function hasRole($role){
-        if($this->roles()->where('name', $role)->first()){
+
+    public function hasRole($role)
+    {
+        if ($this->roles()->where('name', $role)->first()) {
             return true;
         }
         return false;
-    }
-    public function college(){
-        return $this->belongsTo(College::class, 'college_id');
-    }
-    public function student_course(){
-        return $this->hasMany(Student_course::class);
     }
 }

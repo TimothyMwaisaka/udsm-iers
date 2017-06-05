@@ -1,7 +1,7 @@
 <!-- Main Header -->
 <header class="main-header">
     <!-- Logo -->
-    <a href="{{ url('/admin') }}" class="logo">
+    <a href="{{ url('/') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>IERS</b></span>
         <!-- logo for regular state and mobile devices -->
@@ -19,7 +19,6 @@
             <!-- Authentication Links -->
             @if (Auth::guest())
                 <li><a href="{{ url('/login') }}">Login</a></li>
-                <li><a href="{{ url('/register') }}">Register</a></li>
             @else
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
