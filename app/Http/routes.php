@@ -1,98 +1,202 @@
 <?php
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/home', 'HomeController@index');
-
 Route::auth();
 
-Route::group(['middleware' => ['web',]], function () {
-    Route::group(['middleware' => ['auth',]], function () {
-        Route::get('list/colleges', [
-            'uses' => 'MainController@getColleges',
-            'as' => 'view_colleges',
-        ]);
-    });
-
+Route::group(['middleware' => ['auth', 'web', 'roles']], function () {
+    /* Routes :: Login, Register and Logout */
     Route::get('auth/login', 'Auth\AuthController@getLogin');
     Route::post('auth/login', 'Auth\AuthController@postLogin');
     Route::get('auth/logout', 'Auth\AuthController@getLogout');
     Route::get('auth/register', 'Auth\AuthController@getRegister');
     Route::post('auth/register', 'Auth\AuthController@getRegister');
-});
 
-Route::group(['middleware' => ['auth']], function () {
-    Route::get('/admin', function () {
-        return view('admin');
-    })->name('admin');
+    /* Routes :: Homepage - Welcome page */
+    Route::get('/', function () {
+        return view('welcome');
+    });
 
     /* Routes :: Get records from the database */
-    Route::get('list/admins', 'MainController@getAdmins');
-    Route::get('list/instructors', 'MainController@getInstructors');
-    Route::get('list/students', 'MainController@getStudents');
-    Route::get('list/forms', 'MainController@getForms');
-    Route::get('list/forms/{id}', 'MainController@showForms');
-    Route::get('admin/instructor-course', 'MainController@getInstructorsCourses');
-    Route::get('list/instructors-courses', 'MainController@showInstructorsCourses');
-    Route::get('admin/student-course', 'MainController@getStudentsCourses');
-    Route::get('list/students-courses', 'MainController@showStudentsCourses');
-    Route::get('list/students/{id}', 'MainController@showStudentDetails');
-    Route::get('add/student', 'MainController@getStudentsColleges');
-    Route::get('add/instructor', 'MainController@getInstructorsColleges');
+    Route::get('list/admins', [
+        'uses' => 'MainController@getAdmins',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/instructors', [
+        'uses' => 'MainController@getInstructors',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/students', [
+        'uses' => 'MainController@getStudents',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/students/{id}', [
+        'uses' => 'MainController@showStudentDetails',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/colleges', [
+        'uses' => 'MainController@getColleges',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/courses', [
+        'uses' => 'MainController@getCourses',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/forms', [
+        'uses' => 'MainController@getForms',
+        'roles' => ['Admin', 'Instructor']
+    ]);
+    Route::get('list/forms/{id}', [
+        'as' => 'list/forms/{id}',
+        'uses' => 'MainController@showForms',
+        'roles' => ['Admin', 'Student', 'Instructor']
+    ]);
+
+    Route::get('admin/instructor-course', [
+        'uses' => 'MainController@getInstructorsCourses',
+        'roles' => ['Admin']
+    ]);
+    Route::get('admin/student-course', [
+        'uses' => 'MainController@getStudentsCourses',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/instructors-courses', [
+        'uses' => 'MainController@showInstructorsCourses',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/students-courses', [
+        'uses' => 'MainController@showStudentsCourses',
+        'roles' => ['Admin']
+    ]);
+    Route::get('add/student', [
+        'uses' => 'MainController@getStudentsColleges',
+        'roles' => ['Admin']
+    ]);
+    Route::get('add/instructor', [
+        'uses' => 'MainController@getInstructorsColleges',
+        'roles' => ['Admin']
+    ]);
+    Route::get('report', [
+        'uses' => 'ReportController@reports',
+        'roles' => ['Admin']
+    ]);
+    Route::get('add/form', [
+        'uses' => 'FormController@show',
+        'roles' => ['Admin']
+    ]);
 
     /* Routes :: Delete records from the database */
-    Route::get('list/admins/delete/{id}', 'MainController@deleteAdmins');
-    Route::get('list/colleges/delete/{id}', 'MainController@deleteColleges');
-    Route::get('list/instructors/delete/{id}', 'MainController@deleteInstructors');
-    Route::get('list/students/delete/{id}', 'MainController@deleteStudents');
-    Route::get('list/instructors-courses/delete/{id}', 'MainController@deleteInstructorCourse');
-    Route::get('list/forms/delete/{id}', 'MainController@deleteForms');
+    Route::get('list/admins/delete/{id}', [
+        'uses' => 'MainController@deleteAdmins',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/colleges/delete/{id}', [
+        'uses' => 'MainController@deleteColleges',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/instructors/delete/{id}', [
+        'uses' => 'MainController@deleteInstructors',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/students/delete/{id}', [
+        'uses' => 'MainController@deleteStudents',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/instructors-courses/delete/{id}', [
+        'uses' => 'MainController@deleteInstructorCourse',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/forms/delete/{id}', [
+        'uses' => 'MainController@deleteForms',
+        'roles' => ['Admin']
+    ]);
 
     /* Routes :: Insert records into the database */
-    Route::post('add/student', 'MainController@addStudent');
-    Route::post('add/instructor', 'MainController@addInstructor');
-    Route::post('list/forms/{id}', 'MainController@addRating');
-    Route::post('add/user', 'MainController@addUser');
-    Route::post('add/admin', 'MainController@addAdmin');
-    Route::post('add/college', 'MainController@addCollege');
-    Route::post('add/instructor', 'MainController@addInstructor');
-    Route::post('admin/instructor-course', 'MainController@assignInstructorsCourses');
-    Route::post('admin/student-course', 'MainController@assignStudentsCourses');
+    Route::post('add/student', [
+        'uses' => 'MainController@addStudent',
+        'roles' => ['Admin']
+    ]);
+    Route::post('add/instructor', [
+        'uses' => 'MainController@addInstructor',
+        'roles' => ['Admin']
+    ]);
+
+    Route::post('add/user', [
+        'uses' => 'MainController@addUser',
+        'roles' => ['Admin']
+    ]);
+    Route::post('add/admin', [
+        'uses' => 'MainController@addAdmin',
+        'roles' => ['Admin']
+    ]);
+    Route::post('add/college', [
+        'uses' => 'MainController@addCollege',
+        'roles' => ['Admin']
+    ]);
+    Route::post('admin/instructor-course', [
+        'uses' => 'MainController@assignInstructorsCourses',
+        'roles' => ['Admin']
+    ]);
+    Route::post('admin/student-course', [
+        'uses' => 'MainController@assignStudentsCourses',
+        'roles' => ['Admin']
+    ]);
+    Route::post('add/form', [
+        'uses' => 'FormController@store',
+        'roles' => ['Admin']
+    ]);
+    Route::post('add/question', [
+        'uses' => 'QuestionController@store',
+        'roles' => ['Admin']
+    ]);
+    Route::post('list/forms/{id}', [
+        'uses' => 'MainController@addRating',
+        'roles' => ['Admin', 'Student', 'Instructor']
+    ]);
 
     /* Routes :: Update records */
-    Route::get('edit/admins/{id}', 'MainController@editAdmins');
-    Route::post('edit/admins/{id}', 'MainController@updateAdmins');
-    Route::get('edit/colleges/{id}', 'MainController@editColleges');
-    Route::post('edit/colleges/{id}', 'MainController@updateColleges');
+    Route::get('edit/admins/{id}', [
+        'uses' => 'MainController@editAdmins',
+        'roles' => ['Admin']
+    ]);
+    Route::post('edit/admins/{id}', [
+        'uses' => 'MainController@updateAdmins',
+        'roles' => ['Admin']
+    ]);
+    Route::get('edit/colleges/{id}', [
+        'uses' => 'MainController@editColleges',
+        'roles' => ['Admin']
+    ]);
+    Route::post('edit/colleges/{id}', [
+        'uses' => 'MainController@updateColleges',
+        'roles' => ['Admin']
+    ]);
 
-    Route::get('add/admin', function () {
-        return view('add_admins');
-    });
-    Route::get('profile', function () {
-        return view('profile');
-    });
-    Route::get('add/college', ['middleware' => ['auth', 'Admin'], function () {
-        return view('add_colleges');
-    }]);
-    Route::get('student', function () {
-        return view('student.home');
-    });
-    Route::get('instructor', function () {
-        return view('instructor.home');
-    });
-    Route::get('add/question', function () {
-        return view('add_questions');
-    });
-    Route::get('list/courses', function () {
-        $courses = App\Course::all();
-        return View::make('view_courses')->with('courses', $courses);
-    });
-
-    Route::get('report', 'ReportController@reports');
-    Route::get('add/form', 'FormController@show');
-    Route::post('add/form', 'FormController@store');
-    Route::post('add/question', 'QuestionController@store');
-
+    /* Routes :: Index pages */
+    Route::get('profile', [
+        'uses' => 'ProfileController@index',
+        'roles' => ['Admin', 'Student', 'Instructor']
+    ]);
+    Route::get('add/admin', [
+        'uses' => 'MainController@addAdminIndex',
+        'roles' => ['Admin']
+    ]);
+    Route::get('add/college', [
+        'uses' => 'MainController@addCollegeIndex',
+        'roles' => ['Admin']
+    ]);
+    Route::get('admin', [
+        'uses' => 'MainController@adminIndex',
+        'roles' => ['Admin']
+    ]);
+    Route::get('student', [
+        'uses' => 'MainController@studentIndex',
+        'roles' => ['Admin', 'Student']
+    ]);
+    Route::get('instructor', [
+        'uses' => 'MainController@instructorIndex',
+        'roles' => ['Admin', 'Instructor']
+    ]);
+    Route::get('add/question', [
+        'uses' => 'MainController@addQuestionIndex',
+        'roles' => ['Admin']
+    ]);
 });
