@@ -12,14 +12,15 @@ class Form extends Model
 
     public function course()
     {
-        return $this->hasMany(Course::class, 'course_id');
+        return $this->belongsTo(Course::class, 'course_id');
     }
     public function question()
     {
         return $this->hasMany(Question::class, 'question_id');
     }
-    public function instructor()
+
+    public function rating()
     {
-        return $this->belongsTo(Instructor::class, 'instr_id');
+        return $this->belongsTo(Rating::class);
     }
 }

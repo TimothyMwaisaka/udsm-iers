@@ -2,18 +2,18 @@
 
 Route::auth();
 
-Route::group(['middleware' => ['auth', 'web', 'roles']], function () {
+/* Routes :: Homepage - Welcome page */
+Route::get('/', [
+    'uses' => 'MainController@welcomeIndex'
+]);
+
+Route::group(['middleware' => ['auth', 'roles']], function () {
     /* Routes :: Login, Register and Logout */
     Route::get('auth/login', 'Auth\AuthController@getLogin');
     Route::post('auth/login', 'Auth\AuthController@postLogin');
     Route::get('auth/logout', 'Auth\AuthController@getLogout');
     Route::get('auth/register', 'Auth\AuthController@getRegister');
     Route::post('auth/register', 'Auth\AuthController@getRegister');
-
-    /* Routes :: Homepage - Welcome page */
-    Route::get('/', function () {
-        return view('welcome');
-    });
 
     /* Routes :: Get records from the database */
     Route::get('list/admins', [
@@ -44,12 +44,11 @@ Route::group(['middleware' => ['auth', 'web', 'roles']], function () {
         'uses' => 'MainController@getForms',
         'roles' => ['Admin', 'Instructor']
     ]);
+
     Route::get('list/forms/{id}', [
-        'as' => 'list/forms/{id}',
-        'uses' => 'MainController@showForms',
+        'uses' => 'StudentController@showForms',
         'roles' => ['Admin', 'Student', 'Instructor']
     ]);
-
     Route::get('admin/instructor-course', [
         'uses' => 'MainController@getInstructorsCourses',
         'roles' => ['Admin']
@@ -74,12 +73,20 @@ Route::group(['middleware' => ['auth', 'web', 'roles']], function () {
         'uses' => 'MainController@getInstructorsColleges',
         'roles' => ['Admin']
     ]);
+    Route::get('add/course', [
+        'uses' => 'MainController@getCollegesCourses',
+        'roles' => ['Admin']
+    ]);
     Route::get('report', [
         'uses' => 'ReportController@reports',
         'roles' => ['Admin']
     ]);
     Route::get('add/form', [
         'uses' => 'FormController@show',
+        'roles' => ['Admin']
+    ]);
+    Route::get('report/{id}', [
+        'uses' => 'ReportController@showReport',
         'roles' => ['Admin']
     ]);
 
@@ -90,6 +97,10 @@ Route::group(['middleware' => ['auth', 'web', 'roles']], function () {
     ]);
     Route::get('list/colleges/delete/{id}', [
         'uses' => 'MainController@deleteColleges',
+        'roles' => ['Admin']
+    ]);
+    Route::get('list/courses/delete/{id}', [
+        'uses' => 'MainController@deleteCourses',
         'roles' => ['Admin']
     ]);
     Route::get('list/instructors/delete/{id}', [
@@ -129,6 +140,10 @@ Route::group(['middleware' => ['auth', 'web', 'roles']], function () {
     ]);
     Route::post('add/college', [
         'uses' => 'MainController@addCollege',
+        'roles' => ['Admin']
+    ]);
+    Route::post('add/course', [
+        'uses' => 'MainController@addCourse',
         'roles' => ['Admin']
     ]);
     Route::post('admin/instructor-course', [
@@ -188,7 +203,7 @@ Route::group(['middleware' => ['auth', 'web', 'roles']], function () {
         'roles' => ['Admin']
     ]);
     Route::get('student', [
-        'uses' => 'MainController@studentIndex',
+        'uses' => 'StudentController@showStudentCourses',
         'roles' => ['Admin', 'Student']
     ]);
     Route::get('instructor', [

@@ -32,10 +32,10 @@ class User extends Authenticatable
 
     public function student_course()
     {
-        return $this->belongsToMany(Student_course::class, 'courses', 'course_id', 'instr_id');
+        return $this->belongsToMany(Student_course::class);
     }
     public function course(){
-        return $this->hasMany(Course::class);
+        return $this->hasManyThrough(Course::class, Student_course::class, 'user_id', 'course_id', 'id');
     }
 
     public function roles()

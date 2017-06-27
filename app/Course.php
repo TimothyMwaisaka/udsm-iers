@@ -8,11 +8,7 @@ class Course extends Model
 {
     protected $table = 'courses';
     protected $primaryKey = 'course_id';
-
-    public function instructor()
-    {
-        return $this->belongsTo(Instructor::class, 'instr_id');
-    }
+    public $timestamps = false;
 
     public function college()
     {
@@ -31,4 +27,5 @@ class Course extends Model
     public function student_course(){
         return $this->hasMany(Student_course::class);
     }
+
 }
