@@ -15,6 +15,6 @@ class QuestionController extends Controller
                 $question->content = $value;
                 $question->save();
         }
-        return redirect('add/form')->with('message_create_question', 'Questions added successfully!');
+        return redirect('add/form')->with('message_create_question', 'Question(s) added successfully!');
     }
 }

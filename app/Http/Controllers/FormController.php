@@ -21,6 +21,11 @@ class FormController extends Controller
 
     public function store(Request $req)
     {
+        //validation
+        $this->validate($req, array(
+            'course_id' => 'required|max:255|unique:forms',
+            'question_id' => 'required'
+        ));
         foreach ($req->get('question_id') as $question) {
 
                 $form = new Form();
