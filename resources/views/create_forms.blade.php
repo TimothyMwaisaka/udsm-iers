@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- custom style -->
+    <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/custom.css") }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css") }}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -19,6 +21,7 @@
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css") }}">
     <!-- Parsley Form validation -->
     <link rel="stylesheet" href="{{ asset("/jsvalidation/parsley.css") }}">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -50,7 +53,8 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">ASSESSMENT FORM CREATION</h3>
                             <div class="pull-right">
-                                <a href="{{ url('add/question') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-square"></i> ADD QUESTIONS</a>
+                                <a href="{{ url('add/question') }}" class="btn btn-default pull-right"><i
+                                            class="fa fa-plus-square"></i> ADD QUESTIONS</a>
                             </div>
                         </div>
                         <!-- /.box-header -->
@@ -70,7 +74,7 @@
                             <form action="" method="post" role="form">
                             {{ csrf_field() }}
                             <!-- checkbox -->
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('course_id') ? ' has-error' : '' }}">
                                     <label>Course</label>
                                     <select class="form-control" name="course_id">
                                         <option selected disabled>Choose Course..</option>
@@ -78,10 +82,15 @@
                                             <option value="{{ $course->course_id }}">{{ $course->course_code ." - ". $course->course_name }}</option>
                                         @endforeach
                                     </select>
+                                    @if ($errors->has('course_id'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('course_id') }}</strong>
+                                    </span>
+                                    @endif
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('question_id') ? ' has-error' : '' }}">
                                     <div class="checkbox">
-                                        <table id="example1" class="table table-bordered table-striped">
+                                        <table id="example1 mt" class="table table-bordered table-striped">
                                             <thead>
                                             <tr>
                                                 <th>Questions</th>
@@ -92,11 +101,18 @@
                                                 <td>
                                                     @foreach($questions as $question)
                                                         <label>
-                                                            <input type="checkbox" name="question_id['{{$question->question_id}}']" value="{{$question->question_id}}">
+                                                            <input type="checkbox"
+                                                                   name="question_id['{{$question->question_id}}']"
+                                                                   value="{{$question->question_id}}">
                                                             {{ $question->content }}
                                                         </label>
                                                         <br>
                                                     @endforeach
+                                                    @if ($errors->has('question_id'))
+                                                        <span class="help-block">
+                                                                <strong>{{ $errors->first('question_id') }}</strong>
+                                                            </span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             </tbody>

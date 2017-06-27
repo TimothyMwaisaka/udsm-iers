@@ -57,7 +57,7 @@
                             <div class="box-body">
                                 {{ csrf_field() }}
                                 <div id="box">
-                                    <div class="form-group">
+                                    <div class="form-group{{ $errors->has('content[]') ? ' has-error' : '' }}">
                                         <div class="col-sm-10 input_fields_wrap">
                                             <div style="padding-bottom: 10px;">
                                                 <button class="add_field_button btn btn-info"><i
@@ -66,6 +66,11 @@
                                             </div>
                                             <input type="text" name="content[]" class="form-control"
                                                    placeholder="Enter Question">
+                                            @if ($errors->has('content[]'))
+                                                <span class="help-block">
+                                        <strong>{{ $errors->first('content[]') }}</strong>
+                                    </span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +121,7 @@
             if (x < max_fields) { //max input box allowed
                 x++; //text box increment
                 $("#rm").remove();
-                $(wrapper).append('<div class="col-sm-10 input_fields_wrap"><div style="padding: 10px 0;" id="divs"><input type="text" name="content[]" class="form-control" placeholder="Enter Question"/><a href="#" id="rm" class="remove_field">Remove</a></div></div>'); //add input box
+                $(wrapper).append('<div class="col-sm-10 input_fields_wrap{{ $errors->has('content') ? ' has-error' : '' }}"><div style="padding: 10px 0;" id="divs"><input type="text" name="content[]" class="form-control" placeholder="Enter Question"/><a href="#" id="rm" class="remove_field">Remove</a></div></div>'); //add input box
                 $(wrapper).append('<br>')
             }
         });

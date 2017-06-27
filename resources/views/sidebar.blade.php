@@ -17,36 +17,53 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
             @if( Auth::User()->hasRole(['Admin']) )
-            <li class="treeview">
-                <a href="#"><i class="fa fa-link"></i> <span> MANAGE</span>
-                    <span class="pull-right-container">
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span> MANAGE</span>
+                        <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-chevron-circle-right"></i> MANAGE USERS</a>
-                        <ul class="treeview-menu">
-                            <li><a href="{{ url('/list/admins') }}"><i class="fa fa-arrow-right"></i> Administrators</a>
-                            </li>
-                            <li><a href="{{ url('/list/instructors') }}"><i class="fa fa-arrow-right"></i>
-                                    Instructors</a></li>
-                            <li><a href="{{ url('/list/students') }}"><i class="fa fa-arrow-right"></i> Students</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="{{ url('/list/colleges') }}"><i class="fa fa-chevron-circle-right"></i> MANAGE COLLEGES</a>
-                    </li>
-                    <li><a href="{{ url('/list/courses') }}"><i class="fa fa-chevron-circle-right"></i> MANAGE
-                            COURSES</a></li>
-                </ul>
-            </li>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i> MANAGE USERS</a>
+                            <ul class="treeview-menu">
+                                <li><a href="{{ url('/list/admins') }}"><i class="fa fa-arrow-right"></i> Administrators</a>
+                                </li>
+                                <li><a href="{{ url('/list/instructors') }}"><i class="fa fa-arrow-right"></i>
+                                        Instructors</a></li>
+                                <li><a href="{{ url('/list/students') }}"><i class="fa fa-arrow-right"></i> Students</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="{{ url('/list/colleges') }}"><i class="fa fa-circle-o"></i> MANAGE
+                                COLLEGES</a>
+                        </li>
+                        <li><a href="{{ url('/list/courses') }}"><i class="fa fa-circle-o"></i> MANAGE
+                                COURSES</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-link"></i> <span>ASSIGN</span>
+                        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{ url('/admin/student-course') }}"><i class="fa fa-circle-o"></i> Students-Courses</a>
+                        </li>
+                        <li><a href="{{ url('/admin/instructor-course') }}"><i class="fa fa-circle-o"></i>
+                                Instructor-Courses</a></li>
+                    </ul>
+                </li>
             @endif
-                <li class="active"><a href="{{ url('/list/forms') }}"><i class="fa fa-link"></i> <span> FORMS</span></a></li>
-                @if( Auth::User()->hasRole(['Admin']) )
-                <li class="active"><a href="{{ url('report') }}"><i class="fa fa-link"></i> <span> REPORTS</span></a></li>
-                @endif
+            <li><a href="{{ url('/list/forms') }}"><i class="fa fa-link"></i> <span> FORMS</span></a>
+            </li>
+            @if( Auth::User()->hasRole(['Admin']) )
+                <li><a href="{{ url('report') }}"><i class="fa fa-link"></i> <span> REPORTS</span></a>
+                </li>
+            @endif
 
-            </ul>
+        </ul>
         <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

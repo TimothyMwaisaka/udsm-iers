@@ -27,13 +27,13 @@
                             <!-- Menu Toggle Button -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <span class="hidden-xs"><i class="fa fa-bars"></i>&nbsp;&nbsp;{{ Auth::user()->name }}</span>
+                                <span class="hidden-xs"><i class="fa fa-bars"></i>&nbsp;&nbsp;{{ Auth::user()->lastname." ".Auth::user()->name." (".Auth::user()->email.")" }}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- The user image in the menu -->
                                 <li class="user-header">
                                     <p>
-                                        {{ Auth::user()->name }}
+                                        {{ Auth::user()->lastname." ".Auth::user()->name}}
                                         <small>Bsc in Computer Science</small>
                                     </p>
                                 </li>

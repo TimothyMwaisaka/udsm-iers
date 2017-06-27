@@ -59,8 +59,7 @@
 
                         <!-- Add the bg color to the header using any of the bg-* classes -->
                         <div class="widget-user-header bg-blue">
-                            <h3 class="widget-user-username">{{ strtoupper($students[0]->lastname.", ".$students[0]->firstname." ".$students[0]->middlename)}}</h3>
-                            <h5 class="widget-user-desc">{{ $students[0]->student_id }}</h5>
+
                         </div>
                         <div class="box-footer no-padding">
                             <table class="table table-bordered">

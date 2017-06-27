@@ -28,9 +28,9 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-    <!-- Header -->
+
 @include('header')
-<!-- Sidebar -->
+<!-- Left side column. contains the logo and sidebar -->
 @include('sidebar')
 <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -45,62 +45,58 @@
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <div class="col-md-6">
-                    <!-- Widget: user widget style 1 -->
-                    <div class="box box-widget widget-user-2">
-                        <!-- Add the bg color to the header using any of the bg-* classes -->
-                        <div class="widget-user-header bg-light-blue">
-                            <!-- /.widget-user-image -->
-                            <h3 class="widget-user-username">GENERAL INFORMATION</h3>
-                            <h5 class="widget-user-desc"></h5>
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">ASSESSMENT FORMS REPORT</h3>
                         </div>
-                        <div class="box-footer no-padding">
-                            <ul class="nav nav-stacked">
-                                <li><a href="#">TOTAL COURSES <span
-                                                class="pull-right badge bg-blue">{{ $total_courses }}</span></a></li>
-                                <li><a href="#">TOTAL STUDENTS <span
-                                                class="pull-right badge bg-red">{{ $total_students }}</span></a></li>
-                            </ul>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Form Name</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($ratings as $form)
+                                    <tr>
+                                        <td>{{ $form->course_code." - ". $form->course_name }}</td>
+                                        <td>
+                                            <a href="/report/{{ $form->course_id }}">View Report</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+
+
                         </div>
+                        <!-- /.box-body -->
                     </div>
-                    <!-- /.widget-user -->
+                    <!-- /.box -->
                 </div>
-                <div class="col-md-6">
-                    <!-- Widget: user widget style 1 -->
-                    <div class="box box-widget widget-user-2">
-                        <!-- Add the bg color to the header using any of the bg-* classes -->
-                        <div class="widget-user-header bg-light-blue">
-                            <!-- /.widget-user-image -->
-                            <h3 class="widget-user-username">ASSESSMENT INFORMATION</h3>
-                            <h5 class="widget-user-desc"></h5>
-                        </div>
-                        <div class="box-footer no-padding">
-                            <ul class="nav nav-stacked">
-                                <li><a href="#">TOTAL COURSES ASSESSED <span
-                                                class="pull-right badge bg-blue">{{ $total_ratings_courses }}</span></a>
-                                </li>
-                                <li><a href="#">TOTAL STUDENTS DONE ASSESSMENT <span
-                                                class="pull-right badge bg-red">{{ $total_ratings_students }}</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- /.widget-user -->
-                </div>
+                <!-- /.col -->
             </div>
             <!-- /.row -->
         </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-@include('footer')
-<!-- Control Sidebar -->
+    @include('footer')
 </div>
 <!-- ./wrapper -->
+
 <!-- jQuery 2.2.3 -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="{{ asset ("/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
+<!-- DataTables -->
+<script src="{{ asset ("/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js") }}"></script>
+<script src="{{ asset ("/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js") }}"></script>
+
 <!-- SlimScroll -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js") }}"></script>
 <!-- FastClick -->
@@ -109,5 +105,19 @@
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/demo.js") }}"></script>
+<!-- page script -->
+<script>
+    $(function () {
+        $("#example1").DataTable();
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+        });
+    });
+</script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Course Instructors</title>
+    <title>IERS - Report</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -19,7 +19,6 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css") }}">
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -40,50 +39,54 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">students courses</li>
+                <li class="active">report</li>
             </ol>
         </section>
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-header box-header-title">
-                            <h3 class="box-title">COURSES</h3>
-                            <div class="box-body">
-                                <a href="{{ url('/admin/student-course') }}" class="btn btn-default pull-right"><i
-                                            class="fa fa-plus-square"></i> ASSIGN COURSE TO STUDENT</a>
+                <div class="col-md-6">
+                    <!-- Widget: user widget style 1 -->
+                    <div class="box box-widget widget-user-2">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-light-blue">
+                            <!-- /.widget-user-image -->
+                            <h3 class="widget-user-username">GENERAL INFORMATION</h3>
+                            <h5 class="widget-user-desc"></h5>
                         </div>
-                        <!-- /.box-header -->
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>STUDENT</th>
-                                    <th>COURSE</th>
-                                    <th>ACTION</th>
-                                </tr>
-                                </thead>
-                                @foreach($students_courses as $student_course)
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ $student_course->student->name ." ". $student_course->student->middlename ." ". $student_course->student->lastname }}</td>
-                                        <td>
-                                            {{ $student_course->course->course_name }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary btn-flat">EDIT</button>
-                                            <a href="/list/students-courses/delete/{{ $student_course->course->course_id }}"
-                                               class="btn btn-danger btn-flat" onClick="return confirm('Are you sure you want to delete this student?')">DELETE</a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                @endforeach
-                            </table>
+                        <div class="box-footer no-padding">
+                            <ul class="nav nav-stacked">
+                                <li><a href="#">TOTAL COURSES <span
+                                                class="pull-right badge bg-blue">{{ $total_courses }}</span></a></li>
+                                <li><a href="#">TOTAL STUDENTS <span
+                                                class="pull-right badge bg-red">{{ $total_students }}</span></a></li>
+                            </ul>
                         </div>
-                        <!-- /.box-body -->
                     </div>
-                    <!-- /.box -->
+                    <!-- /.widget-user -->
                 </div>
-                <!-- /.col -->
+                <div class="col-md-6">
+                    <!-- Widget: user widget style 1 -->
+                    <div class="box box-widget widget-user-2">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-light-blue">
+                            <!-- /.widget-user-image -->
+                            <h3 class="widget-user-username">ASSESSMENT INFORMATION</h3>
+                            <h5 class="widget-user-desc"></h5>
+                        </div>
+                        <div class="box-footer no-padding">
+                            <ul class="nav nav-stacked">
+                                <li><a href="#">TOTAL COURSES ASSESSED <span
+                                                class="pull-right badge bg-blue">{{ $total_ratings_courses }}</span></a>
+                                </li>
+                                <li><a href="#">TOTAL STUDENTS DONE ASSESSMENT <span
+                                                class="pull-right badge bg-red">{{ $total_ratings_students }}</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.widget-user -->
+                </div>
             </div>
             <!-- /.row -->
         </section>
@@ -91,6 +94,7 @@
     </div>
     <!-- /.content-wrapper -->
 @include('footer')
+
 </div>
 <!-- ./wrapper -->
 <!-- jQuery 2.2.3 -->

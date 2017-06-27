@@ -67,7 +67,7 @@
                                         <select name="instr_id" class="form-control select2" style="width: 100%;">
                                             <option selected disabled>Choose Instructor..</option>
                                             @foreach($instructors as $value)
-                                                <option value="{{ $value->id }}">{{ $value->firstname ." ". $value->middlename ." ". $value->lastname }}</option>
+                                                <option value="{{ $value->id }}">{{ $value->name ." ". $value->middlename ." ". $value->lastname }}</option>
                                                 @if ($errors->has('instr_id'))
                                                     <span class="help-block">
                                                         <strong>{{ $errors->first('instr_id') }}</strong>
@@ -84,13 +84,13 @@
                                             <option selected disabled>Choose Course..</option>
                                             @foreach($courses as $value)
                                                 <option value="{{ $value->course_id }}">{{ $value->course_code ." - ". $value->course_name}}</option>
-                                                @if ($errors->has('course_id'))
-                                                    <span class="help-block">
-                                                        <strong>{{ $errors->first('course_id') }}</strong>
-                                                    </span>
-                                                @endif
                                             @endforeach
                                         </select>
+                                        @if ($errors->has('course_id'))
+                                            <span class="help-block">
+                                                        <strong>{{ $errors->first('course_id') }}</strong>
+                                                    </span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

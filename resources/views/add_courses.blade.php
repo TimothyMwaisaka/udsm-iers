@@ -60,18 +60,34 @@
                             <div class="box-body">
                                 {{ csrf_field() }}
                                 <div class="form-group">
-                                    <label for="collegeShortName" class="col-sm-2 control-label">SHORT NAME</label>
+                                    <label for="course_code" class="col-sm-2 control-label">COURSE CODE</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="collegeShortName" name="collegeShortName" placeholder="eg. CoICT">
+                                        <input type="text" class="form-control" id="course_code" name="course_code" placeholder="eg. CoICT">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="collegeName" class="col-sm-2 control-label">COLLEGE NAME</label>
+                                    <label for="course_name" class="col-sm-2 control-label">COURSE NAME</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="collegeName" name="collegeName"
+                                        <input type="text" class="form-control" id="course_name" name="course_name"
                                                placeholder="Enter College Name">
+                                    </div>
+                                </div>
+                                <div class="form-group{{ $errors->has('college_id') ? ' has-error' : '' }}">
+                                    <label class="col-sm-2 control-label">COLLEGE</label>
+                                    <div class="col-sm-10">
+                                        <select name="college_id" class="form-control select2" style="width: 100%;">
+                                            <option selected disabled>Choose college..</option>
+                                            @foreach($colleges as $college)
+                                                <option value="{{ $college->college_id }}">{{ $college->college_name }}</option>
+                                                @if ($errors->has('college_id'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('college_id') }}</strong>
+                                                    </span>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>

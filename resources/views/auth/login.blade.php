@@ -27,7 +27,7 @@
 <div class="login-box">
     <div class="login-logo">
         <p style="font-size: 42.5%"><b>UDSM INSTRUCTORS EVALUATION AND RATING SYSTEM</b></p>
-        <a href="#" style="font-size: 120%;"><b>UDSM IERS - LOGIN</b></a>
+        <a href="#" style="font-size: 100%;"><b>UDSM IERS - LOGIN</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">

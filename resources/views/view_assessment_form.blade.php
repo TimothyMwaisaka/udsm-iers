@@ -92,62 +92,138 @@
                                         </th>
                                     </tr>
                                     @foreach($data as $value)
-                                        <tr>
-                                            <div class="form-group">
-                                                <input name="course_id" type="hidden" value="{{ $data[0]->course_id }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <input name="user_id" type="hidden" value="{{ Auth::user()->id }}">
-                                            </div>
-                                            <td>{{ $value->content }}</td>
-                                            <td>
-
+                                        @if( Auth::User()->hasRole(['Student']) )
+                                            <tr>
                                                 <div class="form-group">
-                                                    <input name="question_id['{{$value->question_id}}']" type="hidden"
-                                                           value="{{$value->question_id}}">
+                                                    <input name="course_id" type="hidden"
+                                                           value="{{ $data[0]->course_id }}">
                                                 </div>
-                                                <div class="control-group">
-                                                    <div class="col-sm-1">
-                                                        <label class="control control--radio" style="width: 60px;">
-                                                            <input type="radio" name="answer['{{$value->question_id}}']"
-                                                                   value="5"/>
-                                                            <div class="control__indicator"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-sm-1">
-                                                        <label class="control control--radio" style="width: 60px;">
-                                                            <input type="radio" name="answer['{{$value->question_id}}']"
-                                                                   value="4"/>
-                                                            <div class="control__indicator"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-sm-1">
-                                                        <label class="control control--radio" style="width: 60px;">
-                                                            <input type="radio" name="answer['{{$value->question_id}}']"
-                                                                   value="3"/>
-                                                            <div class="control__indicator"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-sm-1">
-                                                        <label class="control control--radio" style="width: 60px;">
-                                                            <input type="radio" name="answer['{{$value->question_id}}']"
-                                                                   value="2"/>
-                                                            <div class="control__indicator"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-sm-1">
-                                                        <label class="control control--radio" style="width: 60px;">
-                                                            <input type="radio" name="answer['{{$value->question_id}}']"
-                                                                   value="1"/>
-                                                            <div class="control__indicator"></div>
-                                                        </label>
-                                                    </div>
+                                                <div class="form-group">
+                                                    <input name="user_id" type="hidden" value="{{ Auth::user()->id }}">
                                                 </div>
-                                            </td>
-                                        </tr>
+                                                <td>{{ $value->content }}</td>
+                                                <td>
+
+                                                    <div class="form-group">
+                                                        <input name="question_id['{{$value->question_id}}']"
+                                                               type="hidden"
+                                                               value="{{$value->question_id}}">
+                                                    </div>
+                                                    <div class="control-group">
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="5"/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="4"/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="3"/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="2"/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="1"/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @elseif(Auth::User()->hasRole(['Admin']) or Auth::User()->hasRole(['Instructor']))
+                                            <tr>
+                                                <div class="form-group">
+                                                    <input name="course_id" type="hidden"
+                                                           value="{{ $data[0]->course_id }}" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input name="user_id" type="hidden" value="{{ Auth::user()->id }}"
+                                                           disabled>
+                                                </div>
+                                                <td>{{ $value->content }}</td>
+                                                <td>
+
+                                                    <div class="form-group">
+                                                        <input name="question_id['{{$value->question_id}}']"
+                                                               type="hidden"
+                                                               value="{{$value->question_id}}" disabled>
+                                                    </div>
+                                                    <div class="control-group">
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="5" disabled/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="4" disabled/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="3" disabled/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="2" disabled/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <label class="control control--radio" style="width: 60px;">
+                                                                <input type="radio"
+                                                                       name="answer['{{$value->question_id}}']"
+                                                                       value="1" disabled/>
+                                                                <div class="control__indicator"></div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </table>
-                                <button type="submit" class="btn btn-primary btn-flat pull-right">Submit</button>
+                                @if( Auth::User()->hasRole(['Student']) )
+                                    <button type="submit" class="btn btn-primary btn-flat pull-right">Submit</button>
+                                @elseif( Auth::User()->hasRole(['Admin']) or Auth::User()->hasRole(['Instructor']))
+                                    <button type="submit" class="btn btn-primary btn-flat pull-right disabled">Submit
+                                    </button>
+                                @endif
                             </form>
                         </div>
                         <!-- /.box-body -->

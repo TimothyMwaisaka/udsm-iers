@@ -50,13 +50,13 @@
         <section class="content">
             <!-- right column -->
             <div class="col-md-10 col-md-offset-1">
-                <div class="row">
-                    @if(session()->has('message'))
-                        <div class="alert alert-success alert-dismissable">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                            {{ session()->get('message') }}
-                        </div>
+                @if(session()->has('message'))
+                    <div class="alert alert-success alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                        {{ session()->get('message') }}
+                    </div>
                 @endif
+                <div class="row">
                 <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
@@ -107,7 +107,6 @@
                                 </div>
                                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="email" class="col-sm-2 control-label">Reg Number</label>
-
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="email"
                                                name="email"
@@ -119,11 +118,16 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                                     <label for="password" class="col-sm-2 control-label">Password</label>
                                     <div class="col-sm-10">
                                         <input type="password" class="form-control" id="password"
                                                name="password" placeholder="Enter Password">
+                                        @if ($errors->has('password'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

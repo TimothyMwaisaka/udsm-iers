@@ -50,6 +50,18 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
+                    @if(session()->has('message'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
+                    @if(session()->has('message_delete'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message_delete') }}
+                        </div>
+                    @endif
                     <div class="box">
                         <div class="box-header box-header-title">
                             <h3 class="box-title">LIST OF COURSES</h3>
@@ -58,8 +70,8 @@
                                             class="fa fa-plus-square"></i> ASSIGN INSTRUCTOR</a>
                                 <a href="{{ url('/add/course') }}" class="btn btn-default pull-right"><i
                                             class="fa fa-plus-circle"></i> ADD COURSE</a>
-                        </div>
-                        <!-- /.box-header -->
+                            </div>
+                            <!-- /.box-header -->
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
@@ -77,8 +89,9 @@
                                         <td>{{ $course->college->college_short_name }}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-flat">EDIT</button>
-                                            <a href="/list/colleges/delete/{{ $course->course_id }}"
-                                               class="btn btn-danger btn-flat" onClick="return confirm('Are you sure you want to delete this Course?')">DELETE</a>
+                                            <a href="/list/courses/delete/{{ $course->course_id }}"
+                                               class="btn btn-danger btn-flat"
+                                               onClick="return confirm('Are you sure you want to delete this Course?')">DELETE</a>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -96,7 +109,7 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-@include('footer')
+    @include('footer')
 </div>
 <!-- ./wrapper -->
 

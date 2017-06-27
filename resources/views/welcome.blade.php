@@ -55,7 +55,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-md-2">
                             <a href="#"><img src={{asset('img/udsm.png')}} alt="udsm" height="150px"></a>
                         </div>
-                        <div class="col-md-10" style="font-size: 120%">
+                        <div class="col-md-10" style="font-size: 110%">
                             <h3>Wecome!</h3>
                             <p>IERS - Instructors Evaluation and Rating System is an online system for Quality Assurance
                                 Bureau (QAB) of the University of Dar es salaam (UDSM). The system is used to conduct
@@ -73,6 +73,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 You are not logged in, to access IERS please <strong><a href="/login">LOGIN
                                         HERE</a></strong>
                             @elseif( Auth::User()->hasRole(['Admin']) )
+
                                 <script>
                                     window.location.href = '{{url("/admin")}}';
                                 </script>

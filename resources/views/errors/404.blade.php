@@ -39,7 +39,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <body class="hold-transition skin-blue sidebar-mini layout-top-nav">
 <div class="wrapper">
     <!-- Header -->
-@include('header-welcome')
+@include('header-o')
 <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <div class="container">

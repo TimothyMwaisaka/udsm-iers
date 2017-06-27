@@ -51,6 +51,12 @@
             <div class="row">
                 <!-- right column -->
                 <div class="col-md-10 col-md-offset-1">
+                    @if(session()->has('message'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message') }}
+                        </div>
+                @endif
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
@@ -61,16 +67,16 @@
                         <form class="form-horizontal" action="" method="post">
                             <div class="box-body">
                                 {{ csrf_field() }}
-                                <div class="form-group{{ $errors->has('stud_id') ? ' has-error' : '' }}">
+                                <div class="form-group{{ $errors->has('id') ? ' has-error' : '' }}">
                                     <label class="col-sm-2 control-label">STUDENT</label>
                                     <div class="col-sm-10">
-                                        <select name="stud_id" class="form-control select2" style="width: 100%;">
+                                        <select name="user_id" class="form-control select2" style="width: 100%;">
                                             <option selected disabled>Choose Student..</option>
                                             @foreach($students as $value)
-                                                <option value="{{ $value->id }}">{{ $value->firstname ." ". $value->middlename ." ". $value->lastname }}</option>
-                                                @if ($errors->has('stud_id'))
+                                                <option value="{{ $value->id }}">{{ $value->name ." ". $value->middlename ." ". $value->lastname }}</option>
+                                                @if ($errors->has('id'))
                                                     <span class="help-block">
-                                                        <strong>{{ $errors->first('stud_id') }}</strong>
+                                                        <strong>{{ $errors->first('id') }}</strong>
                                                     </span>
                                                 @endif
                                             @endforeach
