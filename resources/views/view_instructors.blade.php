@@ -50,23 +50,10 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
-                    @if(session()->has('message'))
-                        <div class="alert alert-success alert-dismissable">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                            {{ session()->get('message') }}
-                        </div>
-                    @endif
-                    @if(session()->has('message_delete'))
-                        <div class="alert alert-danger alert-dismissable">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                            {{ session()->get('message_delete') }}
-                        </div>
-                    @endif
                     <div class="box">
                         <div class="box-header box-header-title">
                             <h3 class="box-title">LIST OF INSTRUCTORS</h3>
-                            <a href="{{ url('/add/instructor') }}" class="btn btn-default pull-right"><i
-                                        class="fa fa-plus-square"></i> ADD INSTRUCTOR</a>
+                            <a href="{{ url('/add/instructor') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-circle"></i> ADD INSTRUCTOR</a>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -77,7 +64,7 @@
                                     <th>FIRST NAME</th>
                                     <th>MIDDLE NAME</th>
                                     <th>LAST NAME</th>
-                                    <th>COLLEGE</th>
+                                    {{--<th>COLLEGE</th>--}}
                                     <th>ACTION</th>
                                 </tr>
                                 </thead>
@@ -88,11 +75,12 @@
                                         <td>{{ $instructor->name }}</td>
                                         <td>{{ $instructor->middlename }}</td>
                                         <td>{{ $instructor->lastname }}</td>
-                                        <td>{{ $instructor->college->college_short_name }}</td>
+                                        {{--<td>{{ $instructor->college->college_short_name }}</td>--}}
                                         <td>
-                                            <button type="button" class="btn btn-primary btn-flat">EDIT</button>
+                                            {{--<button type="button" class="btn btn-primary btn-flat">EDIT</button>--}}
+                                            <a href="/edit/instructors/{{ $instructor->id }}" class="btn btn-primary btn-flat">EDIT</a>
                                             <a href="/list/instructors/delete/{{ $instructor->id }}"
-                                               class="btn btn-danger btn-flat" onClick="return confirm('Are you sure you want to delete this instructor?')">DELETE</a>
+                                               class="btn btn-danger btn-flat" onClick="return confirm('Are you sure you want to delete this Instructor?')">DELETE</a>
                                         </td>
                                     </tr>
                                     </tbody>

@@ -3,13 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Add Instructors</title>
+    <title>IERS - Add Students</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/bootstrap/css/bootstrap.min.css") }}">
-    <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.min.css") }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Ionicons -->
@@ -43,7 +41,7 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">add instructor</li>
+                <li class="active">add students</li>
             </ol>
         </section>
 
@@ -55,7 +53,7 @@
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">ADD INSTRUCTOR</h3>
+                            <h3 class="box-title">EDIT STUDENT</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
@@ -63,11 +61,10 @@
                             <div class="box-body">
                                 {{ csrf_field() }}
                                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                    <label for="email" class="col-sm-2 control-label">INSTRUCTOR ID</label>
-
+                                    <label for="email" class="col-sm-2 control-label">Student ID</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="email" name="email"
-                                               placeholder="Enter Staff ID">
+                                               placeholder="Enter Student ID" value="{{$data[0]->email}}">
                                         @if ($errors->has('email'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
@@ -76,12 +73,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                    <label for="instructorFirstName" class="col-sm-2 control-label">FIRST NAME</label>
+                                    <label for="studentFirstName" class="col-sm-2 control-label">First Name</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="name"
-                                               name="name"
-                                               placeholder="Enter First Name">
+                                        <input type="text" class="form-control" id="studentFirstName" name="name"
+                                               placeholder="Enter First Name" value="{{$data[0]->name}}">
                                         @if ($errors->has('name'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -90,21 +86,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="middlename" class="col-sm-2 control-label">MIDDLE NAME</label>
+                                    <label for="studentMiddleName" class="col-sm-2 control-label">Middle Name</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="middlename"
-                                               name="middlename"
-                                               placeholder="Enter Middle Name">
+                                        <input type="text" class="form-control" id="studentMiddleName" name="middlename"
+                                               placeholder="Enter Middle Name" value="{{$data[0]->middlename}}">
                                     </div>
                                 </div>
                                 <div class="form-group{{ $errors->has('lastname') ? ' has-error' : '' }}">
-                                    <label for="lastname" class="col-sm-2 control-label">LAST NAME</label>
+                                    <label for="studentLastName" class="col-sm-2 control-label">Last Name</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="lastname"
-                                               name="lastname"
-                                               placeholder="Enter Last Name">
+                                        <input type="text" class="form-control" id="studentLastName" name="lastname"
+                                               placeholder="Enter Last Name" value="{{$data[0]->lastname}}">
                                         @if ($errors->has('lastname'))
                                             <span class="help-block">
                                         <strong>{{ $errors->first('lastname') }}</strong>
@@ -112,21 +106,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                    <label for="password" class="col-sm-2 control-label">PASSWORD</label>
-
-                                    <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="password"
-                                               name="password"
-                                               placeholder="Password">
-                                        @if ($errors->has('password'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="form-group{{ $errors->has('college_id') ? ' has-error' : '' }}">
+                                <div class="form-group">
                                     <label class="col-sm-2 control-label">COLLEGE</label>
                                     <div class="col-sm-10">
 
@@ -136,19 +116,16 @@
                                                 <option value="{{ $value->college_id }}">{{ $value->college_short_name }}</option>
                                             @endforeach
                                         </select>
-                                        @if ($errors->has('college_id'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('college_id') }}</strong>
-                                    </span>
-                                        @endif
 
                                     </div>
                                 </div>
+
+
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
                                 <button type="reset" class="btn btn-default">Clear</button>
-                                <button type="submit" name="submit" class="btn btn-info pull-right">Save</button>
+                                <button type="submit" name="submit" class="btn btn-info pull-right">Update</button>
                             </div>
                             <!-- /.box-footer -->
                         </form>
@@ -371,9 +348,6 @@
 <!-- AdminLTE App -->
 <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="{{ asset ("/bower_components/AdminLTE/dist/js/demo.js") }}"></script>
-<!-- Select2 -->
-<script src="{{ asset ("/bower_components/AdminLTE/plugins/select2/select2.full.min.js") }}"></script>
 
 </body>
 </html>

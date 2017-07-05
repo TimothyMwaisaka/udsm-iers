@@ -44,6 +44,10 @@ Route::group(['middleware' => ['auth', 'roles']], function () {
         'uses' => 'MainController@getForms',
         'roles' => ['Admin', 'Instructor']
     ]);
+    Route::get('roles', [
+        'uses' => 'RoleController@getRoles',
+        'roles' => ['Admin']
+    ]);
 
     Route::get('list/forms/{id}', [
         'uses' => 'StudentController@showForms',
@@ -166,6 +170,10 @@ Route::group(['middleware' => ['auth', 'roles']], function () {
         'uses' => 'MainController@addRating',
         'roles' => ['Admin', 'Student', 'Instructor']
     ]);
+    Route::post('roles', [
+        'uses' => 'RoleController@assignRoles',
+        'roles' => ['Admin']
+    ]);
 
     /* Routes :: Update records */
     Route::get('edit/admins/{id}', [
@@ -182,6 +190,34 @@ Route::group(['middleware' => ['auth', 'roles']], function () {
     ]);
     Route::post('edit/colleges/{id}', [
         'uses' => 'MainController@updateColleges',
+        'roles' => ['Admin']
+    ]);
+    Route::get('edit/courses/{id}', [
+        'uses' => 'MainController@editCourses',
+        'roles' => ['Admin']
+    ]);
+    Route::post('edit/courses/{id}', [
+        'uses' => 'MainController@updateCourses',
+        'roles' => ['Admin']
+    ]);
+    Route::post('change-password', [
+        'uses' => 'Auth\UpdatePasswordController@update',
+        'roles' => ['Admin', 'Instructor', 'Student']
+    ]);
+    Route::get('edit/instructors/{id}', [
+        'uses' => 'MainController@editInstructors',
+        'roles' => ['Admin']
+    ]);
+    Route::post('edit/instructors/{id}', [
+        'uses' => 'MainController@updateInstructors',
+        'roles' => ['Admin']
+    ]);
+    Route::get('edit/students/{id}', [
+        'uses' => 'MainController@editStudents',
+        'roles' => ['Admin']
+    ]);
+    Route::post('edit/students/{id}', [
+        'uses' => 'MainController@updateStudents',
         'roles' => ['Admin']
     ]);
 
@@ -210,8 +246,16 @@ Route::group(['middleware' => ['auth', 'roles']], function () {
         'uses' => 'MainController@instructorIndex',
         'roles' => ['Admin', 'Instructor']
     ]);
+    Route::get('instructor', [
+        'uses' => 'InstructorController@showInstructorCourses',
+        'roles' => ['Admin', 'Instructor']
+    ]);
     Route::get('add/question', [
         'uses' => 'MainController@addQuestionIndex',
         'roles' => ['Admin']
+    ]);
+    Route::get('change-password', [
+        'uses' => 'Auth\UpdatePasswordController@index',
+        'roles' => ['Admin', 'Instructor', 'Student']
     ]);
 });

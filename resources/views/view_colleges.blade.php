@@ -73,7 +73,6 @@
                                         <td>{{ $college->college_name }}</td>
                                         <td>
                                             <a href="/edit/colleges/{{ $college->college_id }}" class="btn btn-primary btn-flat">EDIT</a>
-                                            <a href="/list/colleges/delete/{{ $college->college_id }}" class="btn btn-danger btn-flat">DELETE</a>
                                         </td>
                                     </tr>
                                     </tbody>

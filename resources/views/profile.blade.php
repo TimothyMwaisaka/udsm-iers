@@ -57,7 +57,7 @@
                     <div class="box box-primary">
                         <div class="box-body box-profile">
 
-                            <h3 class="profile-username text-center">{{ Auth::user()->name }}</h3>
+                            <h3 class="profile-username text-center">{{ Auth::user()->lastname." ".Auth::user()->name }}</h3>
 
                             <p class="text-muted text-center">{{ Auth::user()->email }}</p>
 
@@ -72,12 +72,10 @@
                                     <b>YEAR OF STUDY</b> <a class="pull-right">2016/2017</a>
                                 </li>
                             </ul>
-                            <a href="{{ url('/forms') }}" class="btn btn-primary btn-block"><b>FILL ASSESSMENT FORMS</b></a>
                         </div>
                         <!-- /.box-body -->
                     </div>
                     <!-- /.box -->
-
                     <!-- About Box -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
@@ -101,41 +99,7 @@
                         </ul>
                         <div class="tab-content">
                             <div class="active tab-pane" id="activity">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <!-- Widget: user widget style 1 -->
-                                        <div class="box box-widget widget-user-2">
-                                            <!-- Add the bg color to the header using any of the bg-* classes -->
-                                            <div class="widget-user-header bg-light-blue">
-                                                <!-- /.widget-user-image -->
-                                                <h3 class="widget-user-username">ASSESSMENT FORMS</h3>
-                                                <h5 class="widget-user-desc"></h5>
-                                            </div>
-                                            <div class="box-footer no-padding">
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>COURSE</th>
-                                                    </tr>
-                                                    </thead>
-                                                    @foreach(Auth::user()->student_course as $course)
-                                                        <tbody>
-                                                        <tr class="tr">
-                                                            <td>
-                                                            </td>
-                                                            <td>
-                                                                <a href="{{URL::to('list/forms/'.$course->course->course_id)}}">{{ $course->course->course_code." - ". $course->course->course_name }}</a>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    @endforeach
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <!-- /.widget-user -->
-                                    </div>
-                                </div>
+                                xxxxxxxxxxx
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="timeline">
@@ -143,7 +107,7 @@
                             </div>
                             <!-- /.tab-pane -->
                             <div class="tab-pane" id="settings">
-                                Nyingine tena
+                                <a href="{{ url('change-password') }}" >Change Password</a>
                             </div>
                             <!-- /.tab-pane -->
                         </div>

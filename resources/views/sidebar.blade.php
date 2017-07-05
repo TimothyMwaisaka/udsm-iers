@@ -16,6 +16,7 @@
         <!-- /.search form -->
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu">
+            <li><a href="{{ url('/') }}"><i class="fa fa-home"></i> <span> HOME</span></a></li>
             @if( Auth::User()->hasRole(['Admin']) )
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span> MANAGE</span>
@@ -53,16 +54,19 @@
                         </li>
                         <li><a href="{{ url('/admin/instructor-course') }}"><i class="fa fa-circle-o"></i>
                                 Instructor-Courses</a></li>
+                        <li><a href="{{ url('/roles') }}"><i class="fa fa-circle-o"></i>
+                                Roles</a></li>
                     </ul>
                 </li>
             @endif
-            <li><a href="{{ url('/list/forms') }}"><i class="fa fa-link"></i> <span> FORMS</span></a>
-            </li>
+            @if( Auth::User()->hasRole(['Admin']) or Auth::User()->hasRole(['Instructor']) )
+                <li><a href="{{ url('/list/forms') }}"><i class="fa fa-link"></i> <span> FORMS</span></a></li>
+            @endif
             @if( Auth::User()->hasRole(['Admin']) )
                 <li><a href="{{ url('report') }}"><i class="fa fa-link"></i> <span> REPORTS</span></a>
                 </li>
             @endif
-
+            <li><a href="{{ url('/change-password') }}"><i class="fa fa-link"></i> <span> PASSWORD</span></a></li>
         </ul>
         <!-- /.sidebar-menu -->
     </section>

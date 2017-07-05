@@ -49,106 +49,113 @@
             </ol>
         </section>
         <!-- Main content -->
-        <section class="content">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-header col-xs-9 col-lg-offset-1">
-                            <h3 class="box-title" style="margin-left: 12px">COURSE ASSESSMENT REPORT</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="col-md-9 col-lg-offset-1">
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th colspan="6">SUMMARY</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>COURSE CODE: {{ $data[0]->course_code }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>COURSE NAME: {{ $data[0]->course_name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            INSTRUCTOR: {{ $data[0]->name. " " .$data[0]->middlename. " " .$data[0]->lastname}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            COLLEGE: {{ $data[0]->college_short_name." - ".$data[0]->college_name }}</td>
-                                    </tr>
-
-                                    </tbody>
-                                </table>
+        <div id="printableArea">
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header col-xs-9 col-lg-offset-1">
+                                <h3 class="box-title" style="margin-left: 12px">COURSE ASSESSMENT REPORT</h3>
+                                <button style="margin-right: 12px" type="submit" class="btn btn-default btn-flat pull-right"
+                                        onclick="printDiv('printableArea')"><i class="fa fa-fw fa-print"></i> Print
+                                </button>
                             </div>
-                        </div>
-                        <div class="box-body">
-                            <div class="col-md-9 col-lg-offset-1">
-                                <table id="example1" class="table table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th colspan="6">SCORES</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <th>Scale</th>
-                                        <td>1</td>
-                                        <td>2</td>
-                                        <td>3</td>
-                                        <td>4</td>
-                                        <td>5</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Occurence</th>
-                                        <td>{{ $count_one }}</td>
-                                        <td>{{ $count_two }}</td>
-                                        <td>{{ $count_three }}</td>
-                                        <td>{{ $count_four }}</td>
-                                        <td>{{ $count_five }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Total</th>
-                                        <td>{{ $count_one }}</td>
-                                        <td>{{ $count_two * 2 }}</td>
-                                        <td>{{ $count_three * 3 }}</td>
-                                        <td>{{ $count_four * 4 }}</td>
-                                        <td>{{ $count_five *5}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="1">AVERAGE SCORE: {{ $average }}</td>
-                                        <td colspan="5">
-                                            <strong>
-                                                @if($average>=1 && $average<2)
-                                                    Very Poor
-                                                @elseif($average>=2 && $average<3)
-                                                    Poor
-                                                @elseif($average>=3 && $average<4)
-                                                    Satisfactory
-                                                @elseif($average>=4 && $average<5)
-                                                    Good
-                                                @elseif($average>=5)
-                                                    Excellent
-                                                @endif
-                                            </strong>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="col-md-9 col-lg-offset-1">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="6">SUMMARY</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>COURSE CODE: {{ $data[0]->course_code }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>COURSE NAME: {{ $data[0]->course_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                INSTRUCTOR: {{ $data[0]->name. " " .$data[0]->middlename. " " .$data[0]->lastname}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                COLLEGE: {{ $data[0]->college_short_name." - ".$data[0]->college_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>STUDENTS DONE ASSESSMENT: {{ $number_of_students }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+                            <div class="box-body">
+                                <div class="col-md-9 col-lg-offset-1">
+                                    <table id="example1" class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="6">SCORES</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>Scale</th>
+                                            <td>1</td>
+                                            <td>2</td>
+                                            <td>3</td>
+                                            <td>4</td>
+                                            <td>5</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Occurence</th>
+                                            <td>{{ $count_one }}</td>
+                                            <td>{{ $count_two }}</td>
+                                            <td>{{ $count_three }}</td>
+                                            <td>{{ $count_four }}</td>
+                                            <td>{{ $count_five }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total</th>
+                                            <td>{{ $count_one }}</td>
+                                            <td>{{ $count_two * 2 }}</td>
+                                            <td>{{ $count_three * 3 }}</td>
+                                            <td>{{ $count_four * 4 }}</td>
+                                            <td>{{ $count_five *5}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="1">AVERAGE SCORE: {{ $average }}</td>
+                                            <td colspan="5">
+                                                <strong>
+                                                    @if($average>=1 && $average<2)
+                                                        Very Poor
+                                                    @elseif($average>=2 && $average<3)
+                                                        Poor
+                                                    @elseif($average>=3 && $average<4)
+                                                        Satisfactory
+                                                    @elseif($average>=4 && $average<5)
+                                                        Good
+                                                    @elseif($average>=5)
+                                                        Excellent
+                                                    @endif
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
                         </div>
-                        <!-- /.box-body -->
+                        <!-- /.box -->
                     </div>
-                    <!-- /.box -->
+                    <!-- /.col -->
                 </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-        </section>
-        <!-- /.content -->
+                <!-- /.row -->
+            </section>
+            <!-- /.content -->
+        </div>
     </div>
     <!-- /.content-wrapper -->
     @include('footer')
@@ -164,11 +171,22 @@
             {y: '4', a: 75},
             {y: '5', a: 50}
         ],
-        xkey: 'y',
+        xkey: 'value',
         ykeys: ['a'],
         labels: ['Occurence']
     });
+</script>
+<script>
+    function printDiv(printableArea) {
+        var printContents = document.getElementById(printableArea).innerHTML;
+        var originalContents = document.body.innerHTML;
 
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
 </script>
 <!-- jQuery 2.2.3 -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>

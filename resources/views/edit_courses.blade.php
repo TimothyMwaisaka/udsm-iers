@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>IERS - Edit Colleges</title>
+    <title>IERS - Add Course</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -41,10 +41,9 @@
             @include('heading')
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">edit colleges</li>
+                <li class="active">add courses</li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
             <div class="row">
@@ -53,40 +52,56 @@
                     <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">EDIT COLLEGE</h3>
+                            <h3 class="box-title">ADD COURSE</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
                         <form class="form-horizontal" action="" method="post">
                             <div class="box-body">
                                 {{ csrf_field() }}
-                                <div class="form-group{{ $errors->has('college_short_name') ? ' has-error' : '' }}">
-                                    <label for="college_short_name" class="col-sm-2 control-label">SHORT NAME</label>
+                                <div class="form-group{{ $errors->has('course_code') ? ' has-error' : '' }}">
+                                    <label for="course_code" class="col-sm-2 control-label">COURSE CODE</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="college_short_name" name="college_short_name" value="{{ $data[0]->college_short_name }}">
-                                        @if ($errors->has('college_short_name'))
+                                        <input type="text" class="form-control" id="course_code" name="course_code"  value="{{ $data[0]->course_code }}">
+                                        @if ($errors->has('course_code'))
                                             <span class="help-block">
-                                        <strong>{{ $errors->first('college_short_name') }}</strong>
+                                        <strong>{{ $errors->first('course_code') }}</strong>
                                     </span>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="form-group{{ $errors->has('college_name') ? ' has-error' : '' }}">
-                                    <label for="college_name" class="col-sm-2 control-label">COLLEGE NAME</label>
-
+                                <div class="form-group{{ $errors->has('course_name') ? ' has-error' : '' }}">
+                                    <label for="course_name" class="col-sm-2 control-label">COURSE NAME</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="college_name" name="college_name"
-                                               value="{{ $data[0]->college_name }}">
-                                        @if ($errors->has('college_name'))
+                                        <input type="text" class="form-control" id="course_name" name="course_name"
+                                               value="{{ $data[0]->course_name }}">
+                                        @if ($errors->has('course_name'))
                                             <span class="help-block">
-                                        <strong>{{ $errors->first('college_name') }}</strong>
+                                        <strong>{{ $errors->first('course_name') }}</strong>
                                     </span>
                                         @endif
                                     </div>
                                 </div>
+                                {{--<div class="form-group{{ $errors->has('college_id') ? ' has-error' : '' }}">--}}
+                                    {{--<label class="col-sm-2 control-label">COLLEGE</label>--}}
+                                    {{--<div class="col-sm-10">--}}
+                                        {{--<select name="college_id" class="form-control select2" style="width: 100%;">--}}
+                                            {{--<option selected disabled>Choose college..</option>--}}
+                                            {{--@foreach($colleges as $college)--}}
+                                                {{--<option value="{{ $college->college_id }}">{{ $college->college_name }}</option>--}}
+                                                {{--@if ($errors->has('college_id'))--}}
+                                                    {{--<span class="help-block">--}}
+                                                        {{--<strong>{{ $errors->first('college_id') }}</strong>--}}
+                                                    {{--</span>--}}
+                                                {{--@endif--}}
+                                            {{--@endforeach--}}
+                                        {{--</select>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
+                                <button type="reset" class="btn btn-default">Clear</button>
                                 <button type="submit" name="submit" class="btn btn-info pull-right">Save</button>
                             </div>
                             <!-- /.box-footer -->

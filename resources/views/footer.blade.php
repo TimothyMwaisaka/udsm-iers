@@ -4,5 +4,5 @@
 
     </div>
     <!-- Default to the left -->
-    <strong>Copyright © 2017 <a href="#">UDSM IERS</a>.</strong> All rights reserved.
+    <strong>Copyright © 2017 <a href="{{ url('/') }}">UDSM IERS</a>.</strong> All rights reserved.
 </footer>

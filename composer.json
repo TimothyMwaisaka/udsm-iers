@@ -1,6 +1,6 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
+    "name": "flexcodes/iers",
+    "description": "UDSM Instructors Evaluation and Rating System.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",

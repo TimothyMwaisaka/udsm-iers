@@ -62,49 +62,61 @@
                         <form class="form-horizontal" action="" method="post">
                             <div class="box-body">
                                 {{ csrf_field() }}
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                                     <label for="instructorID" class="col-sm-2 control-label">STAFF ID</label>
-
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="instructorID" name="instructorID"
-                                               placeholder="Enter Staff ID">
+                                        <input type="text" class="form-control" id="email" name="email"
+                                               value="{{$data[0]->email}}" placeholder="Enter Staff ID">
+                                        @if ($errors->has('email'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="instructorFirstName" class="col-sm-2 control-label">FIRST NAME</label>
+                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                    <label for="name" class="col-sm-2 control-label">FIRST NAME</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="instructorFirstName"
-                                               name="instructorFirstName"
-                                               placeholder="Enter First Name">
+                                        <input type="text" class="form-control" id="name"
+                                               name="name" value="{{$data[0]->name}}">
+                                        @if ($errors->has('name'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="instructorMiddleName" class="col-sm-2 control-label">MIDDLE NAME</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="instructorMiddleName"
-                                               name="instructorMiddleName"
+                                        <input type="text" class="form-control" id="middlename"
+                                               name="middlename" value="{{$data[0]->middlename}}"
                                                placeholder="Enter Middle Name">
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('lastname') ? ' has-error' : '' }}">
                                     <label for="instructorLastName" class="col-sm-2 control-label">LAST NAME</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="instructorLastName"
-                                               name="instructorLastName"
-                                               placeholder="Enter Last Name">
+                                        <input type="text" class="form-control" id="lastname"
+                                               name="lastname" value="{{$data[0]->lastname}}">
+                                        @if ($errors->has('lastname'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('lastname') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">COLLEGE</label>
                                     <div class="col-sm-10">
 
-                                        <select class="form-control select2" style="width: 100%;">
+                                        <select class="form-control select2" style="width: 100%;" name="college_id" >
                                             <option selected disabled>Select College..</option>
-                                            @foreach($data as $value)
-                                                <option>{{ $value->college_short_name }}</option>
+                                            @foreach($colleges as $value)
+                                                <option value="{{ $value->college_id }}">{{ $value->college_short_name }}</option>
                                             @endforeach
                                         </select>
 
@@ -114,7 +126,7 @@
                             <!-- /.box-body -->
                             <div class="box-footer">
                                 <button type="reset" class="btn btn-default">Clear</button>
-                                <button type="submit" name="submit" class="btn btn-info pull-right">Save</button>
+                                <button type="submit" name="submit" class="btn btn-info pull-right">Update</button>
                             </div>
                             <!-- /.box-footer -->
                         </form>
@@ -131,7 +143,7 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-@include('footer')
+    @include('footer')
 </div>
 <!-- ./wrapper -->
 

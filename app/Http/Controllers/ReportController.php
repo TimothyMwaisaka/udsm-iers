@@ -18,11 +18,6 @@ class ReportController extends Controller
             ->groupBy('ratings.course_id')
             ->join('courses', 'courses.course_id', '=', 'ratings.course_id')
             ->get();
-//        $forms = Form::distinct()->select('*')->groupBy('course_id')->get();
-//        $total_students = DB::table('users')->where('type', "student")->count('id');
-//        $total_courses = Course::All()->count();
-//        $total_ratings_students = DB::table('ratings')->distinct('user_id')->count('user_id');
-//        $total_ratings_courses = DB::table('ratings')->distinct('course_id')->count('course_id');
         return view('view_report', compact('ratings'));
     }
 
@@ -44,6 +39,13 @@ class ReportController extends Controller
                 'colleges.*')
             ->where('ratings.course_id', $id)
             ->get();
+
+        $number_of_students = DB::table('ratings')
+            ->where([
+                ['ratings.course_id', $id]
+            ])
+            ->distinct('user_id')
+            ->count('user_id');
 
         $count_one = DB::table('ratings')
             ->where([
@@ -82,6 +84,6 @@ class ReportController extends Controller
 
         $average = ($count_one + $count_two * 2 + $count_three * 3 + $count_four * 4 + $count_five * 5) / ($count_one + $count_two + $count_three + $count_four + $count_five);
         $average = round($average, 2);
-        return view('view_report_details', $data, compact('average', 'count_one', 'count_two', 'count_three', 'count_four', 'count_five'));
+        return view('view_report_details', $data, compact('average', 'count_one', 'count_two', 'count_three', 'count_four', 'count_five', 'number_of_students'));
     }
 }

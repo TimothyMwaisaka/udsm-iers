@@ -23,7 +23,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           apply the skin class to the body tag so the changes take effect.
     -->
     <link rel="stylesheet" href="<?php echo asset("/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css")?>">
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -55,7 +54,6 @@ desired effect
 <div class="wrapper">
     <!-- Header -->
 @include('header')
-
 <!-- Sidebar -->
 @include('sidebar')
 <!-- Content Wrapper. Contains page content -->
@@ -67,39 +65,43 @@ desired effect
                 <li class="active"><a href="{{ url('student') }}"><i class="fa fa-dashboard"></i> Home</a></li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
-
-            <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">ASSESSMENT FORMS</h3>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header box-header-title">
+                            <h3 class="box-title">STUDENTS DASHBOARD</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>Forms</th>
+                                </tr>
+                                @foreach($data as $value)
+                                    @if(Auth::user()->id == $value->id)
+                                        <tr>
+                                            <td>
+                                                <a href="/list/forms/{{ $value->course_id }}">{{ $value->course_code." - ".$value->course_name }}</a>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding">
-                    <table class="table table-striped">
-                        <tr>
-                            <th>Forms</th>
-                        </tr>
-                        @foreach($data as $value)
-                            @if(Auth::user()->id == $value->id)
-                            <tr>
-                                <td><a href="/list/forms/{{ $value->course_id }}">{{ $value->course_code." - ".$value->course_name }}</a></td>
-                            </tr>
-                            @endif
-                        @endforeach
-                    </table>
-                </div>
-                <!-- /.box-body -->
+                <!-- /.col -->
             </div>
-
         </section>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
     <!-- Footer -->
 @include('footer')
-
 <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
@@ -126,7 +128,6 @@ desired effect
                     </li>
                 </ul>
                 <!-- /.control-sidebar-menu -->
-
                 <h3 class="control-sidebar-heading">Tasks Progress</h3>
                 <ul class="control-sidebar-menu">
                     <li>
@@ -137,7 +138,6 @@ desired effect
                   <span class="label label-danger pull-right">70%</span>
                 </span>
                             </h4>
-
                             <div class="progress progress-xxs">
                                 <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
                             </div>
@@ -145,7 +145,6 @@ desired effect
                     </li>
                 </ul>
                 <!-- /.control-sidebar-menu -->
-
             </div>
             <!-- /.tab-pane -->
             <!-- Stats tab content -->
@@ -155,13 +154,11 @@ desired effect
             <div class="tab-pane" id="control-sidebar-settings-tab">
                 <form method="post">
                     <h3 class="control-sidebar-heading">General Settings</h3>
-
                     <div class="form-group">
                         <label class="control-sidebar-subheading">
                             Report panel usage
                             <input type="checkbox" class="pull-right" checked>
                         </label>
-
                         <p>
                             Some information about this general settings option
                         </p>
@@ -178,9 +175,7 @@ desired effect
     <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-
 <!-- REQUIRED JS SCRIPTS -->
-
 <!-- jQuery 2.2.3 -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>
 <!-- Bootstrap 3.3.6 -->

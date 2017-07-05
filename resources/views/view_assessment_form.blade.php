@@ -55,6 +55,18 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
+                    @if(session()->has('message'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
+                    @if(session()->has('message_danger'))
+                        <div class="alert alert-danger alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            <i class="fa fa-ban"></i> {{ session()->get('message_danger') }}
+                        </div>
+                    @endif
                     <div class="box">
                         <div class="box-body">
                             <div class="box box-default">
@@ -74,8 +86,9 @@
                                 <div class="box-body">
                                     COURSE CODE: {{ $data[0]->course_code }}<br>
                                     COURSE TITLE: {{ $data[0]->course_name }}<br>
-                                    COLLEGE:<br>
-                                    INSTRUCTOR'S FULL NAME:
+                                    COLLEGE: {{ $data[0]->college_short_name }}<br>
+                                    INSTRUCTOR'S FULL
+                                    NAME: {{ $data[0]->name." ".$data[0]->middlename." ".$data[0]->lastname }}
                                 </div>
                             </div>
                             <form method="post">
@@ -165,7 +178,6 @@
                                                 </div>
                                                 <td>{{ $value->content }}</td>
                                                 <td>
-
                                                     <div class="form-group">
                                                         <input name="question_id['{{$value->question_id}}']"
                                                                type="hidden"
@@ -221,8 +233,6 @@
                                 @if( Auth::User()->hasRole(['Student']) )
                                     <button type="submit" class="btn btn-primary btn-flat pull-right">Submit</button>
                                 @elseif( Auth::User()->hasRole(['Admin']) or Auth::User()->hasRole(['Instructor']))
-                                    <button type="submit" class="btn btn-primary btn-flat pull-right disabled">Submit
-                                    </button>
                                 @endif
                             </form>
                         </div>
@@ -240,7 +250,6 @@
     @include('footer')
 </div>
 <!-- ./wrapper -->
-
 <!-- jQuery 2.2.3 -->
 <script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>
 <!-- Bootstrap 3.3.6 -->

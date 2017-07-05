@@ -50,16 +50,10 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
-                    @if(session()->has('message'))
-                        <div class="alert alert-success alert-dismissable">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                            {{ session()->get('message') }}
-                        </div>
-                    @endif
                     <div class="box">
                         <div class="box-header box-header-title">
                             <h3 class="box-title">LIST OF STUDENTS</h3>
-                            <a href="{{ url('/add/student') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-square"></i> ADD STUDENT</a>
+                            <a href="{{ url('/add/student') }}"  class="btn btn-default pull-right"><i class="fa fa-plus-circle"></i> ADD STUDENT</a>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -82,8 +76,9 @@
                                         <td>{{ $student->lastname }}</td>
                                         <td>
                                             <a href="/list/students/{{ $student->id }}" class="btn btn-primary btn-flat">VIEW</a>
-                                            <button type="button" class="btn btn-primary btn-flat">EDIT</button>
-                                            <a href="/list/students/delete/{{ $student->id }}" class="btn btn-danger btn-flat">DELETE</a>
+                                            <a href="/edit/students/{{ $student->id }}" class="btn btn-primary btn-flat">EDIT</a>
+                                            <a href="/list/students/delete/{{ $student->id }}"
+                                               class="btn btn-danger btn-flat"onClick="return confirm('Are you sure you want to delete this Student?')">DELETE</a>
                                         </td>
                                     </tr>
                                     </tbody>

@@ -26,7 +26,10 @@ class StudentController extends Controller
         $data['data'] = DB::table('questions')
             ->join('forms', 'questions.question_id', '=', 'forms.question_id')
             ->join('courses', 'forms.course_id', '=', 'courses.course_id')
-            ->select('questions.question_id', 'questions.content', 'courses.course_id', 'courses.course_code', 'courses.course_name')
+            ->join('instructors_courses', 'instructors_courses.course_id', '=', 'courses.course_id')
+            ->join('users', 'users.id', '=', 'instructors_courses.instr_id')
+            ->join('colleges', 'colleges.college_id', '=', 'users.college_id')
+            ->select('users.*', 'colleges.*', 'questions.question_id', 'questions.content', 'courses.course_id', 'courses.course_code', 'courses.course_name')
             ->where('forms.course_id', $id)
             ->get();
         return view('view_assessment_form', $data, compact('ratings'));

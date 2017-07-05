@@ -18,6 +18,7 @@ use App\Student_course;
 use App\Question;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 
 
 class MainController extends Controller
@@ -107,26 +108,32 @@ class MainController extends Controller
     {
         return view('admin');
     }
+
     public function studentIndex()
     {
         return view('student.home');
     }
+
     public function instructorIndex()
     {
         return view('instructor.home');
     }
+
     public function addCollegeIndex()
     {
         return view('add_colleges');
     }
+
     public function addAdminIndex()
     {
         return view('add_admins');
     }
+
     public function addQuestionIndex()
     {
         return view('add_questions');
     }
+
     public function welcomeIndex()
     {
         return view('welcome');
@@ -136,6 +143,14 @@ class MainController extends Controller
     /* Functions to insert data into database */
     public function addStudent(Request $req)
     {
+        //validation
+        $this->validate($req, array(
+            'name' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|max:255|unique:users',
+            'password' => 'required',
+            'college_id' => 'required'
+        ));
         $student = new User();
         $student->name = $req->name;
         $student->email = $req->email;
@@ -156,7 +171,7 @@ class MainController extends Controller
             'name' => 'required',
             'lastname' => 'required',
             'email' => 'required|max:255|unique:users',
-            'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/'
+            'password' => 'required'
         ));
         $admin = new User();
         $admin->name = $req->name;
@@ -173,6 +188,13 @@ class MainController extends Controller
 
     public function addInstructor(Request $req)
     {
+        //validation
+        $this->validate($req, array(
+            'email' => 'required|max:255|unique:users',
+            'name' => 'required',
+            'lastname' => 'required',
+            'college_id' => 'required'
+        ));
         $instructor = new User();
         $instructor->name = $req->name;
         $instructor->email = $req->email;
@@ -203,6 +225,12 @@ class MainController extends Controller
 
     public function addCourse(Request $req)
     {
+        //validation
+        $this->validate($req, array(
+            'course_code' => 'required|max:255|unique:courses',
+            'course_name' => 'required|max:255|unique:courses',
+            'college_id' => 'required'
+        ));
         $course = new Course();
         $course->course_code = $req->course_code;
         $course->course_name = $req->course_name;
@@ -213,15 +241,26 @@ class MainController extends Controller
 
     public function addRating(Request $req)
     {
-        foreach ($req->get('question_id') as $question => $value) {
+        $rated = DB::table('ratings')
+            ->where('user_id', '=', Auth::user()->id)
+            ->where('course_id', '=', $req->course_id)
+            ->first();
+
+        if (is_null($rated)) {
+            foreach ($req->get('question_id') as $question => $value) {
                 $rating = new Rating();
                 $rating->course_id = $req->course_id;
                 $rating->user_id = $req->user_id;
                 $rating->question_id = $value;
                 $rating->answer = $req->get('answer')[$question];
                 $rating->save();
+            }
+            return back()->with('message', 'Ratings recorded successfully!');
+        } else {
+            return back()->with('message_danger', 'You have already done assessment for this course');
         }
-        return redirect('student')->with('message', 'Ratings recorded successfully!');
+
+
     }
 
     public function assignInstructorsCourses(Request $req)
@@ -234,7 +273,7 @@ class MainController extends Controller
         $instructor_course->instr_id = $req->instr_id;
         $instructor_course->course_id = $req->course_id;
         $instructor_course->save();
-        return back();
+        return back()->with('message', 'Course assigned successfully!');;
     }
 
     public function assignStudentsCourses(Request $req)
@@ -247,7 +286,7 @@ class MainController extends Controller
         $student_course->user_id = $req->user_id;
         $student_course->course_id = $req->course_id;
         $student_course->save();
-         return back()->with('message', 'Course assigned Successfully!');;
+        return back()->with('message', 'Course assigned Successfully!');;
     }
 
     /* Functions to view data from database */
@@ -284,7 +323,6 @@ class MainController extends Controller
             return view('add_form');
         }
     }
-
 
     public function getCourses()
     {
@@ -352,7 +390,7 @@ class MainController extends Controller
             ->select('questions.question_id', 'questions.content', 'courses.course_id', 'courses.course_code', 'courses.course_name')
             ->where('forms.course_id', $id)
             ->get();
-        return view('view_assessment_form', $data, compact('ratings'));
+        return view('view_assessment_form', $data);
     }
 
     public function showStudentDetails($id)
@@ -378,15 +416,78 @@ class MainController extends Controller
 
     public function updateAdmins(Request $req, $id)
     {
-        $admin_id = $req->input('admin_id');
-        $firstname = $req->input('firstname');
+        $this->validate($req, array(
+            'email' => 'required|max:255',
+            'name' => 'required|max:255',
+            'lastname' => 'required|max:255|unique:users'
+        ));
+        $email = $req->input('email');
+        $name = $req->input('name');
         $middlename = $req->input('middlename');
         $lastname = $req->input('lastname');
-        $data = array('admin_id' => $admin_id, 'firstname' => $firstname, 'middlename' => $middlename, 'lastname' => $lastname);
+        $data = array('email' => $email, 'name' => $name, 'middlename' => $middlename, 'lastname' => $lastname);
         DB::table('users')
             ->where('id', $id)
             ->update($data);
         return redirect('list/admins');
+    }
+
+    public function editInstructors($id)
+    {
+        $colleges = College::all();
+        $data['data'] = DB::table('users')
+            ->select('*')
+            ->where('id', $id)
+            ->get();
+        return view('edit_instructors', $data, compact('colleges'));
+    }
+
+    public function updateInstructors(Request $req, $id)
+    {
+        $this->validate($req, array(
+            'email' => 'required',
+            'name' => 'required',
+            'lastname' => 'required'
+        ));
+        $email = $req->input('email');
+        $name = $req->input('name');
+        $middlename = $req->input('middlename');
+        $lastname = $req->input('lastname');
+        $college_id = $req->input('college_id');
+        $data = array('email' => $email, 'name' => $name, 'middlename' => $middlename, 'lastname' => $lastname, 'college_id' => $college_id);
+        DB::table('users')
+            ->where('id', $id)
+            ->update($data);
+        return redirect('list/instructors');
+    }
+
+    public function editStudents($id)
+    {
+        $colleges = College::all();
+        $data['data'] = DB::table('users')
+            ->select('*')
+            ->where('id', $id)
+            ->get();
+        return view('edit_students', $data, compact('colleges'));
+    }
+
+    public function updateStudents(Request $req, $id)
+    {
+        $this->validate($req, array(
+            'email' => 'required',
+            'name' => 'required',
+            'lastname' => 'required'
+        ));
+        $email = $req->input('email');
+        $name = $req->input('name');
+        $middlename = $req->input('middlename');
+        $lastname = $req->input('lastname');
+        $college_id = $req->input('college_id');
+        $data = array('email' => $email, 'name' => $name, 'middlename' => $middlename, 'lastname' => $lastname, 'college_id' => $college_id);
+        DB::table('users')
+            ->where('id', $id)
+            ->update($data);
+        return redirect('list/students');
     }
 
     public function editColleges($id)
@@ -400,6 +501,10 @@ class MainController extends Controller
 
     public function updateColleges(Request $req, $id)
     {
+        $this->validate($req, array(
+            'college_short_name' => 'required',
+            'college_name' => 'required'
+        ));
         $college_short_name = $req->input('college_short_name');
         $college_name = $req->input('college_name');
         $data = array('college_short_name' => $college_short_name, 'college_name' => $college_name);
@@ -407,6 +512,30 @@ class MainController extends Controller
             ->where('college_id', $id)
             ->update($data);
         return redirect('list/colleges');
+    }
+
+    public function editCourses($id)
+    {
+        $data['data'] = DB::table('courses')
+            ->select('*')
+            ->where('course_id', $id)
+            ->get();
+        return view('edit_courses', $data);
+    }
+
+    public function updateCourses(Request $req, $id)
+    {
+        $this->validate($req, array(
+            'course_code' => 'required',
+            'course_name' => 'required'
+        ));
+        $course_code = $req->input('course_code');
+        $course_name = $req->input('course_name');
+        $data = array('course_code' => $course_code, 'course_name' => $course_name);
+        DB::table('courses')
+            ->where('course_id', $id)
+            ->update($data);
+        return redirect('list/courses');
     }
 
     /*  Functions to delete data from database  */
@@ -427,15 +556,16 @@ class MainController extends Controller
         DB::table('users')->where('id', $id)->delete();
         return redirect('list/instructors')->with('message', 'Instructor Deleted Successfully!');
     }
+
     public function deleteCourses($id)
     {
         DB::table('courses')->where('course_id', $id)->delete();
-        return redirect('list/courses')->with('message', 'Instructor Deleted Successfully!');
+        return redirect('list/courses')->with('message', 'Course Deleted Successfully!');
     }
 
     public function deleteStudents($id)
     {
-        DB::table('students')->where('id', $id)->delete();
+        DB::table('users')->where('id', $id)->delete();
         return redirect('list/students')->with('message', 'Student Deleted Successfully!');
     }
 
@@ -444,6 +574,7 @@ class MainController extends Controller
         DB::table('instructors_courses')->where('course_id', $cid)->delete();
         return redirect('list/instructors-courses')->with('message', 'Instructor Deleted Successfully!');
     }
+
     public function deleteForms($cid)
     {
         DB::table('forms')->where('course_id', $cid)->delete();

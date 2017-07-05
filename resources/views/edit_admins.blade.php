@@ -35,7 +35,7 @@
 <!-- Sidebar -->
 @include('sidebar')
 
-    <!-- Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -61,32 +61,43 @@
                         <form class="form-horizontal" action="" method="post" data-parsley-validate>
                             <div class="box-body">
                                 {{ csrf_field() }}
-                                <div class="form-group">
-                                    <label for="admin_id" class="col-sm-2 control-label">Staff ID</label>
-
+                                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                    <label for="email" class="col-sm-2 control-label">Staff ID</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="admin_id" name="admin_id" value="{{ $data[0]->admin_id }}" required>
+                                        <input type="text" class="form-control" id="email" name="email" value="{{ $data[0]->email }}">
+                                        @if ($errors->has('email'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="firstname" class="col-sm-2 control-label">First Name</label>
-
+                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                    <label for="name" class="col-sm-2 control-label">First Name</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="firstname" name="firstname" value="{{ $data[0]->firstname }}" required>
+                                        <input type="text" class="form-control" id="name" name="name" value="{{ $data[0]->name }}">
+                                        @if ($errors->has('name'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('course_code') ? ' has-error' : '' }}">
                                     <label for="middlename" class="col-sm-2 control-label">Middle Name</label>
-
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" id="middlename" name="middlename" value="{{ $data[0]->middlename }}">
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group{{ $errors->has('lastname') ? ' has-error' : '' }}">
                                     <label for="lastname" class="col-sm-2 control-label">Last Name</label>
-
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="lastname" name="lastname" value="{{ $data[0]->lastname }}" required>
+                                        <input type="text" class="form-control" id="lastname" name="lastname" value="{{ $data[0]->lastname }}">
+                                        @if ($errors->has('lastname'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('lastname') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +120,7 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-@include('footer')
+    @include('footer')
 </div>
 <!-- ./wrapper -->
 

@@ -71,8 +71,33 @@ desired effect
         <!-- Main content -->
         <section class="content">
 
-            <!-- Your Page Content Here -->
-
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header box-header-title">
+                            <h3 class="box-title">INSTRUCTORS DASHBOARD</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>Forms</th>
+                                </tr>
+                                @foreach($data as $value)
+                                    @if(Auth::user()->id == $value->id)
+                                        <tr>
+                                            <td><a href="/list/forms/{{ $value->course_id }}">{{ $value->course_code." - ".$value->course_name }}</a></td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
         </section>
         <!-- /.content -->
     </div>

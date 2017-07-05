@@ -51,7 +51,13 @@
             <div class="row">
                 <!-- right column -->
                 <div class="col-md-10 col-md-offset-1">
-                    <!-- Horizontal Form -->
+                    @if(session()->has('message'))
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                            {{ session()->get('message') }}
+                        </div>
+                @endif
+                <!-- Horizontal Form -->
                     <div class="box box-info">
                         <div class="box-header with-border">
                             <h3 class="box-title">ASSIGN INSTRUCTOR COURSE</h3>

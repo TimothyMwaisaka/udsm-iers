@@ -36,87 +36,99 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="hold-transition skin-blue sidebar-mini layout-top-nav">
-<div class="wrapper">
-    <!-- Header -->
-@include('header-welcome')
-<!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <div class="container">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                @include('heading')
-            </section>
-            <!-- Main content -->
-            <section class="content">
-                <!-- Your Page Content Here -->
+@if(Auth::guest())
+    <body class="hold-transition skin-blue sidebar-mini layout-top-nav">
+    <div class="wrapper">
+        <!-- Header -->
+    @include('header-welcome')
+    <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="container">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    @include('heading')
+                </section>
+                <!-- Main content -->
                 <section class="content">
-                    <div class="callout callout-info row" style="padding: 90px 30px 110px 15px">
-                        <div class="col-md-2">
-                            <a href="#"><img src={{asset('img/udsm.png')}} alt="udsm" height="150px"></a>
+                    <!-- Your Page Content Here -->
+                    <section class="content">
+                        <div class="callout callout-info row" style="padding: 90px 30px 110px 15px">
+                            <div class="col-md-2">
+                                <a href="#"><img src={{asset('img/udsm.png')}} alt="udsm" height="150px"></a>
+                            </div>
+                            <div class="col-md-10" style="font-size: 110%">
+                                <h3>Wecome!</h3>
+                                <p>IERS - Instructors Evaluation and Rating System is an online system for Quality
+                                    Assurance
+                                    Bureau (QAB) of the University of Dar es salaam (UDSM). The system is used to
+                                    conduct
+                                    instructors assessment, rating and evaluation. The aim of the system is to make
+                                    rating
+                                    and
+                                    evaluation of instructors efficient and less time consuming</p>
+                            </div>
                         </div>
-                        <div class="col-md-10" style="font-size: 110%">
-                            <h3>Wecome!</h3>
-                            <p>IERS - Instructors Evaluation and Rating System is an online system for Quality Assurance
-                                Bureau (QAB) of the University of Dar es salaam (UDSM). The system is used to conduct
-                                instructors assessment, rating and evaluation. The aim of the system is to make rating
-                                and
-                                evaluation of instructors efficient and less time consuming</p>
-                        </div>
-                    </div>
-                    <div class="box box-default">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">USER LOGIN</h3>
-                        </div>
-                        <div class="box-body">
-                            @if(Auth::guest())
+                        <div class="box box-default">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">USER LOGIN</h3>
+                            </div>
+                            <div class="box-body">
+
                                 You are not logged in, to access IERS please <strong><a href="/login">LOGIN
                                         HERE</a></strong>
-                            @elseif( Auth::User()->hasRole(['Admin']) )
-
-                                <script>
-                                    window.location.href = '{{url("/admin")}}';
-                                </script>
-                            @elseif( Auth::User()->hasRole(['Student']) )
-                                <script>
-                                    window.location.href = '{{url("/student")}}';
-                                </script>
-                            @elseif( Auth::User()->hasRole(['Instructor']) )
-                                <script>
-                                    window.location.href = '{{url("/instructor")}}';
-                                </script>
-                            @else
-                                <script>
-                                    window.location.href = '{{url("/")}}';
-                                </script>
-                            @endif
+                            </div>
+                            <!-- /.box-body -->
                         </div>
-                        <!-- /.box-body -->
-                    </div>
-                    <!-- /.box -->
+                        <!-- /.box -->
+                    </section>
                 </section>
-            </section>
-            <!-- /.content -->
+                <!-- /.content -->
+            </div>
+            <!-- /.content-wrapper -->
         </div>
-        <!-- /.content-wrapper -->
+        <!-- Footer -->
+        @include('footer')
     </div>
-    <!-- Footer -->
-    @include('footer')
-</div>
-<!-- ./wrapper -->
+    <!-- ./wrapper -->
 
-<!-- REQUIRED JS SCRIPTS -->
+    <!-- REQUIRED JS SCRIPTS -->
 
-<!-- jQuery 2.2.3 -->
-<script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="{{ asset ("/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
-<!-- AdminLTE App -->
-<script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
+    <!-- jQuery 2.2.3 -->
+    <script src="{{ asset ("/bower_components/AdminLTE/plugins/jQuery/jQuery-2.2.3.min.js") }}"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="{{ asset ("/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js") }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset ("/bower_components/AdminLTE/dist/js/app.min.js") }}"></script>
 
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-     Both of these plugins are recommended to enhance the
-     user experience. Slimscroll is required when using the
-     fixed layout. -->
-</body>
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
+         Both of these plugins are recommended to enhance the
+         user experience. Slimscroll is required when using the
+         fixed layout. -->
+    </body>
+
+@elseif( Auth::User()->hasRole(['Admin']) )
+    <script>
+        window.location.href = '{{url("/admin")}}';
+    </script>
+@elseif( Auth::User()->hasRole(['Student']) )
+    <script>
+        window.location.href = '{{url("/student")}}';
+    </script>
+@elseif( Auth::User()->hasRole(['Instructor']) )
+    <script>
+        window.location.href = '{{url("/instructor")}}';
+    </script>
+@else
+    <div class="container" style="padding-top: 20px; margin: 0 50px;">
+        <div class="callout callout-danger">
+            <h4>Alert</h4>
+            <p>No Role assigned to the user. Contact UIERS Administrators..</p>
+        </div>
+    </div>
+    <script>
+        setTimeout(function () {
+            window.location.href = '{{url("/logout")}}';
+        }, 7000);
+    </script>
+@endif
 </html>
